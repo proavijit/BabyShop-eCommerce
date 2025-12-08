@@ -6,11 +6,13 @@ import cors from "cors";
 
 // Import routes
 import authRoutes from "./routes/authRoutes.js";
+import connectDB from "./config/db.js";
 
 // Load env vars
 dotenv.config();
 
 // Connect to database
+connectDB();
 
 const app = express();
 
