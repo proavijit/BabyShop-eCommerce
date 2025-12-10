@@ -295,6 +295,16 @@ const options = {
             data: { type: "object" },
           },
         },
+        Address: {
+          type: "object",
+          properties: {
+            street: { type: "string" },
+            city: { type: "string" },
+            county: { type: "string" },
+            postalCode: { type: "string" },
+            default: { type: "boolean" },
+          },
+        },
       },
     },
     security: [

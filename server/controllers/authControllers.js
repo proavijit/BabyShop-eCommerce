@@ -94,4 +94,11 @@ const getUserProfile = asyncHandler(async (req, res) => {
     });
 });
 
-export { registerUser, loginUser, getUserProfile };
+//
+// LOGOUT USER
+//
+const logoutUser = asyncHandler(async (req, res) => {
+    res.json({ message: "Logout successful" });
+});
+
+export { registerUser, loginUser, getUserProfile, logoutUser };

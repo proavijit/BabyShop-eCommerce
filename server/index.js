@@ -39,7 +39,7 @@ app.use(
       if (!origin) return callback(null, true);
 
       // In development, allow all origins for easier testing
-      if (process.env.NODE_ENV === "development") {
+      if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
         return callback(null, true);
       }
 
