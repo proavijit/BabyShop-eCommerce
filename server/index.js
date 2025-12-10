@@ -2,7 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import { errorHandler } from "./middleware/errorMiddleware.js";
 import cors from "cors";
-
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "./config/swagger.js";
 
 // Import routes
 import authRoutes from "./routes/authRoutes.js";
@@ -64,7 +65,13 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 app.use("/api/auth", authRoutes)
 
 // API Documentation
-
+app.use("/api/docs", swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    explorer: true,
+    customcss: ".swagger-ui .topbar { display: none }",
+    customSiteTitle: "BabyShop API Documentation",
+  })
+);
 // Home route
 
 app.get("/", (req, res) => {
