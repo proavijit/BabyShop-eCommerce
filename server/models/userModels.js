@@ -7,6 +7,7 @@ const addressSchema = new mongoose.Schema({
     city: { type: String, required: true },
     county: { type: String, required: true },
     postalCode: { type: String, required: true },
+    country: { type: String, required: true },
     default: { type: Boolean, default: false }, // FIXED
 });
 
