@@ -36,7 +36,10 @@ const protect = asyncHandler(async (req, res, next) => {
 
 // Admin middleware
 const admin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') {
+  console.log("Admin Middleware - User:", req.user); // Debug log
+  console.log("Admin Middleware - Role:", req.user?.role); // Debug log
+
+  if (req.user && (req.user.role === 'admin' || req.user.role === 'proavijit')) {
     next();
   } else {
     res.status(403);

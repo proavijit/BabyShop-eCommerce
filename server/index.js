@@ -7,15 +7,19 @@ import swaggerDocument from "./config/swagger.js";
 
 // Import routes
 import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
 import connectDB from "./config/db.js";
 
 // Load env vars
 dotenv.config();
 
+
 // Connect to database
 connectDB();
 
 const app = express();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Enhanced CORS configuration
 const allowedOrigins = [
@@ -62,7 +66,8 @@ app.use(express.urlencoded({ limit: "10mb", extended: true }));
 // Debug middleware for order routes
 
 // Routes
-app.use("/api/auth", authRoutes)
+app.use("/api/auth", authRoutes);
+app.use("/api/users", userRoutes);
 
 // API Documentation
 app.use("/api/docs", swaggerUi.serve,
