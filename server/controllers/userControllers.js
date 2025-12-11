@@ -1,35 +1,31 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModels.js";
 
-// @desc    Get all users
-// @route   GET /api/users
-// @access  Private/Admin
+/**
+ * @desc    Get all users (excluding passwords)
+ * @route   GET /api/users
+ * @access  Private/Admin
+ */
 const getAllUsers = asyncHandler(async (req, res) => {
-
-
     const users = await User.find({}).select("-password");
-
-    return res.status(200).json({
-        success: true,
-        users,
-    });
+    return res.status(200).json({ success: true, users });
 });
 
-
-// @desc    Create new user
-// @route   POST /api/users
-// @access  Private/Admin
+/**
+ * @desc    Create a new user
+ * @route   POST /api/users
+ * @access  Private/Admin
+ */
 const createUser = asyncHandler(async (req, res) => {
-
     const { name, email, password, role, address } = req.body || {};
 
-    // Validate body
+    // Validate required fields
     if (!name || !email || !password) {
         res.status(400);
-        throw new Error("Name, email and password are required");
+        throw new Error("Name, email, and password are required");
     }
 
-    // Check duplicate email
+    // Check if user already exists
     const userExists = await User.findOne({ email });
     if (userExists) {
         res.status(400);
@@ -45,30 +41,30 @@ const createUser = asyncHandler(async (req, res) => {
         address: address || [],
     });
 
-    if (user) {
-        return res.status(201).json({
-            success: true,
-            user: {
-                _id: user._id,
-                name: user.name,
-                email: user.email,
-                role: user.role,
-                address: user.address,
-                avatar: user.avatar,
-            },
-        });
+    if (!user) {
+        res.status(400);
+        throw new Error("Invalid user data");
     }
 
-    res.status(400);
-    throw new Error("Invalid user data");
+    return res.status(201).json({
+        success: true,
+        user: {
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            address: user.address,
+            avatar: user.avatar,
+        },
+    });
 });
 
-
-// @desc    Get user by ID
-// @route   GET /api/users/:id
-// @access  Private/Admin
+/**
+ * @desc    Get a user by ID
+ * @route   GET /api/users/:id
+ * @access  Private/Admin
+ */
 const getUserById = asyncHandler(async (req, res) => {
-
     const user = await User.findById(req.params.id).select("-password");
 
     if (!user) {
@@ -76,53 +72,42 @@ const getUserById = asyncHandler(async (req, res) => {
         throw new Error("User not found");
     }
 
-    return res.status(200).json({
-        success: true,
-        user,
-    });
+    return res.status(200).json({ success: true, user });
 });
 
-
-// @desc    Update user
-// @route   PUT /api/users/:id
-// @access  Private/Admin or Self
-// updateUser
+/**
+ * @desc    Update user details
+ * @route   PUT /api/users/:id
+ * @access  Private/Admin or Self
+ */
 const updateUser = asyncHandler(async (req, res) => {
-
     const user = await User.findById(req.params.id);
 
     if (!user) {
-        console.log(`[DEBUG] User not found with ID: ${req.params.id}`);
         res.status(404);
         throw new Error("User not found");
     }
 
-    // Check permissions: Admin or Self
-    const isAdmin = req.user && (req.user.role === 'admin' || req.user.role === 'proavijit');
+    const isAdmin = req.user && (req.user.role === "admin" || req.user.role === "proavijit");
     const isSelf = req.user && req.user._id.toString() === user._id.toString();
 
     if (!isAdmin && !isSelf) {
-        console.log(`[DEBUG] Authorization Failed. IsAdmin: ${isAdmin}, IsSelf: ${isSelf}`);
         res.status(403);
         throw new Error("Not authorized to update this user");
     }
 
-    // Update fields
+    // Update allowed fields
     if (req.body.name !== undefined) user.name = req.body.name;
     if (req.body.email !== undefined) user.email = req.body.email;
     if (req.body.address !== undefined) user.address = req.body.address;
     if (req.body.avatar !== undefined) user.avatar = req.body.avatar;
 
     // Only admin can update role
-    if (req.body.role && isAdmin) {
-        user.role = req.body.role;
-    }
-
-    console.log(`[DEBUG] User state before save:`, user);
+    if (req.body.role && isAdmin) user.role = req.body.role;
 
     const updatedUser = await user.save();
 
-    res.status(200).json({
+    return res.status(200).json({
         success: true,
         user: {
             _id: updatedUser._id,
@@ -131,18 +116,18 @@ const updateUser = asyncHandler(async (req, res) => {
             role: updatedUser.role,
             address: updatedUser.address,
             avatar: updatedUser.avatar,
-        }
+        },
     });
 });
 
-
-// @desc    Delete user
-// @route   DELETE /api/users/:id
-// @access  Private/Admin
+/**
+ * @desc    Delete a user
+ * @route   DELETE /api/users/:id
+ * @access  Private/Admin
+ */
 const deleteUser = asyncHandler(async (req, res) => {
-    console.log(`deleteUser called - Method: ${req.method}`);
-
     const user = await User.findById(req.params.id);
+
     if (!user) {
         res.status(404);
         throw new Error("User not found");
@@ -150,31 +135,22 @@ const deleteUser = asyncHandler(async (req, res) => {
 
     await user.deleteOne();
 
-    return res.status(200).json({
-        success: true,
-        message: "User deleted successfully",
-    });
+    return res.status(200).json({ success: true, message: "User deleted successfully" });
 });
 
-
-// @desc    Add address
-// @route   POST /api/users/:id/address
-// @access  Private
-
+/**
+ * @desc    Add address for a user
+ * @route   POST /api/users/:id/address
+ * @access  Private (Admin or Self)
+ */
 const addAddress = asyncHandler(async (req, res) => {
-    console.log(`addAddress called - Method: ${req.method}`);
-
-    // Use req.params.id to find the target user (allows Admin to add for others)
     const user = await User.findById(req.params.id);
-
     if (!user) {
         res.status(404);
         throw new Error("User not found");
     }
 
-    // Check permissions: Admin or Self
-    // req.user is the logged-in user
-    const isAdmin = req.user && (req.user.role === 'admin' || req.user.role === 'proavijit');
+    const isAdmin = req.user && (req.user.role === "admin" || req.user.role === "proavijit");
     const isSelf = req.user && req.user._id.toString() === user._id.toString();
 
     if (!isAdmin && !isSelf) {
@@ -184,20 +160,12 @@ const addAddress = asyncHandler(async (req, res) => {
 
     const { street, city, state, zip, country, isDefault } = req.body;
 
-    // Validate required fields (based on User request params)
     if (!street || !city || !state || !zip || !country) {
         res.status(400);
-        throw new Error("All fields are required");
+        throw new Error("All address fields are required");
     }
 
-    // If this address is marked as default, clear all others
-    if (isDefault === true) {
-        user.address.forEach((address) => {
-            address.default = false;
-        });
-    }
-
-    // Check for duplicate address
+    // Prevent duplicate address
     const duplicateAddress = user.address.find((addr) =>
         addr.street === street &&
         addr.city === city &&
@@ -211,16 +179,18 @@ const addAddress = asyncHandler(async (req, res) => {
         throw new Error("Address already exists");
     }
 
-    // If no address exists, automatically set as default
-    const makeDefault = user.address.length === 0 ? true : isDefault || false;
+    // If first address or marked default, clear other defaults
+    if (isDefault === true || user.address.length === 0) {
+        user.address.forEach(addr => (addr.default = false));
+    }
 
     user.address.push({
         street,
         city,
-        county: state, // Map state -> county
-        postalCode: zip, // Map zip -> postalCode
+        county: state,
+        postalCode: zip,
         country,
-        default: makeDefault,
+        default: isDefault === true || user.address.length === 0,
     });
 
     await user.save();
@@ -232,47 +202,30 @@ const addAddress = asyncHandler(async (req, res) => {
     });
 });
 
-
-
-// updateAddress
+/**
+ * @desc    Update an address
+ * @route   PUT /api/users/:id/address/:addressId
+ * @access  Private (Admin or Self)
+ */
 const updateAddress = asyncHandler(async (req, res) => {
-    console.log(`updateAddress called - Method: ${req.method}`);
-
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.params.id);
     if (!user) {
         res.status(404);
         throw new Error("User not found");
     }
 
-    // only allow user to modify their own address or admin
-    if (req.user.id !== user.id && req.user.role !== "admin") {
+    const isAdmin = req.user && (req.user.role === "admin" || req.user.role === "proavijit");
+    const isSelf = req.user && req.user._id.toString() === user._id.toString();
+
+    if (!isAdmin && !isSelf) {
         res.status(403);
         throw new Error("Not authorized to modify this address");
     }
 
     const { street, city, state, zip, country, isDefault } = req.body;
-
     if (!street || !city || !state || !zip || !country) {
         res.status(400);
-        throw new Error("All fields are required");
-    }
-
-    const addressIndex = user.address.findIndex((addr) =>
-        addr.street === street &&
-        addr.city === city &&
-        addr.county === state &&
-        addr.postalCode === zip &&
-        addr.country === country
-    );
-
-    if (addressIndex !== -1) {
-        user.address[addressIndex].default = isDefault;
-        await user.save();
-        return res.status(200).json({
-            success: true,
-            message: "Address updated successfully",
-            addresses: user.address,
-        });
+        throw new Error("All address fields are required");
     }
 
     const addressId = req.params.addressId;
@@ -283,18 +236,18 @@ const updateAddress = asyncHandler(async (req, res) => {
         throw new Error("Address not found");
     }
 
+    // Update address fields
     addressToUpdate.street = street || addressToUpdate.street;
     addressToUpdate.city = city || addressToUpdate.city;
-    addressToUpdate.county = state || addressToUpdate.county; // Correct mapping
-    addressToUpdate.postalCode = zip || addressToUpdate.postalCode; // Correct mapping
+    addressToUpdate.county = state || addressToUpdate.county;
+    addressToUpdate.postalCode = zip || addressToUpdate.postalCode;
     addressToUpdate.country = country || addressToUpdate.country;
     if (isDefault !== undefined) addressToUpdate.default = isDefault;
 
+    // Ensure only one default address
     if (isDefault === true) {
-        user.address.forEach((addr) => {
-            if (addr._id.toString() !== addressId) {
-                addr.default = false;
-            }
+        user.address.forEach(addr => {
+            if (addr._id.toString() !== addressId) addr.default = false;
         });
     }
 
@@ -307,24 +260,29 @@ const updateAddress = asyncHandler(async (req, res) => {
     });
 });
 
-// deleteAddress
+/**
+ * @desc    Delete an address
+ * @route   DELETE /api/users/:id/address/:addressId
+ * @access  Private (Admin or Self)
+ */
 const deleteAddress = asyncHandler(async (req, res) => {
-    console.log(`deleteAddress called - Method: ${req.method}`);
-
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.params.id);
     if (!user) {
         res.status(404);
         throw new Error("User not found");
     }
 
-    // only allow user to modify their own address or admin
-    if (req.user.id !== user.id && req.user.role !== "admin") {
+    const isAdmin = req.user && (req.user.role === "admin" || req.user.role === "proavijit");
+    const isSelf = req.user && req.user._id.toString() === user._id.toString();
+
+    if (!isAdmin && !isSelf) {
         res.status(403);
         throw new Error("Not authorized to modify this address");
     }
 
     const addressId = req.params.addressId;
-    const addressIndex = user.address.findIndex((address) => address._id.toString() === addressId);
+    const addressIndex = user.address.findIndex(addr => addr._id.toString() === addressId);
+
     if (addressIndex === -1) {
         res.status(404);
         throw new Error("Address not found");
@@ -336,10 +294,17 @@ const deleteAddress = asyncHandler(async (req, res) => {
     return res.status(200).json({
         success: true,
         message: "Address deleted successfully",
-        addresses: user.address,  // optional: useful for frontend
+        addresses: user.address,
     });
 });
 
-
-
-export { getAllUsers, createUser, getUserById, updateUser, deleteUser, addAddress, updateAddress, deleteAddress };
+export {
+    getAllUsers,
+    createUser,
+    getUserById,
+    updateUser,
+    deleteUser,
+    addAddress,
+    updateAddress,
+    deleteAddress,
+};
