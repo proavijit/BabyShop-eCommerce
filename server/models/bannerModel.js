@@ -1,14 +1,33 @@
-// models/bannerModel.js
 import mongoose from "mongoose";
 
-const bannerSchema = new mongoose.Schema(
-    {
-        title: { type: String, required: true },
-        image: { type: String, required: true },
-        link: { type: String },
-        isActive: { type: Boolean, default: true },
+const bannerSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
     },
-    { timestamps: true }
+    title: {
+      type: String,
+      required: true,
+    },
+    startFrom: {
+      type: Number,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+    bannerType: {
+      type: String,
+      required: true,
+    },
+  },
+  {
+    timestamps: true,
+  }
 );
 
-export default mongoose.model("Banner", bannerSchema);
+const Banner = mongoose.model("Banner", bannerSchema);
+
+export default Banner;

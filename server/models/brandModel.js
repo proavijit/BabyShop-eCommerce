@@ -1,14 +1,22 @@
-// models/brandModel.js
 import mongoose from "mongoose";
 
-const brandSchema = new mongoose.Schema(
-    {
-        name: { type: String, required: true, unique: true },
-        logo: { type: String },
-        description: { type: String },
-        isActive: { type: Boolean, default: true },
+const brandSchema = mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    { timestamps: true }
+    image: {
+      type: String,
+      default: "",
+    },
+  },
+  {
+    timestamps: true,
+  }
 );
 
-export default mongoose.model("Brand", brandSchema);
+const Brand = mongoose.model("Brand", brandSchema);
+
+export default Brand;

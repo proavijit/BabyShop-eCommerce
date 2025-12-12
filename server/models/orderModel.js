@@ -1,32 +1,75 @@
-// models/orderModel.js
 import mongoose from "mongoose";
 
 const orderItemSchema = new mongoose.Schema({
-    product: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
-    quantity: { type: Number, required: true },
-    price: { type: Number, required: true },
+  productId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Product",
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1,
+  },
+  image: {
+    type: String,
+  },
 });
 
 const orderSchema = new mongoose.Schema(
-    {
-        user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-        items: [orderItemSchema],
-        totalAmount: { type: Number, required: true },
-        shippingAddress: {
-            name: String,
-            phone: String,
-            address: String,
-            city: String,
-            zipcode: String,
-            country: String,
-        },
-        status: {
-            type: String,
-            enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
-            default: "pending",
-        },
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    { timestamps: true }
+    items: [orderItemSchema],
+    total: {
+      type: Number,
+      default: 0,
+    },
+    status: {
+      type: String,
+      enum: ["pending", "paid", "completed", "cancelled"],
+      default: "pending",
+    },
+    shippingAddress: {
+      street: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+      },
+      country: {
+        type: String,
+        required: true,
+      },
+      postalCode: {
+        type: String,
+        required: true,
+      },
+    },
+    paymentIntentId: {
+      type: String,
+    },
+    stripeSessionId: {
+      type: String,
+    },
+    paidAt: {
+      type: Date,
+    },
+  },
+  { timestamps: true }
 );
 
 export default mongoose.model("Order", orderSchema);
