@@ -28,7 +28,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import {
     Dialog,
     DialogContent,
@@ -122,7 +122,6 @@ export const Users: React.FC = () => {
         try {
             const data = await userApi.getAllUsers();
             if (data.success) {
-                // Ensure users have a default status if missing
                 const normalizedUsers = data.users.map((u: any) => ({
                     ...u,
                     status: u.status || 'active'
@@ -140,6 +139,7 @@ export const Users: React.FC = () => {
         setEditingUser(null);
         setFormData({ name: '', email: '', password: '', role: 'user' });
         setIsDialogOpen(true);
+        toast.info('Accessing user registration form...');
     };
 
     const handleOpenEditDialog = (user: User) => {
@@ -151,91 +151,108 @@ export const Users: React.FC = () => {
             role: user.role
         });
         setIsDialogOpen(true);
+        toast.info(`Preparing to modify profile: ${user.name}`);
     };
 
     const handleViewDetails = (user: User) => {
         setViewingUser(user);
         setIsViewDialogOpen(true);
+        toast.info(`Requesting full profile data for ${user.name}`);
     };
 
     const handleOpenResetPassword = (user: User) => {
         setViewingUser(user);
         setNewPassword('');
         setIsResetPasswordDialogOpen(true);
+        toast.warning(`Security verification for ${user.name}'s password reset`);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        try {
+
+        const promise = (async () => {
             if (editingUser) {
                 const updateData = { ...formData };
                 if (!updateData.password) delete (updateData as any).password;
-
                 const res = await userApi.updateUser(editingUser._id, updateData);
-                if (res.success) {
-                    toast.success('User updated successfully');
-                    setIsDialogOpen(false);
-                    fetchUsers();
-                }
+                if (!res.success) throw new Error(res.message || 'Update failed');
+                setIsDialogOpen(false);
+                fetchUsers();
+                return res;
             } else {
                 const res = await userApi.createUser(formData);
-                if (res.success) {
-                    toast.success('User created successfully');
-                    setIsDialogOpen(false);
-                    fetchUsers();
-                }
+                if (!res.success) throw new Error(res.message || 'Creation failed');
+                setIsDialogOpen(false);
+                fetchUsers();
+                return res;
             }
-        } catch (error: any) {
-            toast.error(error.message || 'Operation failed');
-        } finally {
-            setIsSubmitting(false);
-        }
+        })();
+
+        toast.promise(promise, {
+            loading: editingUser ? 'Syncing user updates...' : 'Creating new system member...',
+            success: (data) => editingUser ? `Successfully updated ${data.user.name}` : `Welcome aboard, ${data.user.name}! Account created.`,
+            error: (err) => err.message || 'Operation failed'
+        });
+
+        try { await promise; } catch { } finally { setIsSubmitting(false); }
     };
 
     const handleResetPassword = async () => {
         if (!viewingUser || !newPassword) return;
         setIsSubmitting(true);
-        try {
+
+        const promise = (async () => {
             const res = await userApi.updateUser(viewingUser._id, { password: newPassword });
-            if (res.success) {
-                toast.success('Password reset successfully');
-                setIsResetPasswordDialogOpen(false);
-            }
-        } catch (error: any) {
-            toast.error(error.message || 'Reset failed');
-        } finally {
-            setIsSubmitting(false);
-        }
+            if (!res.success) throw new Error(res.message || 'Reset failed');
+            setIsResetPasswordDialogOpen(false);
+            return res;
+        })();
+
+        toast.promise(promise, {
+            loading: 'Encrypting and updating password...',
+            success: 'Security credentials updated successfully',
+            error: (err) => err.message || 'Password reset failed'
+        });
+
+        try { await promise; } catch { } finally { setIsSubmitting(false); }
     };
 
     const toggleSuspendUser = async (user: User) => {
         const newStatus = user.status === 'active' ? 'suspended' : 'active';
-        try {
+
+        const promise = (async () => {
             const res = await userApi.updateUser(user._id, { status: newStatus });
-            if (res.success) {
-                toast.success(`User ${newStatus === 'suspended' ? 'suspended' : 'activated'} successfully`);
-                fetchUsers();
-            }
-        } catch (error: any) {
-            toast.error(error.message || 'Operation failed');
-        }
+            if (!res.success) throw new Error(res.message || 'Operation failed');
+            fetchUsers();
+            return res;
+        })();
+
+        toast.promise(promise, {
+            loading: `${newStatus === 'suspended' ? 'Revoking' : 'Restoring'} account access...`,
+            success: `User status changed to ${newStatus}`,
+            error: (err) => err.message || 'Status update failed'
+        });
     };
 
     const handleDeleteConfirm = async () => {
         if (!deletingUserId) return;
-        try {
+
+        const promise = (async () => {
             const res = await userApi.deleteUser(deletingUserId);
-            if (res.success) {
-                toast.success('User deleted successfully');
-                fetchUsers();
-            }
-        } catch (error: any) {
-            toast.error(error.message || 'Deletion failed');
-        } finally {
-            setIsDeleteDialogOpen(false);
-            setDeletingUserId(null);
-        }
+            if (!res.success) throw new Error(res.message || 'Deletion failed');
+            fetchUsers();
+            return res;
+        })();
+
+        toast.promise(promise, {
+            loading: 'Purging user records from database...',
+            success: 'User permanently removed from system',
+            error: (err) => err.message || 'Failed to delete user'
+        });
+
+        setIsDeleteDialogOpen(false);
+        setDeletingUserId(null);
     };
 
     const getRoleStyles = (role: string) => {
@@ -413,6 +430,7 @@ export const Users: React.FC = () => {
                                             onClick={() => {
                                                 setDeletingUserId(user._id);
                                                 setIsDeleteDialogOpen(true);
+                                                toast.warning('Warning: Permanent deletion requested');
                                             }}
                                             className="h-9 w-9 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-lg border border-red-500/10"
                                         >
@@ -467,13 +485,13 @@ export const Users: React.FC = () => {
                             <ChevronLeft className="w-4 h-4" />
                         </Button>
 
-                        <div className="flex gap-1.5">
+                        <div className="flex gap-1.5 overflow-x-auto no-scrollbar max-w-[200px] md:max-w-none">
                             {Array.from({ length: totalPages }).map((_, i) => (
                                 <Button
                                     key={i}
                                     variant={currentPage === i + 1 ? "default" : "outline"}
                                     onClick={() => setCurrentPage(i + 1)}
-                                    className={`w-10 h-10 rounded-xl text-xs font-bold transition-all ${currentPage === i + 1
+                                    className={`w-10 h-10 rounded-xl text-xs font-bold transition-all min-w-[40px] ${currentPage === i + 1
                                             ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/20 hover:bg-blue-500 border-0'
                                             : 'bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10'
                                         }`}

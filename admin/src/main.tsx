@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from 'next-themes'
+import { Toaster } from 'sonner'
 import './index.css'
 
 import { About } from './pages/About'
@@ -23,6 +24,7 @@ import ProtectedRoute from './components/ProtectedRoute'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <Toaster richColors position="top-right" closeButton />
       <BrowserRouter>
         <Routes>
           {/* Public routes */}
