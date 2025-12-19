@@ -25,6 +25,11 @@ const userSchema = new mongoose.Schema(
             enum: ["user", "admin", "proavijit"],
             default: "user",
         },
+        status: {
+            type: String,
+            enum: ["active", "suspended"],
+            default: "active",
+        },
         address: [addressSchema], // FIXED
     },
     {

@@ -101,6 +101,8 @@ const updateUser = asyncHandler(async (req, res) => {
     if (req.body.email !== undefined) user.email = req.body.email;
     if (req.body.address !== undefined) user.address = req.body.address;
     if (req.body.avatar !== undefined) user.avatar = req.body.avatar;
+    if (req.body.password !== undefined) user.password = req.body.password;
+    if (req.body.status !== undefined) user.status = req.body.status;
 
     // Only admin can update role
     if (req.body.role && isAdmin) user.role = req.body.role;
