@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { userApi } from '../lib/api';
 import { toast } from 'sonner';
+import { ImageUpload } from '../components/ImageUpload';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -110,7 +111,8 @@ export const Users: React.FC = () => {
         name: '',
         email: '',
         password: '',
-        role: 'user' as User['role']
+        role: 'user' as User['role'],
+        avatar: ''
     });
 
     useEffect(() => {
@@ -137,7 +139,7 @@ export const Users: React.FC = () => {
 
     const handleOpenAddDialog = () => {
         setEditingUser(null);
-        setFormData({ name: '', email: '', password: '', role: 'user' });
+        setFormData({ name: '', email: '', password: '', role: 'user', avatar: '' });
         setIsDialogOpen(true);
         toast.info('Accessing user registration form...');
     };
@@ -148,7 +150,8 @@ export const Users: React.FC = () => {
             name: user.name,
             email: user.email,
             password: '',
-            role: user.role
+            role: user.role,
+            avatar: user.avatar || ''
         });
         setIsDialogOpen(true);
         toast.info(`Preparing to modify profile: ${user.name}`);
@@ -184,6 +187,7 @@ export const Users: React.FC = () => {
                 const res = await userApi.createUser(formData);
                 if (!res.success) throw new Error(res.message || 'Creation failed');
                 setIsDialogOpen(false);
+                setCurrentPage(1); // Reset to first page to show new user
                 fetchUsers();
                 return res;
             }
@@ -361,9 +365,13 @@ export const Users: React.FC = () => {
                                     <div className="flex items-center gap-4">
                                         <div className="relative">
                                             <Avatar className="w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 p-[1px] shadow-lg">
-                                                <AvatarImage src={user.avatar} alt={user.name} className="rounded-xl object-cover" />
+                                                <AvatarImage
+                                                    src={user.avatar || undefined}
+                                                    alt={user.name}
+                                                    className="rounded-xl object-cover"
+                                                />
                                                 <AvatarFallback className="bg-[#1e293b] text-white font-bold text-lg rounded-xl">
-                                                    {user.name.charAt(0)}
+                                                    {user.name.charAt(0).toUpperCase()}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <div className={`absolute -bottom-1 -right-1 w-4 h-4 border-2 border-[#1e293b] rounded-full shadow-lg ${user.status === 'active' ? 'bg-emerald-500 shadow-emerald-500/20' : 'bg-red-500 shadow-red-500/20'}`} />
@@ -492,8 +500,8 @@ export const Users: React.FC = () => {
                                     variant={currentPage === i + 1 ? "default" : "outline"}
                                     onClick={() => setCurrentPage(i + 1)}
                                     className={`w-10 h-10 rounded-xl text-xs font-bold transition-all min-w-[40px] ${currentPage === i + 1
-                                            ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/20 hover:bg-blue-500 border-0'
-                                            : 'bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10'
+                                        ? 'bg-blue-600 text-white shadow-xl shadow-blue-600/20 hover:bg-blue-500 border-0'
+                                        : 'bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10'
                                         }`}
                                 >
                                     {i + 1}
@@ -527,6 +535,15 @@ export const Users: React.FC = () => {
                     </DialogHeader>
 
                     <form onSubmit={handleSubmit} className="space-y-6 py-4">
+                        <div className="flex flex-col items-center justify-center gap-4">
+                            <Label className="text-slate-300 text-sm font-bold uppercase tracking-wider">Profile Picture</Label>
+                            <ImageUpload
+                                value={formData.avatar}
+                                onChange={(url) => setFormData({ ...formData, avatar: url })}
+                                className="w-full"
+                            />
+                        </div>
+
                         <div className="space-y-2">
                             <Label htmlFor="name" className="text-slate-300">Full Name</Label>
                             <Input

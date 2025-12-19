@@ -1,5 +1,9 @@
 import express from "express";
 import dotenv from "dotenv";
+
+// Load env vars at the very beginning
+dotenv.config();
+
 import { errorHandler } from "./middleware/errorMiddleware.js";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
@@ -18,6 +22,7 @@ import cartRoutes from "./routes/cartRoutes.js";
 import analyticsRoutes from "./routes/analyticsRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import uploadRoutes from "./routes/uploadRoutes.js";
 import connectDB from "./config/db.js";
 
 // Load env vars
@@ -88,6 +93,7 @@ app.use("/api/cart", cartRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/products", productRoutes);
+app.use("/api/upload", uploadRoutes);
 
 
 // API Documentation

@@ -17,7 +17,7 @@ const getAllUsers = asyncHandler(async (req, res) => {
  * @access  Private/Admin
  */
 const createUser = asyncHandler(async (req, res) => {
-    const { name, email, password, role, address } = req.body || {};
+    const { name, email, password, role, address, avatar } = req.body || {};
 
     // Validate required fields
     if (!name || !email || !password) {
@@ -39,6 +39,7 @@ const createUser = asyncHandler(async (req, res) => {
         password,
         role: role || "user",
         address: address || [],
+        avatar,
     });
 
     if (!user) {

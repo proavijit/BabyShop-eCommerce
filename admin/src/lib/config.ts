@@ -148,6 +148,7 @@ export const API_ENDPOINTS = {
         BASE: "/payment",
         PROCESS: "/payment/process",
     },
+    UPLOAD: "/upload",
 };
 
 export default api;
