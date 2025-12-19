@@ -2,14 +2,16 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import api, { API_ENDPOINTS } from "../lib/config";
 
-// User interface
+// User interface - updated to match server Model
 export interface User {
     _id: string;
     name: string;
     email: string;
-    isAdmin: boolean;
+    role: string; // Server uses role: "user", "admin", etc.
+    isAdmin?: boolean; // Derived field for UI
     avatar?: string;
     createdAt?: string;
+    address?: any[];
 }
 
 // Auth state interface
@@ -28,6 +30,21 @@ interface AuthState {
     clearError: () => void;
     setUser: (user: User) => void;
 }
+
+// Helper to normalize user data from server
+const normalizeUser = (userData: any): User | null => {
+    if (!userData) return null;
+
+    // Check for both 'role' and 'isAdmin' depending on server version
+    // The current server uses 'role'
+    const isAdmin = userData.role === "admin" || userData.role === "proavijit" || userData.isAdmin === true;
+
+    return {
+        ...userData,
+        isAdmin, // Ensure this is always a boolean for the UI
+        role: userData.role || (userData.isAdmin ? "admin" : "user")
+    };
+};
 
 // Create auth store with Zustand
 export const useAuthStore = create<AuthState>()(
@@ -48,19 +65,27 @@ export const useAuthStore = create<AuthState>()(
                         password,
                     });
 
-                    const { token, user } = response.data;
+                    // Server returns flat object: { _id, name, email, role, token, ... }
+                    const data = response.data;
+                    const normalizedUser = normalizeUser(data);
+
+                    if (!normalizedUser) {
+                        throw new Error("Invalid response from server");
+                    }
 
                     // Check if user is admin
-                    if (!user.isAdmin) {
+                    if (!normalizedUser.isAdmin) {
                         throw new Error("Access denied. Admin privileges required.");
                     }
 
+                    const token = data.token;
+
                     // Store token in localStorage
                     localStorage.setItem("adminToken", token);
-                    localStorage.setItem("adminUser", JSON.stringify(user));
+                    localStorage.setItem("adminUser", JSON.stringify(normalizedUser));
 
                     set({
-                        user,
+                        user: normalizedUser,
                         token,
                         isAuthenticated: true,
                         isLoading: false,
@@ -91,21 +116,24 @@ export const useAuthStore = create<AuthState>()(
                         name,
                         email,
                         password,
+                        role: "admin" // Forcing admin role for new admin accounts
                     });
 
-                    const { token, user } = response.data;
+                    // Server returns flat object on registration too
+                    const data = response.data;
+                    const normalizedUser = normalizeUser(data);
 
-                    // Check if user is admin
-                    if (!user.isAdmin) {
-                        throw new Error("Access denied. Admin privileges required.");
+                    if (!normalizedUser) {
+                        throw new Error("Invalid response from server");
                     }
 
                     // Store token in localStorage
+                    const token = data.token;
                     localStorage.setItem("adminToken", token);
-                    localStorage.setItem("adminUser", JSON.stringify(user));
+                    localStorage.setItem("adminUser", JSON.stringify(normalizedUser));
 
                     set({
-                        user,
+                        user: normalizedUser,
                         token,
                         isAuthenticated: true,
                         isLoading: false,
@@ -163,25 +191,28 @@ export const useAuthStore = create<AuthState>()(
                 }
 
                 try {
-                    const user = JSON.parse(userStr);
+                    // Start loading to prevent flicker
+                    set({ isLoading: true });
 
-                    // Verify token is still valid by making a request
+                    // Verify token by making a request
                     const response = await api.get(API_ENDPOINTS.AUTH.PROFILE);
 
-                    // Check if user is admin
-                    if (!response.data.isAdmin) {
-                        throw new Error("Access denied. Admin privileges required.");
+                    // Normalize user from profile response
+                    const normalizedUser = normalizeUser(response.data);
+
+                    if (!normalizedUser || !normalizedUser.isAdmin) {
+                        throw new Error("Invalid session or insufficient permissions");
                     }
 
                     set({
-                        user: response.data,
+                        user: normalizedUser,
                         token,
                         isAuthenticated: true,
                         error: null,
                         isLoading: false,
                     });
                 } catch (error: any) {
-                    // Token is invalid or user is not admin, clear auth state
+                    // Token is invalid, clear auth state
                     localStorage.removeItem("adminToken");
                     localStorage.removeItem("adminUser");
 
@@ -189,7 +220,7 @@ export const useAuthStore = create<AuthState>()(
                         user: null,
                         token: null,
                         isAuthenticated: false,
-                        error: null,
+                        error: null, // Don't show error for silent auto-auth failure
                         isLoading: false,
                     });
                 }
@@ -202,8 +233,11 @@ export const useAuthStore = create<AuthState>()(
 
             // Set user (for updates)
             setUser: (user: User) => {
-                localStorage.setItem("adminUser", JSON.stringify(user));
-                set({ user });
+                const normalizedUser = normalizeUser(user);
+                if (normalizedUser) {
+                    localStorage.setItem("adminUser", JSON.stringify(normalizedUser));
+                    set({ user: normalizedUser });
+                }
             },
         }),
         {

@@ -166,6 +166,11 @@ export const orderApi = {
         return response.data;
     },
 
+    getAllOrdersAdmin: async (params?: any) => {
+        const response = await api.get(API_ENDPOINTS.ORDERS.ADMIN, { params });
+        return response.data;
+    },
+
     getOrderById: async (id: string) => {
         const response = await api.get(API_ENDPOINTS.ORDERS.BY_ID(id));
         return response.data;

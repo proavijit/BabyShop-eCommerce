@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
+import axios, { type AxiosInstance, type InternalAxiosRequestConfig, type AxiosResponse, type AxiosError } from "axios";
 
 // Configuration utility for Admin API
 
@@ -113,6 +113,7 @@ export const API_ENDPOINTS = {
     // Order endpoints
     ORDERS: {
         BASE: "/orders",
+        ADMIN: "/orders/admin",
         BY_ID: (id: string) => `/orders/${id}`,
         STATUS: (id: string) => `/orders/${id}/status`,
     },
