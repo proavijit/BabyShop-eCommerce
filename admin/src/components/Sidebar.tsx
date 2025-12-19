@@ -16,6 +16,9 @@ import {
 } from 'lucide-react'
 import { useAuthStore } from '../store/useAuthStore'
 import { toast } from 'sonner'
+import { Button } from "@/components/ui/button"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Separator } from "@/components/ui/separator"
 
 const menuItems = [
     { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -44,7 +47,7 @@ export default function Sidebar() {
     return (
         <div className="fixed inset-y-0 left-0 z-50 w-64 flex flex-col bg-[#0f172a] border-r border-white/5 shadow-2xl transition-all duration-300">
             {/* Logo Section */}
-            <div className="h-20 flex items-center px-6 border-b border-white/5 bg-[#0f172a]/50 backdrop-blur-md">
+            <div className="h-20 flex items-center px-6 bg-[#0f172a]/50 backdrop-blur-md">
                 <Link to="/dashboard" className="flex items-center gap-3 group">
                     <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg shadow-blue-600/20 group-hover:scale-105 transition-transform duration-200">
                         <span className="text-white font-bold text-xl">B</span>
@@ -55,25 +58,23 @@ export default function Sidebar() {
                     </div>
                 </Link>
             </div>
+            <Separator className="bg-white/5" />
 
             {/* User Profile Section */}
             <div className="px-4 py-6">
                 <div className="bg-white/5 rounded-2xl p-4 border border-white/5 relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button className="text-slate-500 hover:text-white transition-colors">
+                    <div className="absolute top-0 right-0 p-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                        <Button variant="ghost" size="icon" className="w-8 h-8 text-slate-500 hover:text-white">
                             <Settings className="w-4 h-4" />
-                        </button>
+                        </Button>
                     </div>
                     <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 p-[2px] shadow-inner">
-                            <div className="w-full h-full rounded-full bg-[#1e293b] flex items-center justify-center border-2 border-[#1e293b]">
-                                {user?.avatar ? (
-                                    <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full object-cover" />
-                                ) : (
-                                    <span className="text-white font-bold text-lg">{user?.name?.charAt(0) || 'A'}</span>
-                                )}
-                            </div>
-                        </div>
+                        <Avatar className="w-12 h-12 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 p-[2px]">
+                            <AvatarImage src={user?.avatar} alt={user?.name} className="rounded-full object-cover" />
+                            <AvatarFallback className="bg-[#1e293b] text-white font-bold text-lg rounded-full">
+                                {user?.name?.charAt(0) || 'A'}
+                            </AvatarFallback>
+                        </Avatar>
                         <div className="flex flex-col min-w-0">
                             <span className="text-white font-semibold text-sm truncate">{user?.name || 'Admin User'}</span>
                             <span className="text-slate-500 text-[11px] truncate">{user?.email || 'admin@babymart.com'}</span>
@@ -114,14 +115,15 @@ export default function Sidebar() {
 
             {/* Logout Section */}
             <div className="p-4 border-t border-white/5 bg-[#0f172a]/50">
-                <button
+                <Button
+                    variant="ghost"
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 transition-all duration-200 group"
+                    className="w-full flex items-center justify-start gap-3 px-4 py-6 rounded-xl text-sm font-medium text-red-400 hover:bg-red-500/10 hover:text-red-300 transition-all duration-200 group border-0"
                 >
                     <LogOut className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
                     <span>Logout</span>
                     <ChevronRight className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-all" />
-                </button>
+                </Button>
                 <div className="mt-4 text-[10px] text-slate-600 text-center font-medium tracking-tight">
                     © 2025 BabyMart v1.0.0
                 </div>
@@ -129,4 +131,3 @@ export default function Sidebar() {
         </div>
     )
 }
-

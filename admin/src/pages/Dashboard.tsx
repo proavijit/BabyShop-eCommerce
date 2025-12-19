@@ -9,6 +9,10 @@ import {
     CheckCircle,
     AlertCircle
 } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const stats = [
     { label: 'Total Revenue', value: '$24,560', change: '+12.5%', icon: DollarSign, color: 'bg-emerald-500', trend: 'up' },
@@ -38,21 +42,23 @@ export const Dashboard: React.FC = () => {
                 {stats.map((stat, index) => {
                     const Icon = stat.icon;
                     return (
-                        <div key={index} className="bg-[#1e293b]/50 backdrop-blur-xl border border-white/5 rounded-2xl p-6 hover:border-white/10 transition-all group">
-                            <div className="flex items-center justify-between mb-4">
-                                <div className={`w-12 h-12 ${stat.color} rounded-xl flex items-center justify-center shadow-lg shadow-black/10 transition-transform group-hover:scale-110`}>
-                                    <Icon className="w-6 h-6 text-white" />
+                        <Card key={index} className="bg-[#1e293b]/50 backdrop-blur-xl border-white/5 hover:border-white/10 transition-all group overflow-hidden">
+                            <CardContent className="p-6">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className={`w-12 h-12 ${stat.color} rounded-xl flex items-center justify-center shadow-lg shadow-black/10 transition-transform group-hover:scale-110`}>
+                                        <Icon className="w-6 h-6 text-white" />
+                                    </div>
+                                    <Badge variant="outline" className={`border-0 font-bold ${stat.trend === 'up' ? 'text-emerald-400 bg-emerald-400/10' : 'text-red-400 bg-red-400/10'}`}>
+                                        <TrendingUp className={`w-3 h-3 mr-1 ${stat.trend === 'down' ? 'rotate-180' : ''}`} />
+                                        {stat.change}
+                                    </Badge>
                                 </div>
-                                <div className={`flex items-center gap-1 text-xs font-bold px-2 py-1 rounded-full ${stat.trend === 'up' ? 'text-emerald-400 bg-emerald-400/10' : 'text-red-400 bg-red-400/10'}`}>
-                                    <TrendingUp className={`w-3 h-3 ${stat.trend === 'down' ? 'rotate-180' : ''}`} />
-                                    {stat.change}
+                                <div className="flex flex-col">
+                                    <span className="text-slate-400 text-sm font-medium">{stat.label}</span>
+                                    <span className="text-white text-2xl font-bold mt-1 tracking-tight">{stat.value}</span>
                                 </div>
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-slate-400 text-sm font-medium">{stat.label}</span>
-                                <span className="text-white text-2xl font-bold mt-1 tracking-tight">{stat.value}</span>
-                            </div>
-                        </div>
+                            </CardContent>
+                        </Card>
                     );
                 })}
             </div>
@@ -60,66 +66,67 @@ export const Dashboard: React.FC = () => {
             {/* Content Sections */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Recent Orders Table */}
-                <div className="lg:col-span-2 bg-[#1e293b]/50 backdrop-blur-xl border border-white/5 rounded-2xl overflow-hidden shadow-xl">
-                    <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between">
-                        <h2 className="text-lg font-bold text-white">Recent Orders</h2>
-                        <button className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors">View All</button>
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead>
-                                <tr className="text-left text-[11px] uppercase tracking-wider text-slate-500 font-bold border-b border-white/5">
-                                    <th className="px-6 py-4">Order ID</th>
-                                    <th className="px-6 py-4">Customer</th>
-                                    <th className="px-6 py-4">Amount</th>
-                                    <th className="px-6 py-4">Status</th>
-                                    <th className="px-6 py-4 text-right">Time</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-white/5">
-                                {recentOrders.map((order, idx) => (
-                                    <tr key={idx} className="hover:bg-white/[0.02] transition-colors">
-                                        <td className="px-6 py-4 text-sm font-bold text-blue-400">{order.id}</td>
-                                        <td className="px-6 py-4 text-sm text-slate-300">{order.customer}</td>
-                                        <td className="px-6 py-4 text-sm font-semibold text-white">{order.amount}</td>
-                                        <td className="px-6 py-4">
-                                            <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide
-                                                ${order.status === 'Delivered' ? 'bg-emerald-500/10 text-emerald-400' :
+                <Card className="lg:col-span-2 bg-[#1e293b]/50 backdrop-blur-xl border-white/5 shadow-xl overflow-hidden">
+                    <CardHeader className="px-6 py-5 border-b border-white/5 flex flex-row items-center justify-between space-y-0">
+                        <CardTitle className="text-lg font-bold text-white">Recent Orders</CardTitle>
+                        <Button variant="link" className="text-blue-400 hover:text-blue-300 p-0 h-auto font-medium">View All</Button>
+                    </CardHeader>
+                    <Table>
+                        <TableHeader>
+                            <TableRow className="border-b border-white/5 text-slate-500 hover:bg-transparent">
+                                <TableHead className="px-6 py-4 uppercase text-[11px] font-bold">Order ID</TableHead>
+                                <TableHead className="px-6 py-4 uppercase text-[11px] font-bold">Customer</TableHead>
+                                <TableHead className="px-6 py-4 uppercase text-[11px] font-bold">Amount</TableHead>
+                                <TableHead className="px-6 py-4 uppercase text-[11px] font-bold">Status</TableHead>
+                                <TableHead className="px-6 py-4 uppercase text-[11px] font-bold text-right">Time</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {recentOrders.map((order, idx) => (
+                                <TableRow key={idx} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors">
+                                    <TableCell className="px-6 py-4 text-sm font-bold text-blue-400">{order.id}</TableCell>
+                                    <TableCell className="px-6 py-4 text-sm text-slate-300">{order.customer}</TableCell>
+                                    <TableCell className="px-6 py-4 text-sm font-semibold text-white">{order.amount}</TableCell>
+                                    <TableCell className="px-6 py-4">
+                                        <Badge
+                                            variant="outline"
+                                            className={`font-bold uppercase tracking-wide border-0 ${order.status === 'Delivered' ? 'bg-emerald-500/10 text-emerald-400' :
                                                     order.status === 'Pending' ? 'bg-orange-500/10 text-orange-400' :
-                                                        'bg-blue-500/10 text-blue-400'}`}>
-                                                {order.status === 'Delivered' ? <CheckCircle className="w-3 h-3" /> :
-                                                    order.status === 'Pending' ? <Clock className="w-3 h-3" /> :
-                                                        <AlertCircle className="w-3 h-3" />}
-                                                {order.status}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-slate-500 text-right">{order.date}</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                                        'bg-blue-500/10 text-blue-400'
+                                                }`}
+                                        >
+                                            {order.status === 'Delivered' ? <CheckCircle className="w-3 h-3 mr-1" /> :
+                                                order.status === 'Pending' ? <Clock className="w-3 h-3 mr-1" /> :
+                                                    <AlertCircle className="w-3 h-3 mr-1" />}
+                                            {order.status}
+                                        </Badge>
+                                    </TableCell>
+                                    <TableCell className="px-6 py-4 text-sm text-slate-500 text-right">{order.date}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </Card>
 
                 {/* Quick Actions / Notifications */}
-                <div className="bg-[#1e293b]/50 backdrop-blur-xl border border-white/5 rounded-2xl p-6 shadow-xl flex flex-col gap-6">
-                    <div>
-                        <h2 className="text-lg font-bold text-white mb-1">Quick Actions</h2>
-                        <p className="text-slate-500 text-xs">Common administrative tasks</p>
+                <Card className="bg-[#1e293b]/50 backdrop-blur-xl border-white/5 shadow-xl p-6 flex flex-col gap-6">
+                    <div className="space-y-1">
+                        <CardTitle className="text-lg font-bold text-white">Quick Actions</CardTitle>
+                        <p className="text-slate-500 text-xs text-balance">Common administrative tasks</p>
                     </div>
 
                     <div className="flex flex-col gap-3">
-                        <button className="w-full p-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm shadow-lg shadow-blue-600/20 transition-all flex items-center justify-center gap-2">
+                        <Button className="w-full h-12 bg-blue-600 hover:bg-blue-500 text-white font-bold shadow-lg shadow-blue-600/20 transition-all gap-2">
                             <Package className="w-4 h-4" />
                             Add New Product
-                        </button>
-                        <button className="w-full p-4 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-sm border border-white/5 transition-all flex items-center justify-center gap-2">
+                        </Button>
+                        <Button variant="outline" className="w-full h-12 bg-white/5 hover:bg-white/10 text-slate-300 font-bold border-white/5 transition-all gap-2">
                             <Users className="w-4 h-4" />
                             Invite Manager
-                        </button>
-                        <button className="w-full p-4 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 font-bold text-sm border border-white/5 transition-all flex items-center justify-center gap-2 text-red-400 hover:bg-red-500/10 hover:border-red-500/20">
+                        </Button>
+                        <Button variant="outline" className="w-full h-12 bg-white/5 hover:bg-white/10 text-slate-300 font-bold border-white/5 transition-all gap-2 text-red-400 hover:bg-red-500/10 hover:border-red-500/20">
                             Clear Cache
-                        </button>
+                        </Button>
                     </div>
 
                     <div className="mt-4 pt-6 border-t border-white/5">
@@ -145,7 +152,7 @@ export const Dashboard: React.FC = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </Card>
             </div>
         </div>
     );
