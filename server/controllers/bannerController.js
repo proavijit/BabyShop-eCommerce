@@ -81,9 +81,9 @@ const updateBanner = asyncHandler(async (req, res) => {
           const result = await cloudinary.uploader.upload(image, {
             folder: "admin-dashboard/banners",
           });
-          brand.image = result.secure_url;
+          banner.image = result.secure_url;
         } else {
-          brand.image = undefined; // Clear image if empty string is provided
+          banner.image = undefined; // Clear image if empty string is provided
         }
       }
       const updatedBanner = await banner.save();
