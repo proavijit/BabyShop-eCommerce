@@ -101,8 +101,8 @@ export const productApi = {
 // CATEGORY API
 // ============================================
 export const categoryApi = {
-    getAllCategories: async () => {
-        const response = await api.get(API_ENDPOINTS.CATEGORIES.BASE);
+    getAllCategories: async (params?: any) => {
+        const response = await api.get(API_ENDPOINTS.CATEGORIES.BASE, { params });
         return response.data;
     },
 
