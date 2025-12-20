@@ -105,28 +105,39 @@ export const CategoryTable: React.FC<CategoryTableProps> = ({
             </div>
 
             {/* Controls */}
-            <div className="flex flex-col md:flex-row gap-4">
-                <div className="relative flex-1 group">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
+            <div className="flex flex-col md:flex-row gap-4 items-center">
+                {/* Search Input Container */}
+                <div className="relative flex-1 group w-full">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-blue-500 transition-colors z-20" />
                     <Input
                         placeholder="Search categories by name..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-12 bg-white/5 border-white/10 text-white h-12 rounded-xl focus-visible:ring-blue-500/20 transition-all shadow-inner"
+                        className="pl-12 bg-white/5 border-white/10 text-white h-12 rounded-xl focus-visible:ring-blue-500/20 transition-all shadow-inner w-full"
                     />
                 </div>
-                <Select value={sortOrder} onValueChange={(val: any) => setSortOrder(val)}>
-                    <SelectTrigger className="w-full md:w-[180px] bg-white/5 border-white/10 text-white h-12 rounded-xl focus:ring-blue-500/20">
-                        <div className="flex items-center gap-2">
-                            {sortOrder === 'asc' ? <SortAsc className="w-4 h-4" /> : <SortDesc className="w-4 h-4" />}
-                            <SelectValue placeholder="Sort Order" />
-                        </div>
-                    </SelectTrigger>
-                    <SelectContent className="bg-[#1e293b] border-white/10 text-white">
-                        <SelectItem value="asc">Ascending (Oldest)</SelectItem>
-                        <SelectItem value="desc">Descending (Newest)</SelectItem>
-                    </SelectContent>
-                </Select>
+
+                {/* Sort Select */}
+                <div className="w-full md:w-[240px]">
+                    <Select value={sortOrder} onValueChange={(val: 'asc' | 'desc') => setSortOrder(val)}>
+                        <SelectTrigger
+                            className="w-full bg-white/5 border-white/10 text-white h-12 px-4 rounded-xl focus:ring-blue-500/20 flex items-center gap-2"
+                        >
+                            <div className="flex items-center gap-2">
+                                {sortOrder === 'asc' ? <SortAsc className="w-4 h-4 text-slate-400" /> : <SortDesc className="w-4 h-4 text-slate-400" />}
+                                <SelectValue placeholder="Sort Order" />
+                            </div>
+                        </SelectTrigger>
+                        <SelectContent className="bg-[#1e293b] border-white/10 text-white">
+                            <SelectItem value="asc" className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                Ascending (Oldest)
+                            </SelectItem>
+                            <SelectItem value="desc" className="focus:bg-white/10 focus:text-white cursor-pointer">
+                                Descending (Newest)
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
 
             {/* Table */}
