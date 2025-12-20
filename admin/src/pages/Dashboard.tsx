@@ -3,11 +3,11 @@ import {
     Users,
     ShoppingCart,
     DollarSign,
-    TrendingUp,
     Package,
     Clock,
     CheckCircle,
-    AlertCircle
+    AlertCircle,
+    TrendingUp
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -91,8 +91,8 @@ export const Dashboard: React.FC = () => {
                                         <Badge
                                             variant="outline"
                                             className={`font-bold uppercase tracking-wide border-0 ${order.status === 'Delivered' ? 'bg-emerald-500/10 text-emerald-400' :
-                                                    order.status === 'Pending' ? 'bg-orange-500/10 text-orange-400' :
-                                                        'bg-blue-500/10 text-blue-400'
+                                                order.status === 'Pending' ? 'bg-orange-500/10 text-orange-400' :
+                                                    'bg-blue-500/10 text-blue-400'
                                                 }`}
                                         >
                                             {order.status === 'Delivered' ? <CheckCircle className="w-3 h-3 mr-1" /> :

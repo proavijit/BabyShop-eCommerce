@@ -33,31 +33,25 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Enhanced CORS configuration
+// 1. CORS configuration (Apply this first)
 const allowedOrigins = [
   process.env.ADMIN_URL,
   process.env.CLIENT_URL,
-  // Add production URLs
-
-  // Add localhost for development
   "http://localhost:3000",
   "http://localhost:5173",
-  "http://localhost:8081", // iOS simulator
-  "http://10.0.2.2:8081", // Android emulator
-  "http://10.0.2.2:8000", // Android emulator direct access
-  // "http://192.168.1.100:8081", // Replace with your actual local IP for physical devices
-].filter(Boolean); // Remove any undefined values
+  "http://localhost:8081",
+  "http://10.0.2.2:8081",
+  "http://10.0.2.2:8000",
+].filter(Boolean);
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
+      // Allow requests with no origin (like mobile apps)
       if (!origin) return callback(null, true);
 
-      // In development, allow all origins for easier testing
+      // In development, allow all origins
       if (!process.env.NODE_ENV || process.env.NODE_ENV === "development") {
         return callback(null, true);
       }
@@ -70,11 +64,11 @@ app.use(
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
 
-// Increase body size limit for JSON and URL-encoded payloads
+// 2. Body parsing middleware (only once, with limit)
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 

@@ -117,19 +117,24 @@ export const UserTable: React.FC<UserTableProps> = ({
             </div>
 
             {/* Controls */}
-            <div className="flex flex-col md:flex-row gap-4">
-                <div className="relative flex-1 group">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
+            <div className="flex flex-col md:flex-row gap-4 items-center">
+                {/* Search Input Container */}
+                <div className="relative flex-1 group w-full">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-blue-500 transition-colors z-10" />
                     <Input
                         placeholder="Search by name or email..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-12 bg-white/5 border-white/10 text-white h-12 rounded-xl focus-visible:ring-blue-500/20 transition-all shadow-inner"
+                        // Added py-0 and forced min/max height to match Select
+                        className="pl-12 bg-white/5 border-white/10 text-white h-12 min-h-[48px] max-h-[48px] py-0 rounded-xl focus-visible:ring-blue-500/20 transition-all shadow-inner w-full"
                     />
                 </div>
-                <div className="flex gap-2">
+
+                {/* Select Box Container */}
+                <div className="w-full md:w-auto">
                     <Select value={roleFilter} onValueChange={setRoleFilter}>
-                        <SelectTrigger className="w-[160px] bg-white/5 border-white/10 text-white h-12 rounded-xl focus:ring-blue-500/20">
+                        {/* Added py-0 and forced min/max height to match Input */}
+                        <SelectTrigger className="w-full md:w-[160px] bg-white/5 border-white/10 text-white h-12 min-h-[48px] max-h-[48px] py-0 rounded-xl focus:ring-blue-500/20 flex items-center">
                             <SelectValue placeholder="All Roles" />
                         </SelectTrigger>
                         <SelectContent className="bg-[#1e293b] border-white/10 text-white">
