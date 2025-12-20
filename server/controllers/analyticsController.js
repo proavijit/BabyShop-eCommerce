@@ -373,9 +373,62 @@ const getInventoryAlerts = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get active carts
+// @route   GET /api/analytics/active-carts
+// @access  Private/Admin
+const getActiveCarts = asyncHandler(async (req, res) => {
+  try {
+    const activeCarts = await User.find({
+      cart: { $exists: true, $not: { $size: 0 } },
+    })
+      .select("name email cart avatar")
+      .populate("cart.productId", "name price images");
+
+    // Calculate total value for each cart
+    const cartsWithValue = activeCarts.map((user) => {
+      const cartValue = user.cart.reduce((acc, item) => {
+        // Handle case where product might be null (deleted)
+        if (!item.productId) return acc;
+        return acc + (item.productId.price || 0) * item.quantity;
+      }, 0);
+
+      // Filter out null products from items preview
+      const validItems = user.cart
+        .filter(item => item.productId)
+        .map(item => ({
+          name: item.productId.name,
+          price: item.productId.price,
+          quantity: item.quantity,
+          image: item.productId.images?.[0]
+        }));
+
+      return {
+        _id: user._id,
+        user: {
+          name: user.name,
+          email: user.email,
+          avatar: user.avatar,
+        },
+        itemCount: user.cart.length,
+        totalValue: cartValue,
+        items: validItems.slice(0, 3), // Preview first 3 items
+      };
+    });
+
+    res.json({
+      success: true,
+      data: cartsWithValue,
+    });
+  } catch (error) {
+    res.status(500);
+    throw new Error("Failed to fetch active carts");
+  }
+});
+
 export {
   getAnalyticsOverview,
   getProductAnalytics,
   getSalesAnalytics,
   getInventoryAlerts,
+  getActiveCarts,
 };

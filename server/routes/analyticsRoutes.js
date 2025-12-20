@@ -4,6 +4,7 @@ import {
   getProductAnalytics,
   getSalesAnalytics,
   getInventoryAlerts,
+  getActiveCarts,
 } from "../controllers/analyticsController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
@@ -170,5 +171,23 @@ router.get("/sales", getSalesAnalytics);
  *         description: Admin access required
  */
 router.get("/inventory-alerts", getInventoryAlerts);
+
+/**
+ * @swagger
+ * /api/analytics/active-carts:
+ *   get:
+ *     summary: Get active shopping carts
+ *     tags: [Analytics]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Active carts retrieved successfully
+ *       401:
+ *         description: Unauthorized
+ *       403:
+ *         description: Admin access required
+ */
+router.get("/active-carts", getActiveCarts);
 
 export default router;

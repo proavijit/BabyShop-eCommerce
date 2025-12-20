@@ -133,6 +133,8 @@ export const API_ENDPOINTS = {
         BASE: "/analytics",
         USERS: "/analytics/users",
         PRODUCTS: "/analytics/products",
+        INVENTORY: "/analytics/inventory-alerts",
+        ACTIVE_CARTS: "/analytics/active-carts",
     },
     // Cart endpoints
     CART: {
