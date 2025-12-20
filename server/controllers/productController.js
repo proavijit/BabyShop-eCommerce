@@ -172,10 +172,28 @@ const deleteProduct = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get product stats
+// @route   GET /api/products/stats
+// @access  Private/Admin
+const getProductStats = asyncHandler(async (req, res) => {
+  const totalProducts = await Product.countDocuments();
+  const lowStock = await Product.countDocuments({ stock: { $gt: 0, $lt: 10 } });
+  const outOfStock = await Product.countDocuments({ stock: 0 });
+  const featured = await Product.countDocuments({ isFeatured: true });
+
+  res.json({
+    totalProducts,
+    lowStock,
+    outOfStock,
+    featured,
+  });
+});
+
 export {
   getProducts,
   getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
+  getProductStats,
 };

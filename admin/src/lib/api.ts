@@ -95,6 +95,11 @@ export const productApi = {
         const response = await api.delete(API_ENDPOINTS.PRODUCTS.BY_ID(id));
         return response.data;
     },
+
+    getProductStats: async () => {
+        const response = await api.get(API_ENDPOINTS.PRODUCTS.STATS);
+        return response.data;
+    },
 };
 
 // ============================================

@@ -6,11 +6,13 @@ import {
     createProduct,
     updateProduct,
     deleteProduct,
+    getProductStats,
 } from "../controllers/productController.js";
 
 const router = express.Router();
 
 router.route("/").get(getProducts).post(protect, admin, createProduct);
+router.get("/stats", protect, admin, getProductStats);
 
 router
     .route("/:id")

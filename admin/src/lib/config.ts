@@ -99,6 +99,7 @@ export const API_ENDPOINTS = {
     PRODUCTS: {
         BASE: "/products",
         BY_ID: (id: string) => `/products/${id}`,
+        STATS: "/products/stats",
     },
     // Category endpoints
     CATEGORIES: {

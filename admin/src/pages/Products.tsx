@@ -1,222 +1,232 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { productApi } from '../lib/api';
-import { toast } from 'sonner';
-import type { Product, ProductFormData, ProductResponse } from '../types/product';
+import React, { useState, useEffect, useCallback } from "react";
+import { toast } from "sonner";
+import { Package, AlertTriangle, CheckCircle } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "../components/ui/skeleton";
 
 // Modular Components
-import {
-    ProductTable,
-    ProductDialog,
-    ProductDeleteDialog
-} from '@/pages/Products/components';
+import { ProductTable, ProductDialog, ProductDeleteDialog } from "@/pages/Products/components";
+
+// Types and API
+import type { Product, ProductFormData, ProductStats } from "../types/product";
+import { productApi } from "../lib/api";
 
 export const Products: React.FC = () => {
-    // -------------------------------------------------------------------------
-    // 1. STATE MANAGEMENT
-    // -------------------------------------------------------------------------
-
-    // Core Data
+    // State for products and stats
     const [products, setProducts] = useState<Product[]>([]);
+    const [stats, setStats] = useState<ProductStats | null>(null);
     const [loading, setLoading] = useState(true);
-    const [totalCount, setTotalCount] = useState(0);
-    const [totalPages, setTotalPages] = useState(0);
+    const [statsLoading, setStatsLoading] = useState(true);
 
-    // Dialog Visibility
+    // Pagination and filtering state
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+    const [totalCount, setTotalCount] = useState(0);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+
+    // Dialog states
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-
-    // Selection State
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
     const [deletingProductId, setDeletingProductId] = useState<string | null>(null);
-
-    // Form & UI State
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [formData, setFormData] = useState<ProductFormData>({
-        name: '',
-        description: '',
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    // Form state
+    const initialFormData: ProductFormData = {
+        name: "",
+        description: "",
         price: 0,
         discountPrice: 0,
-        category: '',
-        brand: '',
+        category: "",
+        brand: "",
         images: [],
         stock: 0,
-        ageGroup: '0-6 Months',
-        isFeatured: false
-    });
+        ageGroup: "",
+        isFeatured: false,
+    };
+    const [formData, setFormData] = useState<ProductFormData>(initialFormData);
 
-    // Filtering, Sorting & Pagination
-    const [searchTerm, setSearchTerm] = useState('');
-    const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-    const [currentPage, setCurrentPage] = useState(1);
-    const PER_PAGE = 20;
-
-    // -------------------------------------------------------------------------
-    // 2. DATA FETCHING
-    // -------------------------------------------------------------------------
-
+    // Fetch products
     const fetchProducts = useCallback(async () => {
+        setLoading(true);
         try {
-            setLoading(true);
-            const params = {
+            const response = await productApi.getAllProducts({
                 page: currentPage,
-                perPage: PER_PAGE,
-                sortOrder: sortOrder,
-                search: searchTerm
-            };
-
-            const res: ProductResponse = await productApi.getAllProducts(params);
-
-            if (res && res.products) {
-                setProducts(res.products);
-                setTotalCount(res.total);
-                setTotalPages(res.pages);
-            } else {
-                setProducts([]);
-                setTotalCount(0);
-                setTotalPages(0);
-            }
+                limit: 20,
+                search: searchTerm,
+                sort: sortOrder,
+            });
+            setProducts(response.products);
+            setTotalPages(response.pages);
+            setTotalCount(response.total);
         } catch (error) {
-            toast.error('Inventory synchronization failed');
-            console.error('Fetch error:', error);
+            console.error("Failed to fetch products:", error);
+            toast.error("Failed to load products");
         } finally {
             setLoading(false);
         }
-    }, [currentPage, sortOrder, searchTerm]);
+    }, [currentPage, searchTerm, sortOrder]);
+
+    // Fetch stats
+    const fetchStats = useCallback(async () => {
+        setStatsLoading(true);
+        try {
+            const data = await productApi.getProductStats();
+            setStats(data);
+        } catch (error) {
+            console.error("Failed to fetch stats:", error);
+        } finally {
+            setStatsLoading(false);
+        }
+    }, []);
 
     useEffect(() => {
         fetchProducts();
-    }, [fetchProducts]);
+        fetchStats();
+    }, [fetchProducts, fetchStats]);
 
-    // -------------------------------------------------------------------------
-    // 3. DIALOG HANDLERS
-    // -------------------------------------------------------------------------
-
-    const handleOpenAddDialog = () => {
-        setEditingProduct(null);
-        setFormData({
-            name: '',
-            description: '',
-            price: 0,
-            discountPrice: 0,
-            category: '',
-            brand: '',
-            images: [],
-            stock: 0,
-            ageGroup: '0-6 Months',
-            isFeatured: false
-        });
-        setIsDialogOpen(true);
-        toast.info('Accessing inventory registration...');
+    // Handlers
+    const handleRefresh = () => {
+        fetchProducts();
+        fetchStats();
+        toast.success("Data refreshed");
     };
 
-    const handleOpenEditDialog = (product: Product) => {
+    const handleAddProduct = () => {
+        setEditingProduct(null);
+        setFormData(initialFormData);
+        setIsDialogOpen(true);
+    };
+
+    const handleEditProduct = (product: Product) => {
         setEditingProduct(product);
         setFormData({
             name: product.name,
-            description: product.description || '',
+            description: product.description,
             price: product.price,
             discountPrice: product.discountPrice || 0,
             category: typeof product.category === 'object' ? product.category._id : product.category,
-            brand: typeof product.brand === 'object' ? product.brand?._id || '' : product.brand || '',
-            images: product.images || [],
+            brand: typeof product.brand === 'object' ? product.brand._id : (product.brand || ""),
+            images: product.images,
             stock: product.stock,
-            ageGroup: product.ageGroup || '0-6 Months',
-            isFeatured: product.isFeatured || false
+            ageGroup: product.ageGroup || "",
+            isFeatured: product.isFeatured,
         });
         setIsDialogOpen(true);
-        toast.info(`Preparing modifications for: ${product.name}`);
     };
 
-    const handleDeleteClick = (productId: string) => {
-        setDeletingProductId(productId);
+    const handleDeleteProduct = (id: string) => {
+        setDeletingProductId(id);
         setIsDeleteDialogOpen(true);
-        toast.warning('Security clearance required for deletion');
     };
-
-    const handleRefresh = () => {
-        fetchProducts();
-        toast.success('Live inventory synchronized');
-    };
-
-    // -------------------------------------------------------------------------
-    // 4. API ACTIONS
-    // -------------------------------------------------------------------------
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        // Basic Validation
-        if (!formData.category) {
-            return toast.error('Category is required for placement');
-        }
-
         setIsSubmitting(true);
-        const promise = (async () => {
-            if (editingProduct) {
-                const res = await productApi.updateProduct(editingProduct._id, formData);
-                if (res.error) throw new Error(res.error);
-                setIsDialogOpen(false);
-                fetchProducts();
-                return res;
-            } else {
-                const res = await productApi.createProduct(formData);
-                if (res.error) throw new Error(res.error);
-                setIsDialogOpen(false);
-                setCurrentPage(1);
-                fetchProducts();
-                return res;
-            }
-        })();
+
+        const promise = editingProduct
+            ? productApi.updateProduct(editingProduct._id, formData)
+            : productApi.createProduct(formData);
 
         toast.promise(promise, {
-            loading: editingProduct ? 'Syncing product updates...' : 'Generating product identity...',
-            success: editingProduct ? 'Product details updated' : 'Product successfully published',
-            error: (err) => err.message || 'Operation failed'
+            loading: editingProduct ? "Updating product..." : "Creating product...",
+            success: () => {
+                setIsSubmitting(false);
+                setIsDialogOpen(false);
+                fetchProducts();
+                fetchStats();
+                return editingProduct ? "Product updated successfully" : "Product created successfully";
+            },
+            error: (err) => {
+                setIsSubmitting(false);
+                return err.response?.data?.message || "Something went wrong";
+            },
         });
-
-        try { await promise; } catch { } finally { setIsSubmitting(false); }
     };
 
     const handleDeleteConfirm = async () => {
         if (!deletingProductId) return;
-        const promise = (async () => {
-            const res = await productApi.deleteProduct(deletingProductId);
-            if (res.error) throw new Error(res.error);
-            setIsDeleteDialogOpen(false);
-            fetchProducts();
-            return res;
-        })();
+        setIsDeleting(true);
 
-        toast.promise(promise, {
-            loading: 'Expunging record from database...',
-            success: 'Product record permanently removed',
-            error: (err) => err.message || 'Purge operation failed'
+        toast.promise(productApi.deleteProduct(deletingProductId), {
+            loading: "Deleting product...",
+            success: () => {
+                setIsDeleting(false);
+                setIsDeleteDialogOpen(false);
+                setDeletingProductId(null);
+                fetchProducts();
+                fetchStats();
+                return "Product deleted successfully";
+            },
+            error: "Failed to delete product",
         });
     };
 
-    // -------------------------------------------------------------------------
-    // 5. RENDER
-    // -------------------------------------------------------------------------
-
     return (
-        <div className="p-4 md:p-8 min-h-screen bg-[#0f172a]/50 text-white">
-            <ProductTable
-                products={products}
-                loading={loading}
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-                sortOrder={sortOrder}
-                setSortOrder={setSortOrder}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                totalPages={totalPages}
-                totalCount={totalCount}
-                onAddProduct={handleOpenAddDialog}
-                onEditProduct={handleOpenEditDialog}
-                onDeleteProduct={handleDeleteClick}
-                onRefresh={handleRefresh}
-            />
+        <div className="p-6 space-y-6">
+            {/* Stats Section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <StatsCard
+                    title="Total Products"
+                    value={stats?.totalProducts}
+                    loading={statsLoading}
+                    icon={<Package className="h-5 w-5 text-blue-500" />}
+                    color="blue"
+                />
+                <StatsCard
+                    title="Low Stock"
+                    value={stats?.lowStock}
+                    loading={statsLoading}
+                    icon={<AlertTriangle className="h-5 w-5 text-amber-500" />}
+                    color="amber"
+                    badge="Action Needed"
+                />
+                <StatsCard
+                    title="Out of Stock"
+                    value={stats?.outOfStock}
+                    loading={statsLoading}
+                    icon={<AlertTriangle className="h-5 w-5 text-red-500" />}
+                    color="red"
+                    badge="Critical"
+                />
+                <StatsCard
+                    title="Featured Products"
+                    value={stats?.featured}
+                    loading={statsLoading}
+                    icon={<CheckCircle className="h-5 w-5 text-emerald-500" />}
+                    color="emerald"
+                />
+            </div>
 
+            <Separator />
+
+            {/* Main Content */}
+            <Card>
+                <CardContent className="pt-6">
+                    <ProductTable
+                        products={products}
+                        loading={loading}
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                        sortOrder={sortOrder}
+                        setSortOrder={setSortOrder}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage}
+                        totalPages={totalPages}
+                        totalCount={totalCount}
+                        onAddProduct={handleAddProduct}
+                        onEditProduct={handleEditProduct}
+                        onDeleteProduct={handleDeleteProduct}
+                        onRefresh={handleRefresh}
+                    />
+                </CardContent>
+            </Card>
+
+            {/* Dialogs */}
             <ProductDialog
                 isOpen={isDialogOpen}
                 onOpenChange={setIsDialogOpen}
@@ -231,7 +241,53 @@ export const Products: React.FC = () => {
                 isOpen={isDeleteDialogOpen}
                 onOpenChange={setIsDeleteDialogOpen}
                 onConfirm={handleDeleteConfirm}
+                isDeleting={isDeleting}
+                productName={products.find(p => p._id === deletingProductId)?.name || "this product"}
             />
         </div>
     );
 };
+
+// Internal Stats Card Component
+const StatsCard = ({
+    title,
+    value,
+    loading,
+    icon,
+    color,
+    badge
+}: {
+    title: string;
+    value?: number;
+    loading: boolean;
+    icon: React.ReactNode;
+    color: string;
+    badge?: string;
+}) => (
+    <Card>
+        <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+                <div className={`p-2 rounded-lg bg-${color}-500/10`}>
+                    {icon}
+                </div>
+                {badge && (
+                    <Badge variant={color === 'red' ? 'destructive' : 'secondary'} className="text-[10px]">
+                        {badge}
+                    </Badge>
+                )}
+            </div>
+            <div className="mt-4">
+                <p className="text-sm font-medium text-muted-foreground">{title}</p>
+                <div className="flex items-baseline gap-2">
+                    {loading ? (
+                        <Skeleton className="h-8 w-16 mt-1" />
+                    ) : (
+                        <h3 className="text-2xl font-bold">{value?.toLocaleString() || 0}</h3>
+                    )}
+                </div>
+            </div>
+        </CardContent>
+    </Card>
+);
+
+

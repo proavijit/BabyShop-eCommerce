@@ -9,40 +9,50 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { AlertCircle } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 
 interface ProductDeleteDialogProps {
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
     onConfirm: () => void;
+    isDeleting: boolean;
+    productName: string;
 }
 
 export const ProductDeleteDialog: React.FC<ProductDeleteDialogProps> = ({
     isOpen,
     onOpenChange,
     onConfirm,
+    isDeleting,
+    productName,
 }) => {
     return (
         <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
-            <AlertDialogContent className="bg-[#0f172a] border-white/10 text-white">
+            <AlertDialogContent>
                 <AlertDialogHeader>
-                    <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center text-red-500 mb-4">
-                        <AlertCircle className="w-6 h-6" />
-                    </div>
-                    <AlertDialogTitle className="text-xl font-bold">Delete Product?</AlertDialogTitle>
-                    <AlertDialogDescription className="text-slate-400">
-                        This action cannot be undone. This product will be permanently removed from the inventory and will no longer be visible to customers.
+                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                        This will permanently delete <span className="font-semibold text-foreground">{productName}</span> and remove the product data from our servers.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
-                <AlertDialogFooter className="gap-2 mt-4">
-                    <AlertDialogCancel className="bg-white/5 border-white/10 text-slate-400 hover:bg-white/10 hover:text-white rounded-xl h-12 px-6">
-                        Cancel
-                    </AlertDialogCancel>
+                <AlertDialogFooter>
+                    <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
                     <AlertDialogAction
-                        onClick={onConfirm}
-                        className="bg-red-600 hover:bg-red-500 text-white font-bold rounded-xl h-12 px-8 shadow-lg shadow-red-600/20 transition-all border-0"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            onConfirm();
+                        }}
+                        disabled={isDeleting}
+                        className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                     >
-                        Delete Permanently
+                        {isDeleting ? (
+                            <>
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                Deleting...
+                            </>
+                        ) : (
+                            'Delete Product'
+                        )}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

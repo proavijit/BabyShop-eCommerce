@@ -1,5 +1,5 @@
-import { Category } from './category';
-import { Brand } from './brand';
+import type { Category } from './category';
+import type { Brand } from './brand';
 
 export interface Product {
     _id: string;
@@ -35,4 +35,11 @@ export interface ProductResponse {
     total: number;
     page: number;
     pages: number;
+}
+
+export interface ProductStats {
+    totalProducts: number;
+    lowStock: number;
+    outOfStock: number;
+    featured: number;
 }
