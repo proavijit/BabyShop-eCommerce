@@ -4,4 +4,4 @@ export default function OrdersIcon() {
             OrdersIcon
         </div>
     );
-}
+}   
