@@ -7,9 +7,14 @@ export interface ApiConfig {
 export const getApiConfig = (): ApiConfig => {
     const isClient = typeof window !== "undefined";
 
-    const baseUrl = isClient
+    let baseUrl = isClient
         ? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api"
         : process.env.API_ENDPOINT ?? "http://localhost:8000/api";
+
+    // Ensure API URL ends with /api
+    if (!baseUrl.endsWith("/api")) {
+        baseUrl = baseUrl.endsWith("/") ? `${baseUrl}api` : `${baseUrl}/api`;
+    }
 
     const isProduction =
         process.env.NODE_ENV === "production" ||

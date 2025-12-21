@@ -5,6 +5,13 @@ export interface Category {
     slug: string;
     categoryType: string;
 }
+export interface CategoryResponse {
+    categories: Category[];
+    total: number;
+    page: number;
+    perPage: number;
+    totalPages: number;
+}
 
 export interface Brand {
     _id: string;
