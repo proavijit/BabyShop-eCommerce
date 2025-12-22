@@ -19,6 +19,18 @@ const getProducts = asyncHandler(async (req, res) => {
     }
     : {};
 
+  if (req.query.featured) {
+    keyword.isFeatured = req.query.featured === "true";
+  }
+
+  if (req.query.trending) {
+    keyword.isTrending = req.query.trending === "true";
+  }
+
+  if (req.query.onSale) {
+    keyword.discountPrice = { $gt: 0 };
+  }
+
   const count = await Product.countDocuments({ ...keyword });
   const products = await Product.find({ ...keyword })
     .populate("category", "name")
@@ -61,6 +73,7 @@ const createProduct = asyncHandler(async (req, res) => {
     stock,
     ageGroup,
     isFeatured,
+    isTrending,
   } = req.body;
 
   const productExists = await Product.findOne({ name });
@@ -94,6 +107,7 @@ const createProduct = asyncHandler(async (req, res) => {
     stock: stock || 0,
     ageGroup,
     isFeatured: isFeatured || false,
+    isTrending: isTrending || false,
   });
 
   if (product) {
@@ -119,6 +133,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     stock,
     ageGroup,
     isFeatured,
+    isTrending,
   } = req.body;
 
   const product = await Product.findById(req.params.id);
@@ -147,7 +162,9 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.images = images ? uploadedImages : product.images;
     product.stock = stock !== undefined ? stock : product.stock;
     product.ageGroup = ageGroup || product.ageGroup;
+    product.ageGroup = ageGroup || product.ageGroup;
     product.isFeatured = isFeatured !== undefined ? isFeatured : product.isFeatured;
+    product.isTrending = isTrending !== undefined ? isTrending : product.isTrending;
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);
@@ -180,12 +197,14 @@ const getProductStats = asyncHandler(async (req, res) => {
   const lowStock = await Product.countDocuments({ stock: { $gt: 0, $lt: 10 } });
   const outOfStock = await Product.countDocuments({ stock: 0 });
   const featured = await Product.countDocuments({ isFeatured: true });
+  const trending = await Product.countDocuments({ isTrending: true });
 
   res.json({
     totalProducts,
     lowStock,
     outOfStock,
     featured,
+    trending,
   });
 });
 

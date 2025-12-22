@@ -3,6 +3,7 @@ import Banner from "@/components/home/Banner";
 
 
 import CatagorySection from "@/components/home/CatagorySection";
+import ProductList from "@/components/home/ProductList";
 
 
 export default function Home() {
@@ -14,7 +15,7 @@ export default function Home() {
         <div className="flex-1 bg-red-50">
 
           <Banner />
-          {/* ProductList */}
+          <ProductList />
           {/* BabyTravelSection */}
           {/* ComfyApparelSection */}
           {/* FeaturedServicesSection */}
