@@ -31,6 +31,9 @@ export interface Product {
     discountPercentage: number;
     stock: number;
     averageRating: number;
+    isFeatured?: boolean;
+    isTrending?: boolean;
+    isBestDeal?: boolean;
     createdAt: string;
     updatedAt: string;
     __v: number;

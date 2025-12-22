@@ -14,6 +14,7 @@ const productSchema = new mongoose.Schema(
         ageGroup: { type: String }, // example: "0-3 years", "3-6 years"
         isFeatured: { type: Boolean, default: false },
         isTrending: { type: Boolean, default: false },
+        isBestDeal: { type: Boolean, default: false },
     },
     { timestamps: true }
 );

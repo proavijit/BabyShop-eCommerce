@@ -27,6 +27,10 @@ const getProducts = asyncHandler(async (req, res) => {
     keyword.isTrending = req.query.trending === "true";
   }
 
+  if (req.query.isBestDeal) {
+    keyword.isBestDeal = req.query.isBestDeal === "true";
+  }
+
   if (req.query.onSale) {
     keyword.discountPrice = { $gt: 0 };
   }
@@ -74,6 +78,7 @@ const createProduct = asyncHandler(async (req, res) => {
     ageGroup,
     isFeatured,
     isTrending,
+    isBestDeal,
   } = req.body;
 
   const productExists = await Product.findOne({ name });
@@ -108,6 +113,7 @@ const createProduct = asyncHandler(async (req, res) => {
     ageGroup,
     isFeatured: isFeatured || false,
     isTrending: isTrending || false,
+    isBestDeal: isBestDeal || false,
   });
 
   if (product) {
@@ -134,6 +140,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     ageGroup,
     isFeatured,
     isTrending,
+    isBestDeal,
   } = req.body;
 
   const product = await Product.findById(req.params.id);
@@ -165,6 +172,7 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.ageGroup = ageGroup || product.ageGroup;
     product.isFeatured = isFeatured !== undefined ? isFeatured : product.isFeatured;
     product.isTrending = isTrending !== undefined ? isTrending : product.isTrending;
+    product.isBestDeal = isBestDeal !== undefined ? isBestDeal : product.isBestDeal;
 
     const updatedProduct = await product.save();
     res.json(updatedProduct);
@@ -198,6 +206,7 @@ const getProductStats = asyncHandler(async (req, res) => {
   const outOfStock = await Product.countDocuments({ stock: 0 });
   const featured = await Product.countDocuments({ isFeatured: true });
   const trending = await Product.countDocuments({ isTrending: true });
+  const bestDeals = await Product.countDocuments({ isBestDeal: true });
 
   res.json({
     totalProducts,
@@ -205,6 +214,7 @@ const getProductStats = asyncHandler(async (req, res) => {
     outOfStock,
     featured,
     trending,
+    bestDeals,
   });
 });
 

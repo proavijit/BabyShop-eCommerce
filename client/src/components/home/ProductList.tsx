@@ -55,29 +55,29 @@ async function ProductSection({ title, description, query, viewAllLink, classNam
 export default function ProductList() {
     return (
         <div className="space-y-4">
-            {/* Trending Products - Sort by newest (createdAt desc) by default */}
+            {/* Trending Products */}
             <ProductSection
                 title="🔥 Trending Products"
                 description="Check out what's hot right now!"
-                query={{ sortOrder: "desc" }}
-                viewAllLink="/products?sort=newest"
+                query={{ trending: true }}
+                viewAllLink="/products?trending=true"
             />
 
-            {/* Featured Products - Use new featured filter */}
+            {/* Featured Products */}
             <ProductSection
-                title="Featured Products"
+                title="⭐ Featured Products"
                 description="Handpicked favorites just for you!"
-                query={{ featured: true }}
-                viewAllLink="/products?featured=true"
+                query={{ isFeatured: true }}
+                viewAllLink="/products?isFeatured=true"
                 className="bg-gray-50 -mx-4 px-4 sm:-mx-8 sm:px-8 py-16 rounded-3xl"
             />
 
-            {/* Best Deals - Use new onSale filter */}
+            {/* Best Deals */}
             <ProductSection
                 title="💰 Best Deals"
                 description="Don't miss out on these amazing deals!"
-                query={{ onSale: true, sortOrder: 'desc' }}
-                viewAllLink="/products?onSale=true"
+                query={{ isBestDeal: true }}
+                viewAllLink="/products?isBestDeal=true"
             />
         </div>
     );

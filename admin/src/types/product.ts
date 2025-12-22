@@ -13,6 +13,8 @@ export interface Product {
     stock: number;
     ageGroup?: string;
     isFeatured: boolean;
+    isTrending: boolean;
+    isBestDeal: boolean;
     createdAt?: string;
     updatedAt?: string;
 }
@@ -28,6 +30,8 @@ export interface ProductFormData {
     stock: number;
     ageGroup: string;
     isFeatured: boolean;
+    isTrending: boolean;
+    isBestDeal: boolean;
 }
 
 export interface ProductResponse {
@@ -42,4 +46,6 @@ export interface ProductStats {
     lowStock: number;
     outOfStock: number;
     featured: number;
+    trending: number;
+    bestDeals: number;
 }

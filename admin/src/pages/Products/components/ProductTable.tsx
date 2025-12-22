@@ -165,7 +165,26 @@ export const ProductTable: React.FC<ProductTableProps> = ({
                                         </td>
                                         <td className="p-4">
                                             <div className="flex flex-col gap-1">
-                                                <div className="font-medium">{product.name}</div>
+                                                <div className="flex items-center gap-2">
+                                                    <span className="font-medium">{product.name}</span>
+                                                    <div className="flex gap-1">
+                                                        {product.isTrending && (
+                                                            <Badge variant="secondary" className="text-xs">
+                                                                🔥
+                                                            </Badge>
+                                                        )}
+                                                        {product.isFeatured && (
+                                                            <Badge variant="secondary" className="text-xs">
+                                                                ⭐
+                                                            </Badge>
+                                                        )}
+                                                        {product.isBestDeal && (
+                                                            <Badge variant="secondary" className="text-xs">
+                                                                💰
+                                                            </Badge>
+                                                        )}
+                                                    </div>
+                                                </div>
                                                 <div className="text-sm text-muted-foreground md:hidden">
                                                     {typeof product.category === 'object'
                                                         ? product.category.name

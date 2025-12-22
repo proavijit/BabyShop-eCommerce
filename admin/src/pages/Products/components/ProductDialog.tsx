@@ -190,13 +190,33 @@ export const ProductDialog: React.FC<ProductDialogProps> = ({
                                 </div>
                             </div>
 
-                            <div className="flex items-center space-x-2">
-                                <Switch
-                                    id="featured"
-                                    checked={formData.isFeatured}
-                                    onCheckedChange={(val) => setFormData({ ...formData, isFeatured: val })}
-                                />
-                                <Label htmlFor="featured">Featured Product</Label>
+                            <div className="space-y-3">
+                                <div className="flex items-center space-x-2">
+                                    <Switch
+                                        id="featured"
+                                        checked={formData.isFeatured}
+                                        onCheckedChange={(val) => setFormData({ ...formData, isFeatured: val })}
+                                    />
+                                    <Label htmlFor="featured" className="cursor-pointer">⭐ Featured Product</Label>
+                                </div>
+
+                                <div className="flex items-center space-x-2">
+                                    <Switch
+                                        id="trending"
+                                        checked={formData.isTrending}
+                                        onCheckedChange={(val) => setFormData({ ...formData, isTrending: val })}
+                                    />
+                                    <Label htmlFor="trending" className="cursor-pointer">🔥 Trending Product</Label>
+                                </div>
+
+                                <div className="flex items-center space-x-2">
+                                    <Switch
+                                        id="bestDeal"
+                                        checked={formData.isBestDeal}
+                                        onCheckedChange={(val) => setFormData({ ...formData, isBestDeal: val })}
+                                    />
+                                    <Label htmlFor="bestDeal" className="cursor-pointer">💰 Best Deal</Label>
+                                </div>
                             </div>
                         </TabsContent>
 

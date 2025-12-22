@@ -47,6 +47,8 @@ export const Products: React.FC = () => {
         stock: 0,
         ageGroup: "",
         isFeatured: false,
+        isTrending: false,
+        isBestDeal: false,
     };
     const [formData, setFormData] = useState<ProductFormData>(initialFormData);
 
@@ -115,6 +117,8 @@ export const Products: React.FC = () => {
             stock: product.stock,
             ageGroup: product.ageGroup || "",
             isFeatured: product.isFeatured,
+            isTrending: product.isTrending,
+            isBestDeal: product.isBestDeal,
         });
         setIsDialogOpen(true);
     };
