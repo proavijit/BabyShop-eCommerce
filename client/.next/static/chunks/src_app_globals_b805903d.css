@@ -684,6 +684,10 @@
     position: relative;
   }
 
+  .static {
+    position: static;
+  }
+
   .inset-0 {
     inset: calc(var(--spacing) * 0);
   }
@@ -4251,6 +4255,12 @@
   @media (min-width: 64rem) {
     .lg\:w-\[75\%\] {
       width: 75%;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .lg\:w-full {
+      width: 100%;
     }
   }
 
