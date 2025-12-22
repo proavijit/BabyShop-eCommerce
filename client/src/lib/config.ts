@@ -138,4 +138,8 @@ export const API_ENDPOINTS = {
     // Stats & Analytics
     STATS: "/stats",
     ANALYTICS: "/analytics",
+
+    // Banners
+    BANNERS: "/banners",
+    BANNER_BY_ID: (id: string) => `/banners/${id}`,
 } as const;

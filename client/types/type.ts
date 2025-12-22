@@ -45,3 +45,18 @@ export interface Review {
     updatedAt: string;
     __v: number;
 }
+
+export interface Banner {
+    _id: string;
+    name: string;
+    title: string;
+    startFrom: number;
+    image: string;
+    bannerType: string;
+    createdAt?: string;
+    updatedAt?: string;
+}
+
+export interface BannerResponse {
+    banners: Banner[];
+}
