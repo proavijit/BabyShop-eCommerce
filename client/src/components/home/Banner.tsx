@@ -9,15 +9,19 @@ import { API_ENDPOINTS, fetchData } from "@/lib/api";
 export default function BannerComponent() {
     const [banners, setBanners] = useState<Banner[]>([]);
     const [loading, setLoading] = useState(true);
+
+    // Main Slider State
+    const [mainBanners, setMainBanners] = useState<Banner[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    // Derived state for split banners
-    const [mainBanners, setMainBanners] = useState<Banner[]>([]);
-    const [sideBanner, setSideBanner] = useState<Banner | null>(null);
+    // Side Banner State
+    const [sideBanners, setSideBanners] = useState<Banner[]>([]);
+    const [sideCurrentIndex, setSideCurrentIndex] = useState(0);
 
     useEffect(() => {
         const fetchBanners = async () => {
             try {
+                // The server returns Banner[] directly, not { banners: Banner[] }
                 const response = await fetchData<Banner[] | { banners: Banner[] }>(API_ENDPOINTS.BANNERS);
                 let allBanners: Banner[] = [];
 
@@ -30,24 +34,20 @@ export default function BannerComponent() {
                 setBanners(allBanners);
 
                 // Filter banners
-                // 'slider' type goes to main carousel
-                // 'static' or 'popup' type goes to side banner
-                // If no explicit types, fallback to splitting array
                 const sliders = allBanners.filter(b => b.bannerType === 'slider');
                 const statics = allBanners.filter(b => b.bannerType === 'static' || b.bannerType === 'popup');
 
                 if (sliders.length > 0) {
                     setMainBanners(sliders);
-                } else {
-                    // Fallback: Use all but the last one if array is large enough, or just all
-                    setMainBanners(allBanners.length > 1 ? allBanners.slice(0, -1) : allBanners);
+                } else if (allBanners.length > 0 && statics.length === 0) {
+                    // Fallback: Use all if only mixed types without explicit static/slider differentiation
+                    setMainBanners(allBanners);
                 }
 
                 if (statics.length > 0) {
-                    setSideBanner(statics[0]);
-                } else if (allBanners.length > 1 && sliders.length === 0) {
-                    // Fallback: Use the last one if we did a manual split
-                    setSideBanner(allBanners[allBanners.length - 1]);
+                    setSideBanners(statics);
+                } else {
+                    // Fallback logic if needed, or leave empty
                 }
 
             } catch (error) {
@@ -60,6 +60,7 @@ export default function BannerComponent() {
         fetchBanners();
     }, []);
 
+    // Main Slider Interval (5s)
     useEffect(() => {
         if (mainBanners.length <= 1) return;
 
@@ -69,6 +70,17 @@ export default function BannerComponent() {
 
         return () => clearInterval(interval);
     }, [mainBanners.length]);
+
+    // Side Slider Interval (10s)
+    useEffect(() => {
+        if (sideBanners.length <= 1) return;
+
+        const interval = setInterval(() => {
+            setSideCurrentIndex((prevIndex) => (prevIndex + 1) % sideBanners.length);
+        }, 10000);
+
+        return () => clearInterval(interval);
+    }, [sideBanners.length]);
 
     const nextSlide = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % mainBanners.length);
@@ -88,7 +100,7 @@ export default function BannerComponent() {
         );
     }
 
-    if (mainBanners.length === 0 && !sideBanner) {
+    if (mainBanners.length === 0 && sideBanners.length === 0) {
         return (
             <div className="w-full h-[300px] md:h-[400px] bg-gray-50 rounded-lg flex flex-col items-center justify-center text-gray-400">
                 <p>No offers available at the moment</p>
@@ -98,9 +110,9 @@ export default function BannerComponent() {
 
     return (
         <div className="w-full flex flex-col lg:flex-row gap-4 h-auto lg:h-[400px]">
-            {/* Main Slider - 75% width on desktop */}
+            {/* Main Slider - 75% width on desktop (if side banners exist) */}
             {mainBanners.length > 0 ? (
-                <div className={`relative w-full ${sideBanner ? 'lg:w-[75%]' : 'lg:w-full'} h-[300px] lg:h-full group overflow-hidden rounded-xl shadow-sm border border-gray-100`}>
+                <div className={`relative w-full ${sideBanners.length > 0 ? 'lg:w-[75%]' : 'lg:w-full'} h-[300px] lg:h-full group overflow-hidden rounded-xl shadow-sm border border-gray-100`}>
                     {/* Slides */}
                     <div
                         className="w-full h-full flex transition-transform duration-500 ease-out"
@@ -178,23 +190,35 @@ export default function BannerComponent() {
                 </div>
             ) : null}
 
-            {/* Static Side Banner - 25% width on desktop */}
-            {sideBanner ? (
-                <div className="w-full lg:w-[25%] h-[200px] lg:h-full relative rounded-xl overflow-hidden shadow-sm group cursor-pointer">
-                    <img
-                        src={sideBanner.image}
-                        alt={sideBanner.name || sideBanner.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-b from-transparent to-black/70 flex flex-col justify-end p-6">
-                        <span className="text-yellow-400 font-bold text-xs uppercase tracking-wider mb-1">{sideBanner.bannerType || 'Exclusive'}</span>
-                        <h3 className="text-white text-xl font-bold mb-2">{sideBanner.title}</h3>
-                        <p className="text-gray-300 text-sm mb-3">
-                            Starting from <span className="font-bold text-white">${sideBanner.startFrom}</span>
-                        </p>
-                        <span className="text-white text-sm font-semibold flex items-center gap-1 group-hover:underline">
-                            Explore <ChevronRight className="w-4 h-4" />
-                        </span>
+            {/* Static/Side Banner Slider - 25% width on desktop */}
+            {sideBanners.length > 0 ? (
+                <div className="w-full lg:w-[25%] h-[200px] lg:h-full relative rounded-xl overflow-hidden shadow-sm group cursor-pointer border border-gray-100">
+                    <div
+                        className="w-full h-full flex transition-transform duration-700 ease-in-out"
+                        style={{ transform: `translateX(-${sideCurrentIndex * 100}%)` }}
+                    >
+                        {sideBanners.map((banner) => (
+                            <div
+                                key={banner._id}
+                                className="w-full h-full shrink-0 relative"
+                            >
+                                <img
+                                    src={banner.image}
+                                    alt={banner.name || banner.title}
+                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                />
+                                <div className="absolute inset-0 bg-linear-to-b from-transparent to-black/70 flex flex-col justify-end p-6">
+                                    <span className="text-yellow-400 font-bold text-xs uppercase tracking-wider mb-1">{banner.bannerType || 'Exclusive'}</span>
+                                    <h3 className="text-white text-xl font-bold mb-2">{banner.title}</h3>
+                                    <p className="text-gray-300 text-sm mb-3">
+                                        Starting from <span className="font-bold text-white">${banner.startFrom}</span>
+                                    </p>
+                                    <span className="text-white text-sm font-semibold flex items-center gap-1 group-hover:underline">
+                                        Explore <ChevronRight className="w-4 h-4" />
+                                    </span>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             ) : (
