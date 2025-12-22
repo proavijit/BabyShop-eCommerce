@@ -1,5 +1,5 @@
 import { API_ENDPOINTS, fetchData } from "@/lib/api";
-import { Category, CategoryResponse } from "../../../types/type";
+import { Category, CategoryResponse } from "@/types/type";
 import {
     ChevronRight,
     Star,

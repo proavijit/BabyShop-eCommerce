@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Banner } from "../../../types/type";
+import { Banner } from "@/types/type";
 import { API_ENDPOINTS, fetchData } from "@/lib/api";
 
 export default function BannerComponent() {
@@ -178,8 +178,8 @@ export default function BannerComponent() {
                                         key={index}
                                         onClick={() => setCurrentIndex(index)}
                                         className={`h-1.5 rounded-full transition-all duration-300 ${index === currentIndex
-                                                ? "bg-[#9c059c] w-8"
-                                                : "bg-white/50 w-2 hover:bg-white"
+                                            ? "bg-[#9c059c] w-8"
+                                            : "bg-white/50 w-2 hover:bg-white"
                                             }`}
                                         aria-label={`Go to slide ${index + 1}`}
                                     />
