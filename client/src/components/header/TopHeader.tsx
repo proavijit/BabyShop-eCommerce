@@ -1,5 +1,5 @@
 import React from "react";
-import { Truck, Facebook, Twitter, Instagram } from "lucide-react";
+import { Truck, Facebook, Twitter, Instagram, Sparkles } from "lucide-react";
 import Container from "../common/Container";
 import { Button } from "../ui/button";
 import SelectCurrency from "./SelectCurrency";
@@ -7,52 +7,66 @@ import SelectLanguage from "./SelectLanguage";
 
 const TopHeader = () => {
     return (
-        <div className="w-full bg-[#9c059c] text-white py-2.5 border-b border-white/10">
+        <div className="w-full bg-gradient-to-r from-babyshopSky to-teal-400 text-white py-3 border-b border-white/10 shadow-md">
             <Container className="flex items-center justify-between text-xs sm:text-sm">
                 {/* Left Section: Promo & Socials */}
                 <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2 text-gray-200">
-                        <Truck className="h-4 w-4 text-emerald-300" />
-                        <p>
-                            Free Shipping on all orders over{" "}
-                            <span className="font-semibold text-white">$50</span>
+                    <div className="flex items-center gap-2.5 text-white/95">
+                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                            <Truck className="h-4 w-4 text-white" />
+                        </div>
+                        <p className="font-medium">
+                            Free Shipping on orders over{" "}
+                            <span className="font-bold text-white bg-white/20 px-2 py-0.5 rounded-full">$50</span>
                         </p>
                     </div>
-                    <div className="hidden md:flex items-center gap-3 text-white/80">
-                        <a href="#" className="hover:text-emerald-300 transition-colors">
-                            <Facebook className="h-3.5 w-3.5" />
+                    <div className="hidden md:flex items-center gap-3">
+                        <a
+                            href="#"
+                            className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all hover:scale-110 backdrop-blur-sm"
+                            aria-label="Facebook"
+                        >
+                            <Facebook className="h-3.5 w-3.5 text-white" />
                         </a>
-                        <a href="#" className="hover:text-emerald-300 transition-colors">
-                            <Twitter className="h-3.5 w-3.5" />
+                        <a
+                            href="#"
+                            className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all hover:scale-110 backdrop-blur-sm"
+                            aria-label="Twitter"
+                        >
+                            <Twitter className="h-3.5 w-3.5 text-white" />
                         </a>
-                        <a href="#" className="hover:text-emerald-300 transition-colors">
-                            <Instagram className="h-3.5 w-3.5" />
+                        <a
+                            href="#"
+                            className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all hover:scale-110 backdrop-blur-sm"
+                            aria-label="Instagram"
+                        >
+                            <Instagram className="h-3.5 w-3.5 text-white" />
                         </a>
                     </div>
                 </div>
 
                 {/* Right Section: Actions */}
                 <div className="flex items-center gap-4">
-                    <div className="hidden sm:flex items-center gap-2">
+                    <div className="hidden sm:flex items-center gap-3">
                         <SelectCurrency />
                         <SelectLanguage />
                     </div>
 
-                    <div className="h-4 w-px bg-white/20 hidden sm:block" />
+                    <div className="h-5 w-px bg-white/30 hidden sm:block" />
 
                     <div className="flex items-center gap-2">
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="h-auto p-0 text-gray-200 hover:text-white hover:bg-transparent font-normal"
+                            className="h-auto px-3 py-1.5 text-white/90 hover:text-white hover:bg-white/20 font-semibold rounded-full transition-all"
                         >
                             Sign In
                         </Button>
-                        <span className="text-gray-400">/</span>
+                        <span className="text-white/50">|</span>
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="h-auto p-0 text-gray-200 hover:text-white hover:bg-transparent font-normal"
+                            className="h-auto px-3 py-1.5 text-white/90 hover:text-white hover:bg-white/20 font-semibold rounded-full transition-all"
                         >
                             Sign Up
                         </Button>

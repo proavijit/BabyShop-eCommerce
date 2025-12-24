@@ -10,24 +10,32 @@ import TopHeader from "./TopHeader";
 export default function Header() {
     return <>
         <TopHeader />
-        <Container className="flex items-center justify-between gap-10 py-4">
-            <div className="flex flex-1 items-center justify-between md:justify-start md:gap-12">
-                {/* Sidebar */}
-                <Logo />
-                <div className="md:hidden flex items-center gap-3">
+        <div className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+            <Container className="flex items-center justify-between gap-10 py-5">
+                <div className="flex flex-1 items-center justify-between md:justify-start md:gap-12">
+                    {/* Logo */}
+                    <Logo />
+
+                    {/* Mobile Icons */}
+                    <div className="md:hidden flex items-center gap-4">
+                        <OrdersIcon />
+                        <WishlistIcon />
+                        <UserButton />
+                        <CartIcon />
+                    </div>
+
+                    {/* Search */}
+                    <SearchInput />
+                </div>
+
+                {/* Desktop Icons */}
+                <div className="hidden md:inline-flex items-center gap-6">
                     <OrdersIcon />
                     <WishlistIcon />
                     <UserButton />
                     <CartIcon />
                 </div>
-                <SearchInput />
-            </div>
-            <div className="hidden md:inline-flex items-center gap-5">
-                <OrdersIcon />
-                <WishlistIcon />
-                <UserButton />
-                <CartIcon />
-            </div>
-        </Container>
+            </Container>
+        </div>
     </>
 }
