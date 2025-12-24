@@ -4,6 +4,7 @@ import ProductCard from "./ProductCard";
 import Link from "next/link";
 import { ChevronRight, Sparkles, TrendingUp, Tag } from "lucide-react";
 
+
 interface ProductSectionProps {
     title: string;
     description?: string;
@@ -37,7 +38,7 @@ async function ProductSection({
     if (products.length === 0) return null;
 
     return (
-        <section className={`py-12 px-6 rounded-3xl bg-gradient-to-br ${gradient} border border-gray-100`}>
+        <section className="py-12 px-6 rounded-3xl bg-gradient-to-br from-teal-50/60 via-cyan-50/60 to-white border border-gray-100">
             {/* Section Header */}
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
                 <div className="flex items-center gap-4">
@@ -100,6 +101,8 @@ export default function ProductList() {
                 gradient="from-teal-50 via-cyan-50 to-white"
                 accentColor="text-babyshopSky"
             />
+
+
 
             {/* Best Deals - Red/Orange Theme */}
             <ProductSection

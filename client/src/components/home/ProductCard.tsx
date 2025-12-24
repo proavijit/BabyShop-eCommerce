@@ -24,8 +24,12 @@ export default function ProductCard({ product }: ProductCardProps) {
         discountPercentage = Math.round(((price - discountPrice) / price) * 100);
     }
 
-    const brandName = typeof product.brand === 'object' ? (product.brand as any).name : product.brand;
-    const categoryName = typeof product.category === 'object' ? (product.category as any).name : product.category;
+    const brandName = product.brand
+        ? (typeof product.brand === 'object' ? (product.brand as any).name : product.brand)
+        : null;
+    const categoryName = product.category
+        ? (typeof product.category === 'object' ? (product.category as any).name : product.category)
+        : null;
 
     // Determine final price to show
     const finalPrice = discountPrice && discountPrice < price ? discountPrice : price;

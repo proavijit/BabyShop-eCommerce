@@ -1,8 +1,11 @@
 import Container from "@/components/common/Container";
+import BabyTravelSection from "@/components/home/BabyTravelSection";
+
 import Banner from "@/components/home/Banner";
 
 
 import CatagorySection from "@/components/home/CatagorySection";
+import HomeBrand from "@/components/home/HomeBrand";
 import ProductList from "@/components/home/ProductList";
 
 
@@ -15,7 +18,8 @@ export default function Home() {
         <div className="flex-1">
           <Banner />
           <ProductList />
-          {/* BabyTravelSection */}
+          <HomeBrand />
+          <BabyTravelSection />
           {/* ComfyApparelSection */}
           {/* FeaturedServicesSection */}
         </div>
