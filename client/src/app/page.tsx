@@ -8,12 +8,11 @@ import ProductList from "@/components/home/ProductList";
 
 export default function Home() {
   return (
-    <div>
-      <Container className="min-h-screen flex py-7 gap-3">
+    <div className="bg-babyShopLightWhite min-h-screen">
+      <Container className="flex py-7 gap-3">
         <CatagorySection />
 
-        <div className="flex-1 bg-red-50">
-
+        <div className="flex-1">
           <Banner />
           <ProductList />
           {/* BabyTravelSection */}
