@@ -133,13 +133,15 @@ export default function ProductCard({ product }: ProductCardProps) {
 
                 {/* Add to Cart Button */}
                 <div className="mt-auto">
-                    <Button
-                        disabled={product.stock === 0}
-                        className="w-full rounded-full bg-transparent border-2 border-babyshopSky text-babyshopSky hover:bg-gradient-to-r hover:from-babyshopSky hover:to-teal-400 hover:text-white hover:border-transparent font-semibold h-11 gap-2 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-400"
-                    >
-                        <ShoppingCart className="w-4 h-4" />
-                        Add to Cart
-                    </Button>
+                    <Link href={`/product/${product._id}`} className="block">
+                        <Button
+                            disabled={product.stock === 0}
+                            className="w-full rounded-full bg-transparent border-2 border-babyshopSky text-babyshopSky hover:bg-gradient-to-r hover:from-babyshopSky hover:to-teal-400 hover:text-white hover:border-transparent font-semibold h-11 gap-2 shadow-sm hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:border-gray-300 disabled:text-gray-400"
+                        >
+                            <ShoppingCart className="w-4 h-4" />
+                            View Details
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </div>

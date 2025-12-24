@@ -24,13 +24,16 @@ export interface Product {
     name: string;
     slug: string;
     image?: string;
+    images?: string[];
     price: number;
-    brand: string;
-    category: string;
+    discountPrice?: number;
+    brand: string | { _id: string; name: string; image?: string };
+    category: string | { _id: string; name: string; slug: string };
     description: string;
     discountPercentage: number;
     stock: number;
     averageRating: number;
+    ageGroup?: string;
     isFeatured?: boolean;
     isTrending?: boolean;
     isBestDeal?: boolean;
