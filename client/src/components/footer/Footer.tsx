@@ -1,0 +1,232 @@
+import { Facebook, Instagram, Twitter, Youtube, Heart, CreditCard, Truck, Shield, Baby, Mail } from "lucide-react";
+import Link from "next/link";
+
+export default function Footer() {
+    const currentYear = new Date().getFullYear();
+
+    const footerLinks = {
+        shop: [
+            { name: "New Arrivals", href: "/new-arrivals" },
+            { name: "Best Sellers", href: "/best-sellers" },
+            { name: "Sale", href: "/sale" },
+            { name: "Brands", href: "/brands" },
+            { name: "Gift Cards", href: "/gift-cards" }
+        ],
+        categories: [
+            { name: "Clothing", href: "/category/clothing" },
+            { name: "Toys & Games", href: "/category/toys" },
+            { name: "Feeding", href: "/category/feeding" },
+            { name: "Nursery", href: "/category/nursery" },
+            { name: "Travel", href: "/category/travel" }
+        ],
+        support: [
+            { name: "Contact Us", href: "/contact" },
+            { name: "FAQs", href: "/faqs" },
+            { name: "Shipping Info", href: "/shipping" },
+            { name: "Returns", href: "/returns" },
+            { name: "Size Guide", href: "/size-guide" }
+        ],
+        company: [
+            { name: "About Us", href: "/about" },
+            { name: "Careers", href: "/careers" },
+            { name: "Blog", href: "/blog" },
+            { name: "Privacy Policy", href: "/privacy" },
+            { name: "Terms of Service", href: "/terms" }
+        ]
+    };
+
+    const features = [
+        { icon: Truck, text: "Free Shipping", subtext: "Over $50" },
+        { icon: Shield, text: "Secure Payment", subtext: "100% Protected" },
+        { icon: CreditCard, text: "Easy Returns", subtext: "30 Days" },
+        { icon: Heart, text: "Quality Assured", subtext: "Certified Products" }
+    ];
+
+    return (
+        <footer className="bg-white border-t border-gray-200">
+            {/* Features Bar */}
+            <div className="bg-gradient-to-br from-teal-50/60 via-cyan-50/60 to-white border-b border-gray-200">
+                <div className="container mx-auto px-4 py-8">
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+                        {features.map((feature, index) => {
+                            const IconComponent = feature.icon;
+                            return (
+                                <div key={index} className="flex items-center gap-4 group">
+                                    <div className="w-12 h-12 rounded-xl bg-white shadow-md flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                                        <IconComponent className="w-6 h-6 text-babyshopSky" />
+                                    </div>
+                                    <div>
+                                        <h4 className="font-bold text-gray-900 text-sm">{feature.text}</h4>
+                                        <p className="text-xs text-gray-600">{feature.subtext}</p>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            </div>
+
+            {/* Main Footer Content */}
+            <div className="container mx-auto px-4 py-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
+                    {/* Brand Section */}
+                    <div className="lg:col-span-2">
+                        <Link href="/" className="flex items-center gap-2 mb-4 group">
+                            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-babyshopSky to-teal-400 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                                <Baby className="w-7 h-7 text-white" />
+                            </div>
+                            <span className="text-2xl font-bold bg-gradient-to-r from-babyshopSky to-teal-400 bg-clip-text text-transparent">BabyShop</span>
+                        </Link>
+                        <p className="text-sm text-gray-600 mb-6 leading-relaxed">
+                            Your trusted destination for premium baby products. We provide quality, safety, and comfort for your little ones with love and care.
+                        </p>
+
+                        {/* Social Media */}
+                        <div>
+                            <h4 className="text-gray-900 font-bold mb-3 text-sm">Follow Us</h4>
+                            <div className="flex items-center gap-3">
+                                <Link href="https://facebook.com" className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-50 to-blue-100 hover:from-blue-500 hover:to-blue-600 text-blue-600 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg">
+                                    <Facebook className="w-5 h-5" />
+                                </Link>
+                                <Link href="https://instagram.com" className="w-10 h-10 rounded-lg bg-gradient-to-br from-pink-50 to-pink-100 hover:from-pink-500 hover:to-pink-600 text-pink-600 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg">
+                                    <Instagram className="w-5 h-5" />
+                                </Link>
+                                <Link href="https://twitter.com" className="w-10 h-10 rounded-lg bg-gradient-to-br from-sky-50 to-sky-100 hover:from-sky-500 hover:to-sky-600 text-sky-600 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg">
+                                    <Twitter className="w-5 h-5" />
+                                </Link>
+                                <Link href="https://youtube.com" className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-50 to-red-100 hover:from-red-500 hover:to-red-600 text-red-600 hover:text-white flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg">
+                                    <Youtube className="w-5 h-5" />
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Shop Links */}
+                    <div>
+                        <h3 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider flex items-center gap-2">
+                            <div className="w-1 h-5 bg-gradient-to-b from-babyshopSky to-teal-400 rounded-full"></div>
+                            Shop
+                        </h3>
+                        <ul className="space-y-2.5">
+                            {footerLinks.shop.map((link, index) => (
+                                <li key={index}>
+                                    <Link href={link.href} className="text-sm text-gray-600 hover:text-babyshopSky transition-colors duration-300 flex items-center gap-2 group">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-babyshopSky transition-colors"></span>
+                                        {link.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Categories Links */}
+                    <div>
+                        <h3 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider flex items-center gap-2">
+                            <div className="w-1 h-5 bg-gradient-to-b from-babyshopSky to-teal-400 rounded-full"></div>
+                            Categories
+                        </h3>
+                        <ul className="space-y-2.5">
+                            {footerLinks.categories.map((link, index) => (
+                                <li key={index}>
+                                    <Link href={link.href} className="text-sm text-gray-600 hover:text-babyshopSky transition-colors duration-300 flex items-center gap-2 group">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-babyshopSky transition-colors"></span>
+                                        {link.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Support Links */}
+                    <div>
+                        <h3 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider flex items-center gap-2">
+                            <div className="w-1 h-5 bg-gradient-to-b from-babyshopSky to-teal-400 rounded-full"></div>
+                            Support
+                        </h3>
+                        <ul className="space-y-2.5">
+                            {footerLinks.support.map((link, index) => (
+                                <li key={index}>
+                                    <Link href={link.href} className="text-sm text-gray-600 hover:text-babyshopSky transition-colors duration-300 flex items-center gap-2 group">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-babyshopSky transition-colors"></span>
+                                        {link.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Company Links */}
+                    <div>
+                        <h3 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider flex items-center gap-2">
+                            <div className="w-1 h-5 bg-gradient-to-b from-babyshopSky to-teal-400 rounded-full"></div>
+                            Company
+                        </h3>
+                        <ul className="space-y-2.5">
+                            {footerLinks.company.map((link, index) => (
+                                <li key={index}>
+                                    <Link href={link.href} className="text-sm text-gray-600 hover:text-babyshopSky transition-colors duration-300 flex items-center gap-2 group">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-babyshopSky transition-colors"></span>
+                                        {link.name}
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </div>
+
+                {/* Newsletter Section */}
+                <div className="pt-8 border-t border-gray-200">
+                    <div className="bg-gradient-to-br from-teal-50/60 via-cyan-50/60 to-white rounded-2xl p-8 border border-gray-200">
+                        <div className="max-w-2xl mx-auto text-center">
+                            <div className="w-14 h-14 rounded-2xl bg-white shadow-md flex items-center justify-center mx-auto mb-4">
+                                <Mail className="w-7 h-7 text-babyshopSky" />
+                            </div>
+                            <h3 className="text-gray-900 font-bold text-2xl mb-2">Stay Updated!</h3>
+                            <p className="text-gray-600 text-sm mb-6">
+                                Subscribe to our newsletter for exclusive deals, parenting tips, and new arrivals
+                            </p>
+                            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+                                <input
+                                    type="email"
+                                    placeholder="Enter your email address"
+                                    className="flex-1 px-4 py-3 rounded-xl bg-white border-2 border-gray-200 focus:border-babyshopSky focus:outline-none text-gray-900 placeholder-gray-400 transition-colors"
+                                />
+                                <button className="px-6 py-3 bg-gradient-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-105 whitespace-nowrap">
+                                    Subscribe Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Bottom Bar */}
+            <div className="border-t border-gray-200 bg-gray-50">
+                <div className="container mx-auto px-4 py-6">
+                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <p className="text-sm text-gray-600">
+                            © {currentYear} <span className="font-semibold text-babyshopSky">BabyShop</span>. All rights reserved. Made with <Heart className="w-4 h-4 inline fill-babyshopRed text-babyshopRed" /> for parents.
+                        </p>
+                        <div className="flex items-center gap-4">
+                            <span className="text-sm text-gray-600 font-medium">We Accept:</span>
+                            <div className="flex items-center gap-2">
+                                <div className="w-12 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-xs font-bold text-blue-600 shadow-sm">
+                                    VISA
+                                </div>
+                                <div className="w-12 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-xs font-bold text-red-600 shadow-sm">
+                                    MC
+                                </div>
+                                <div className="w-12 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-xs font-bold text-blue-500 shadow-sm">
+                                    AMEX
+                                </div>
+                                <div className="w-12 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-xs font-bold text-blue-700 shadow-sm">
+                                    PP
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    );
+}
