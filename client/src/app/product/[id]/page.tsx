@@ -2,9 +2,9 @@ import { API_ENDPOINTS, fetchData } from "@/lib/api";
 import { Product } from "@/types/type";
 import Container from "@/components/common/Container";
 import ProductAction from "@/components/common/product/ProductAction";
-import WishListButton from "@/components/common/product/WishListButton";
 import ImageGallery from "@/components/common/product/ImageGallery";
-import { Share2, Award, Package, Shield, Zap, Tag, Star } from "lucide-react";
+import ProductDescription from "@/components/common/product/ProductDescription";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -15,10 +15,11 @@ interface ProductPageProps {
 }
 
 export default async function SingleProductPage({ params }: ProductPageProps) {
+    const { id } = await params;
     let product: Product | null = null;
 
     try {
-        product = await fetchData<Product>(`${API_ENDPOINTS.PRODUCTS}/${params.id}`);
+        product = await fetchData<Product>(`${API_ENDPOINTS.PRODUCTS}/${id}`);
     } catch (error) {
         console.error("Failed to fetch product:", error);
         notFound();
@@ -28,11 +29,9 @@ export default async function SingleProductPage({ params }: ProductPageProps) {
         notFound();
     }
 
-    // Get brand and category names
     const brandName = typeof product.brand === 'object' ? product.brand.name : product.brand;
     const categoryName = typeof product.category === 'object' ? product.category.name : product.category;
 
-    // Get images array or fallback to single image
     const productImages = product.images && product.images.length > 0
         ? product.images
         : product.image
@@ -40,138 +39,89 @@ export default async function SingleProductPage({ params }: ProductPageProps) {
             : ['/placeholder.png'];
 
     return (
-        <div className="bg-babyShopLightWhite min-h-screen py-8">
-            <Container>
-                {/* Breadcrumb */}
-                <nav className="flex items-center gap-2 text-sm text-gray-600 mb-6">
-                    <Link href="/" className="hover:text-babyshopSky transition-colors">Home</Link>
-                    <span>/</span>
-                    <Link href="/products" className="hover:text-babyshopSky transition-colors">Products</Link>
-                    <span>/</span>
-                    {categoryName && (
-                        <>
-                            <Link href={`/category/${typeof product.category === 'object' ? product.category.slug : ''}`} className="hover:text-babyshopSky transition-colors">
-                                {categoryName}
-                            </Link>
-                            <span>/</span>
-                        </>
-                    )}
-                    <span className="text-gray-900 font-medium">{product.name}</span>
-                </nav>
+        <div className="bg-white min-h-screen">
+            {/* Minimal Breadcrumb */}
+            <div className="py-6 border-b border-gray-50">
+                <Container>
+                    <nav className="flex items-center gap-2 text-xs text-gray-400 font-medium tracking-wide">
+                        <Link href="/" className="hover:text-black transition-colors">Home</Link>
+                        <ChevronRight className="w-3 h-3 text-gray-300" />
+                        <Link href="/products" className="hover:text-black transition-colors">Shop</Link>
+                        {categoryName && (
+                            <>
+                                <ChevronRight className="w-3 h-3 text-gray-300" />
+                                <Link
+                                    href={`/category/${typeof product.category === 'object' ? product.category.slug : ''}`}
+                                    className="hover:text-black transition-colors"
+                                >
+                                    {categoryName}
+                                </Link>
+                            </>
+                        )}
+                        <ChevronRight className="w-3 h-3 text-gray-300" />
+                        <span className="text-gray-900 truncate max-w-[200px]">{product.name}</span>
+                    </nav>
+                </Container>
+            </div>
 
-                {/* Main Product Section */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-                    {/* Left: Image Gallery */}
-                    <div className="space-y-4 relative">
-                        <ImageGallery
-                            name={product.name}
-                            images={productImages}
-                            isFeatured={product.isFeatured}
-                            isTrending={product.isTrending}
-                            isBestDeal={product.isBestDeal}
-                        />
-
-                        {/* Wishlist & Share - Absolute positioned relative to the gallery area */}
-                        <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
-                            <WishListButton productId={product._id} />
-                            <button className="w-12 h-12 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-babyshopSky hover:scale-110 transition-all duration-300 group/share">
-                                <Share2 className="w-5 h-5 text-gray-400 group-hover/share:text-white transition-colors" />
-                            </button>
+            <Container className="py-12 md:py-20">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-24">
+                    {/* Left Column: Gallery (7 Cols for visual impact) */}
+                    <div className="lg:col-span-7">
+                        <div className="lg:sticky lg:top-24">
+                            <ImageGallery
+                                name={product.name}
+                                images={productImages}
+                            />
                         </div>
                     </div>
 
-                    {/* Right: Product Details */}
-                    <div className="space-y-6">
-                        {/* Title & Rating */}
-                        <div>
-                            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+                    {/* Right Column: Product Info (5 Cols) */}
+                    <div className="lg:col-span-5 flex flex-col gap-10">
+                        {/* Header Info */}
+                        <div className="space-y-4">
+                            {brandName && (
+                                <Link
+                                    href={`/brand/${typeof product.brand === 'object' ? product.brand._id : ''}`}
+                                    className="text-sm font-semibold text-gray-500 uppercase tracking-widest hover:text-black transition-colors"
+                                >
+                                    {brandName}
+                                </Link>
+                            )}
+                            <h1 className="text-4xl md:text-5xl font-semibold text-gray-900 tracking-tight leading-[1.1]">
                                 {product.name}
                             </h1>
 
-                            {/* Meta Info */}
-                            <div className="flex flex-wrap items-center gap-4 text-sm">
-                                {brandName && (
-                                    <div className="flex items-center gap-2">
-                                        <Award className="w-4 h-4 text-gray-400" />
-                                        <span className="text-gray-600">Brand:</span>
-                                        <Link href={`/brand/${brandName.toLowerCase()}`} className="font-semibold text-babyshopSky hover:underline">
-                                            {brandName}
-                                        </Link>
-                                    </div>
-                                )}
-                                {product.averageRating > 0 && (
-                                    <div className="flex items-center gap-2">
-                                        <div className="flex items-center gap-1">
-                                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                                            <span className="font-semibold text-gray-900">{product.averageRating}</span>
-                                        </div>
-                                        <span className="text-gray-400">|</span>
-                                        <span className="text-gray-600">Reviews</span>
-                                    </div>
-                                )}
-                                {product.ageGroup && (
-                                    <div className="flex items-center gap-2">
-                                        <Package className="w-4 h-4 text-gray-400" />
-                                        <span className="text-gray-600">Age:</span>
-                                        <span className="font-semibold text-gray-900">{product.ageGroup}</span>
-                                    </div>
-                                )}
+                            {/* Rating - Minimal */}
+                            <div className="flex items-center gap-2 text-sm">
+                                <div className="flex gap-0.5">
+                                    {[1, 2, 3, 4, 5].map((star) => (
+                                        <svg
+                                            key={star}
+                                            className={`w-4 h-4 ${star <= (product.averageRating || 0) ? 'text-gray-900 fill-current' : 'text-gray-200'}`}
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            fill="none"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        >
+                                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                                        </svg>
+                                    ))}
+                                </div>
+                                <span className="text-gray-500 underline decoration-gray-300 underline-offset-4 decoration-1">
+                                    {product.averageRating > 0 ? `${product.averageRating} Rating` : 'No reviews'}
+                                </span>
                             </div>
                         </div>
 
-                        {/* Description */}
-                        {product.description && (
-                            <div className="bg-white rounded-2xl p-6 border border-gray-200">
-                                <h2 className="text-lg font-bold text-gray-900 mb-3">Product Description</h2>
-                                <p className="text-gray-600 leading-relaxed">
-                                    {product.description}
-                                </p>
-                            </div>
-                        )}
-
-                        {/* Product Actions */}
+                        {/* Actions & Selectors */}
                         <ProductAction product={product} />
 
-                        {/* Trust Badges */}
-                        <div className="bg-gradient-to-br from-teal-50/60 via-cyan-50/60 to-white rounded-2xl p-6 border border-gray-200">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center">
-                                        <Shield className="w-5 h-5 text-green-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-gray-600">Secure</p>
-                                        <p className="text-sm font-bold text-gray-900">Payment</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center">
-                                        <Package className="w-5 h-5 text-blue-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-gray-600">Free</p>
-                                        <p className="text-sm font-bold text-gray-900">Shipping</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center">
-                                        <Zap className="w-5 h-5 text-orange-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-gray-600">Fast</p>
-                                        <p className="text-sm font-bold text-gray-900">Delivery</p>
-                                    </div>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-lg bg-white shadow-sm flex items-center justify-center">
-                                        <Award className="w-5 h-5 text-purple-600" />
-                                    </div>
-                                    <div>
-                                        <p className="text-xs text-gray-600">Quality</p>
-                                        <p className="text-sm font-bold text-gray-900">Assured</p>
-                                    </div>
-                                </div>
-                            </div>
+                        {/* Details Accordion - "Collapsible sections" */}
+                        <div className="pt-8 border-t border-gray-100">
+                            <ProductDescription product={product} />
                         </div>
                     </div>
                 </div>

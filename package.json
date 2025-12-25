@@ -1,0 +1,10 @@
+{
+  "name": "ecommerce",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n server,admin,client -c red,blue,green \"cd server && yarn dev\" \"cd admin && yarn dev\" \"cd client && yarn dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
