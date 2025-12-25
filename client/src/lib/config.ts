@@ -142,4 +142,7 @@ export const API_ENDPOINTS = {
     // Banners
     BANNERS: "/banners",
     BANNER_BY_ID: (id: string) => `/banners/${id}`,
+
+    // Wishlist
+    WISHLIST: "/wishlist",
 } as const;
