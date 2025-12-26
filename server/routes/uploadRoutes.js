@@ -13,7 +13,7 @@ const upload = multer({ storage });
 // @desc    Upload an image to Cloudinary
 // @route   POST /api/upload
 // @access  Private/Admin
-router.post('/', protect, admin, upload.single('image'), asyncHandler(async (req, res) => {
+router.post('/', protect, upload.single('image'), asyncHandler(async (req, res) => {
     if (!req.file) {
         res.status(400);
         throw new Error('Please upload an image');

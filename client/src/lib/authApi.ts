@@ -87,3 +87,31 @@ export const getUserProfile = async (token: string): Promise<User> => {
         headers: getAuthHeaders(token),
     });
 };
+
+export const uploadImage = async (file: File, token: string): Promise<{ success: boolean; url: string }> => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    const { baseUrl } = require("./config").getApiConfig();
+    const response = await fetch(`${baseUrl}${API_ENDPOINTS.UPLOAD || "/upload"}`, {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to upload image");
+    }
+
+    return response.json();
+};
+
+export const updateUserProfile = async (userId: string, data: Partial<User>, token: string): Promise<{ success: boolean; user: User }> => {
+    return fetchWithConfig<{ success: boolean; user: User }>(API_ENDPOINTS.USER_BY_ID(userId), {
+        method: "PUT",
+        headers: getAuthHeaders(token),
+        body: JSON.stringify(data),
+    });
+};
