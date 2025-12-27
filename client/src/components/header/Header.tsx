@@ -1,3 +1,5 @@
+"use client";
+
 import Container from "../common/Container";
 import Logo from "./Logo";
 import SearchInput from "./SearchInput";
@@ -11,55 +13,58 @@ export default function Header() {
     return (
         <>
             <TopHeader />
-            {/* Main Header with Glassmorphism */}
-            <header className="bg-white/95 backdrop-blur-md border-b border-gray-200/50 shadow-lg sticky top-0 z-50 transition-all duration-300">
-                <Container>
-                    <div className="flex items-center justify-between gap-4 lg:gap-8 py-4 lg:py-5">
-                        {/* Left: Logo */}
-                        <div className="flex-shrink-0 transition-transform hover:scale-105 duration-200">
+            {/* Main Header with Modern Floating Feel */}
+            <header className="sticky top-0 z-50 w-full transition-all duration-300">
+                {/* Background Layer with Glassmorphism */}
+                <div className="absolute inset-0 bg-white/80 backdrop-blur-xl border-b border-slate-100 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)]" />
+
+                <Container className="relative">
+                    <div className="flex items-center justify-between gap-6 py-3 lg:py-4">
+
+                        {/* Left: Brand Logo */}
+                        <div className="flex-shrink-0 group cursor-pointer">
                             <Logo />
                         </div>
 
-                        {/* Center: Search (Hidden on Mobile) */}
-                        <div className="hidden md:flex flex-1 max-w-2xl mx-auto">
-                            <SearchInput />
+                        {/* Center: Search Bar (Redesigned for better focus) */}
+                        <div className="hidden md:flex flex-1 max-w-[600px] mx-auto group">
+                            <div className="w-full transition-all duration-300 focus-within:ring-2 focus-within:ring-babyshopSky/20 rounded-2xl">
+                                <SearchInput />
+                            </div>
                         </div>
 
-                        {/* Right: Action Icons */}
-                        <div className="flex items-center gap-3 lg:gap-5">
-                            {/* Desktop Icons */}
-                            <div className="hidden md:flex items-center gap-4 lg:gap-5">
-                                <div className="group relative">
-                                    <OrdersIcon />
-                                </div>
-                                <div className="h-6 w-px bg-gray-200" />
-                                <div className="group relative">
-                                    <WishlistIcon />
-                                </div>
-                                <div className="h-6 w-px bg-gray-200" />
-                                <div className="group relative">
-                                    <UserButton />
-                                </div>
-                                <div className="h-6 w-px bg-gray-200" />
-                                <div className="group relative">
-                                    <CartIcon />
-                                </div>
+                        {/* Right: User Actions */}
+                        <div className="flex items-center gap-2 lg:gap-4">
+
+                            {/* Desktop Exclusive: Orders */}
+                            <div className="hidden lg:block hover:bg-slate-50 p-2 rounded-xl transition-colors cursor-pointer">
+                                <OrdersIcon />
                             </div>
 
-                            {/* Mobile Icons - Compact */}
-                            <div className="md:hidden flex items-center gap-2">
+                            {/* Wishlist */}
+                            <div className="hover:bg-slate-50 p-2 rounded-xl transition-colors cursor-pointer relative">
                                 <WishlistIcon />
-                                <div className="h-6 w-px bg-gray-200" />
-                                <UserButton />
-                                <div className="h-6 w-px bg-gray-200" />
+                            </div>
+
+                            {/* Cart - More prominent like in your screenshots */}
+                            <div className="bg-babyshopSky/5 hover:bg-babyshopSky/10 p-2 rounded-xl transition-all cursor-pointer">
                                 <CartIcon />
+                            </div>
+
+                            {/* User Profile - Rounded Style */}
+                            <div className="pl-2 ml-2 border-l border-slate-100">
+                                <div className="p-0.5 rounded-full border-2 border-transparent hover:border-babyshopSky transition-all">
+                                    <UserButton />
+                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Mobile Search Bar */}
-                    <div className="md:hidden pb-4">
-                        <SearchInput />
+                    {/* Mobile Search - Bottom padding adjusted */}
+                    <div className="md:hidden pb-3 px-1">
+                        <div className="bg-slate-50 rounded-2xl border border-slate-100 focus-within:bg-white transition-all shadow-sm">
+                            <SearchInput />
+                        </div>
                     </div>
                 </Container>
             </header>

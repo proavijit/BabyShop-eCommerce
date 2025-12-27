@@ -174,56 +174,34 @@ export default function Footer() {
                     </div>
                 </div>
 
-                {/* Newsletter Section */}
-                <div className="pt-8 border-t border-gray-200">
-                    <div className="bg-gradient-to-br from-teal-50/60 via-cyan-50/60 to-white rounded-2xl p-8 border border-gray-200">
-                        <div className="max-w-2xl mx-auto text-center">
-                            <div className="w-14 h-14 rounded-2xl bg-white shadow-md flex items-center justify-center mx-auto mb-4">
-                                <Mail className="w-7 h-7 text-babyshopSky" />
-                            </div>
-                            <h3 className="text-gray-900 font-bold text-2xl mb-2">Stay Updated!</h3>
-                            <p className="text-gray-600 text-sm mb-6">
-                                Subscribe to our newsletter for exclusive deals, parenting tips, and new arrivals
-                            </p>
-                            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                                <input
-                                    type="email"
-                                    placeholder="Enter your email address"
-                                    className="flex-1 px-4 py-3 rounded-xl bg-white border-2 border-gray-200 focus:border-babyshopSky focus:outline-none text-gray-900 placeholder-gray-400 transition-colors"
-                                />
-                                <button className="px-6 py-3 bg-gradient-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-105 whitespace-nowrap">
-                                    Subscribe Now
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
             </div>
 
-            {/* Bottom Bar */}
-            <div className="border-t border-gray-200 bg-gray-50">
-                <div className="container mx-auto px-4 py-6">
-                    <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-                        <p className="text-sm text-gray-600">
-                            © {currentYear} <span className="font-semibold text-babyshopSky">BabyShop</span>. All rights reserved. Made with <Heart className="w-4 h-4 inline fill-babyshopRed text-babyshopRed" /> for parents.
-                        </p>
-                        <div className="flex items-center gap-4">
-                            <span className="text-sm text-gray-600 font-medium">We Accept:</span>
-                            <div className="flex items-center gap-2">
-                                <div className="w-12 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-xs font-bold text-blue-600 shadow-sm">
-                                    VISA
+            {/* Bottom Bar - Soft & Playful */}
+            <div className="bg-babyshopSky/5 border-t border-babyshopSky/10">
+                <div className="container mx-auto px-4 py-10">
+                    <div className="flex flex-col items-center gap-6">
+
+                        {/* Payment Badges - Floating Style */}
+                        {/* <div className="flex items-center gap-3">
+                            <span className="text-xs font-semibold text-babyshopSky/60 uppercase tracking-widest mr-2">Secure Checkout</span>
+                            {['VISA', 'MC', 'AMEX', 'PP'].map((type) => (
+                                <div key={type} className="w-10 h-6 bg-white shadow-sm rounded-md flex items-center justify-center text-[9px] font-bold text-gray-400">
+                                    {type}
                                 </div>
-                                <div className="w-12 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-xs font-bold text-red-600 shadow-sm">
-                                    MC
-                                </div>
-                                <div className="w-12 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-xs font-bold text-blue-500 shadow-sm">
-                                    AMEX
-                                </div>
-                                <div className="w-12 h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-xs font-bold text-blue-700 shadow-sm">
-                                    PP
-                                </div>
-                            </div>
+                            ))}
+                        </div> */}
+
+                        <div className="h-px w-24 bg-gray-200" />
+
+                        {/* Branding & Attribution */}
+                        <div className="text-center">
+                            <p className="text-sm text-gray-600 mb-1">
+                                © {currentYear} <span className="text-babyshopSky font-bold">BabyShop</span>.
+                                Created by Avijit Ghosh  <Heart className="w-3.5 h-3.5 inline-block mx-1 fill-babyshopRed text-babyshopRed" />
+                            </p>
                         </div>
+
                     </div>
                 </div>
             </div>
