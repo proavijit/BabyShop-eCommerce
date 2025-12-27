@@ -186,7 +186,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
                                                     </div>
                                                 </div>
                                                 <div className="text-sm text-muted-foreground md:hidden">
-                                                    {typeof product.category === 'object'
+                                                    {(product.category && typeof product.category === 'object')
                                                         ? product.category.name
                                                         : 'Unknown'}
                                                 </div>
@@ -194,7 +194,7 @@ export const ProductTable: React.FC<ProductTableProps> = ({
                                         </td>
                                         <td className="p-4 hidden md:table-cell">
                                             <Badge variant="outline">
-                                                {typeof product.category === 'object'
+                                                {(product.category && typeof product.category === 'object')
                                                     ? product.category.name
                                                     : 'Unknown'}
                                             </Badge>

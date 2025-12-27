@@ -5,8 +5,17 @@ import Link from "next/link";
 import { useWishlist } from "@/hooks/useWishlist";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { useEffect, useState } from "react";
+
 export default function WishlistIcon() {
     const { totalItems } = useWishlist();
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const count = mounted ? totalItems : 0;
 
     return (
         <Link href="/wishlist" className="relative p-2 group">
@@ -14,7 +23,7 @@ export default function WishlistIcon() {
                 <Heart className="w-6 h-6 text-gray-700 group-hover:text-babyshopRed transition-colors duration-300" />
 
                 <AnimatePresence mode="wait">
-                    {totalItems > 0 && (
+                    {count > 0 && (
                         <motion.span
                             key="wishlist-badge"
                             initial={{ scale: 0, opacity: 0 }}
@@ -22,12 +31,12 @@ export default function WishlistIcon() {
                             exit={{ scale: 0, opacity: 0 }}
                             className="absolute -top-2 -right-2 bg-babyshopSky text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm border-2 border-white"
                         >
-                            {totalItems}
+                            {count}
                         </motion.span>
                     )}
                 </AnimatePresence>
             </div>
-            <span className="sr-only">Wishlist ({totalItems} items)</span>
+            <span className="sr-only">Wishlist ({count} items)</span>
         </Link>
     );
 }

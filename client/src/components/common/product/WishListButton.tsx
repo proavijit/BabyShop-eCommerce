@@ -7,6 +7,7 @@ import { useUserStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Product } from "@/types/type";
+import { useEffect, useState } from "react";
 
 interface WishListButtonProps {
     productId: string;
@@ -18,7 +19,13 @@ export default function WishListButton({ productId, product, className = "" }: W
     const { toggleWishlist, isInWishlist } = useWishlist();
     const { isAuthenticated } = useUserStore();
     const router = useRouter();
-    const isWishlisted = isInWishlist(productId);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const isWishlisted = mounted ? isInWishlist(productId) : false;
 
     const handleToggle = async (e: React.MouseEvent) => {
         e.preventDefault();

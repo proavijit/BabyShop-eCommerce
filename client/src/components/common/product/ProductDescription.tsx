@@ -57,7 +57,7 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
         setOpenSection(openSection === section ? null : section);
     };
 
-    const brandName = typeof product.brand === 'object' ? product.brand.name : product.brand;
+    const brandName = (product.brand && typeof product.brand === 'object') ? product.brand.name : (product.brand || 'Unknown');
 
     return (
         <div className="w-full space-y-8">
@@ -116,7 +116,7 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
                         <div className="space-y-1">
                             <span className="text-xs uppercase tracking-wider text-gray-400 font-bold">Category</span>
                             <p className="font-bold text-gray-900">
-                                {typeof product.category === 'object' ? product.category.name : product.category}
+                                {(product.category && typeof product.category === 'object') ? product.category.name : (product.category || 'Unknown')}
                             </p>
                         </div>
                         <div className="space-y-1">

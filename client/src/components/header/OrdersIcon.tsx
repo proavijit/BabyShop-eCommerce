@@ -5,9 +5,17 @@ import Link from "next/link";
 import { useOrderStore } from "@/lib/store";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { useEffect, useState } from "react";
+
 export default function OrdersIcon() {
     const { orders } = useOrderStore();
-    const totalOrders = orders.length;
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    const totalOrders = mounted ? orders.length : 0;
 
     return (
         <Link href="/orders" className="relative p-2 group">

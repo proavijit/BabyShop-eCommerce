@@ -29,8 +29,8 @@ export default async function SingleProductPage({ params }: ProductPageProps) {
         notFound();
     }
 
-    const brandName = typeof product.brand === 'object' ? product.brand.name : product.brand;
-    const categoryName = typeof product.category === 'object' ? product.category.name : product.category;
+    const brandName = (product.brand && typeof product.brand === 'object') ? product.brand.name : (product.brand || null);
+    const categoryName = (product.category && typeof product.category === 'object') ? product.category.name : (product.category || null);
 
     const productImages = product.images && product.images.length > 0
         ? product.images
@@ -51,7 +51,7 @@ export default async function SingleProductPage({ params }: ProductPageProps) {
                             <>
                                 <ChevronRight className="w-3 h-3 text-gray-300" />
                                 <Link
-                                    href={`/category/${typeof product.category === 'object' ? product.category.slug : ''}`}
+                                    href={`/category/${(product.category && typeof product.category === 'object') ? product.category.slug : ''}`}
                                     className="hover:text-black transition-colors"
                                 >
                                     {categoryName}
@@ -82,7 +82,7 @@ export default async function SingleProductPage({ params }: ProductPageProps) {
                         <div className="space-y-4">
                             {brandName && (
                                 <Link
-                                    href={`/brand/${typeof product.brand === 'object' ? product.brand._id : ''}`}
+                                    href={`/brand/${(product.brand && typeof product.brand === 'object') ? product.brand._id : ''}`}
                                     className="text-sm font-semibold text-gray-500 uppercase tracking-widest hover:text-black transition-colors"
                                 >
                                     {brandName}
