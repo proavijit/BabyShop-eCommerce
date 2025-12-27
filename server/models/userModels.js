@@ -31,6 +31,20 @@ const userSchema = new mongoose.Schema(
             default: "active",
         },
         address: [addressSchema], // FIXED
+        cart: [
+            {
+                productId: {
+                    type: mongoose.Schema.Types.ObjectId,
+                    ref: "Product",
+                    required: true,
+                },
+                quantity: {
+                    type: Number,
+                    required: true,
+                    default: 1,
+                },
+            },
+        ],
     },
     {
         timestamps: true,
