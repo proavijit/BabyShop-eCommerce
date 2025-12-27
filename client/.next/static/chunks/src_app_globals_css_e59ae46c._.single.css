@@ -2359,6 +2359,12 @@
     background-color: #9c059c;
   }
 
+  .bg-\[\#29beb3\]\/10 {
+    background-color: rgba(41, 190, 179, .1);
+    background-color: color(display-p3 .365014 .734409 .700083 / .1);
+    background-color: lab(69.569% -40.7245 -5.8538 / .1);
+  }
+
   .bg-\[\#fafafa\]\/50 {
     background-color: rgba(250, 250, 250, .5);
     background-color: color(display-p3 .980392 .980392 .980392 / .5);
@@ -3356,6 +3362,10 @@
 
   .whitespace-nowrap {
     white-space: nowrap;
+  }
+
+  .text-\[\#29beb3\] {
+    color: #29beb3;
   }
 
   .text-accent-foreground {
@@ -4593,6 +4603,14 @@
   }
 
   @media (hover: hover) {
+    .hover\:bg-\[\#29beb3\]\/10:hover {
+      background-color: rgba(41, 190, 179, .1);
+      background-color: color(display-p3 .365014 .734409 .700083 / .1);
+      background-color: lab(69.569% -40.7245 -5.8538 / .1);
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:bg-\[\#800480\]:hover {
       background-color: #800480;
     }
@@ -5006,6 +5024,10 @@
       content: var(--tw-content);
       background-color: var(--sidebar-border);
     }
+  }
+
+  .focus\:border-\[\#29beb3\]:focus {
+    border-color: #29beb3;
   }
 
   .focus\:border-babyshopSky:focus {

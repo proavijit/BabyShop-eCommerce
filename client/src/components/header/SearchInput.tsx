@@ -135,10 +135,10 @@ export default function SearchInput() {
                         if (suggestions.length > 0) setIsOpen(true);
                     }}
                     placeholder="Search for products..."
-                    className="w-full pl-12 pr-12 py-3 rounded-full border-2 border-gray-200 focus:border-pink-400 focus:ring-4 focus:ring-pink-100 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm"
+                    className="w-full pl-12 pr-12 py-3 rounded-full border-2 border-gray-200 focus:border-[#29beb3] focus:ring-4 focus:ring-pink-100 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm"
                 />
                 {isLoading && (
-                    <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-pink-500 animate-spin" />
+                    <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#29beb3] animate-spin" />
                 )}
                 {!isLoading && searchQuery && (
                     <button
@@ -172,7 +172,7 @@ export default function SearchInput() {
                                     <button
                                         key={product._id}
                                         onClick={() => handleProductClick(product)}
-                                        className={`w-full flex items-center gap-4 p-4 hover:bg-pink-50 transition-colors border-b border-gray-100 last:border-0 ${selectedIndex === index ? "bg-pink-50" : ""
+                                        className={`w-full flex items-center gap-4 p-4 hover:bg-[#29beb3]/10 transition-colors border-b border-gray-100 last:border-0 ${selectedIndex === index ? "bg-[#29beb3]/10" : ""
                                             }`}
                                     >
                                         <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
@@ -194,7 +194,7 @@ export default function SearchInput() {
                                                 {product.name}
                                             </h3>
                                             <div className="flex items-center gap-2 mt-1">
-                                                <span className="text-pink-600 font-semibold">
+                                                <span className="text-[#29beb3] font-semibold">
                                                     ${getPrice(product).toFixed(2)}
                                                 </span>
                                                 {product.discountPrice && product.discountPrice > 0 && product.price && (
@@ -210,7 +210,7 @@ export default function SearchInput() {
                             {suggestions.length >= 6 && (
                                 <button
                                     onClick={handleViewAllResults}
-                                    className="w-full p-4 text-center text-pink-600 hover:bg-pink-50 font-medium transition-colors border-t border-gray-100"
+                                    className="w-full p-4 text-center text-[#29beb3] hover:bg-[#29beb3]/10 font-medium transition-colors border-t border-gray-100"
                                 >
                                     View all results for &quot;{searchQuery}&quot;
                                 </button>
