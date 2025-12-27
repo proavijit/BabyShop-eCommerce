@@ -1,6 +1,6 @@
 import { API_ENDPOINTS, fetchData } from "@/lib/api";
 import { Brand } from "@/types/type";
-import { Award, ChevronRight, Sparkles, Star } from "lucide-react";
+import { ChevronRight, Search } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -14,104 +14,76 @@ export default async function HomeBrand() {
         console.error("Failed to fetch brands in HomeBrand:", error);
     }
 
-    // If no brands, don't render the section
     if (brands.length === 0) return null;
 
     return (
-        <section className="py-12 px-6 rounded-3xl bg-gradient-to-br from-teal-50/60 via-cyan-50/60 to-white border border-gray-100">
-            {/* Section Header */}
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-4">
-                <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-2xl bg-white shadow-md flex items-center justify-center text-babyshopSky">
-                        <Award className="w-7 h-7" />
-                    </div>
-                    <div>
-                        <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-1 flex items-center gap-2">
-                            Shop by Brand
+        <section className="py-16 px-4 md:px-8 bg-white relative overflow-hidden">
+            <div className="max-w-7xl mx-auto relative">
+
+                {/* Section Header - Clean & Professional */}
+                <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 border-b border-slate-100 pb-8">
+                    <div className="space-y-2">
+                        <h2 className="text-4xl font-extrabold text-slate-900 tracking-tight">
+                            Our Trusted <span className="text-babyshopSky">Brands</span>
                         </h2>
-                        <p className="text-gray-600 text-sm">
-                            Trusted brands for your precious little ones!
+                        <p className="text-slate-500 text-sm">
+                            Quality products from the names you love and trust.
                         </p>
                     </div>
-                </div>
-                <Link
-                    href="/brands"
-                    className="group flex items-center gap-2 text-babyshopSky font-semibold hover:gap-3 transition-all duration-300 text-sm"
-                >
-                    View All Brands
-                    <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                </Link>
-            </div>
 
-            {/* Brands Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-                {brands.map((brand) => (
                     <Link
-                        key={brand._id}
-                        href={`/brand/${brand.name.toLowerCase().replace(/\s+/g, '-')}`}
-                        className="group relative bg-white rounded-2xl border-2 border-gray-100 hover:border-babyshopSky/40 p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 overflow-hidden"
+                        href="/brands"
+                        className="group flex items-center gap-2 text-slate-900 font-bold hover:text-babyshopSky transition-all duration-300 text-sm"
                     >
-                        {/* Decorative Background */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-teal-50 via-cyan-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        View All
+                        <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                </div>
 
-                        {/* Sparkle Effect */}
-                        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                            <Sparkles className="w-4 h-4 text-babyshopSky" />
-                        </div>
+                {/* Brands Grid - All same size & No badges */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-8">
+                    {brands.map((brand) => (
+                        <Link
+                            key={brand._id}
+                            href={`/brand/${brand.name.toLowerCase().replace(/\s+/g, '-')}`}
+                            className="group flex flex-col items-center"
+                        >
+                            {/* Fixed Aspect Ratio Container */}
+                            <div className="relative w-full aspect-square rounded-2xl bg-slate-50 border border-transparent overflow-hidden transition-all duration-500 group-hover:shadow-2xl group-hover:border-slate-100 group-hover:-translate-y-2">
 
-                        {/* Brand Content */}
-                        <div className="relative flex flex-col items-center justify-center gap-3 h-full min-h-[100px]">
-                            {brand.image ? (
-                                <div className="relative w-full h-16 flex items-center justify-center">
+                                {brand.image ? (
                                     <Image
                                         src={brand.image}
                                         alt={brand.name}
-                                        width={80}
-                                        height={64}
-                                        className="object-contain max-h-16 w-auto transition-transform duration-300 group-hover:scale-110"
+                                        fill
+                                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                                        sizes="(max-width: 768px) 50vw, 20vw"
                                     />
-                                </div>
-                            ) : (
-                                <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-teal-100 to-cyan-100 flex items-center justify-center transition-transform duration-300 group-hover:scale-110">
-                                    <Award className="w-8 h-8 text-babyshopSky" />
-                                </div>
-                            )}
+                                ) : (
+                                    <div className="w-full h-full bg-slate-100 flex items-center justify-center">
+                                        <span className="text-slate-300 font-bold text-2xl">{brand.name.charAt(0)}</span>
+                                    </div>
+                                )}
+                            </div>
 
-                            <h3 className="text-sm font-bold text-gray-800 text-center group-hover:text-babyshopSky transition-colors duration-300 line-clamp-2">
+                            {/* Label */}
+                            <span className="mt-4 text-[14px] font-bold text-slate-700 group-hover:text-babyshopSky transition-colors duration-300">
                                 {brand.name}
-                            </h3>
-                        </div>
-
-                        {/* Bottom Accent Line */}
-                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-babyshopSky to-teal-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                    </Link>
-                ))}
-            </div>
-
-            {/* Bottom CTA Banner */}
-            <div className="mt-10 bg-gradient-to-r from-teal-100 via-cyan-100 to-teal-100 rounded-2xl p-6 border border-teal-200">
-                <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-white shadow-md flex items-center justify-center">
-                            <Star className="w-6 h-6 text-babyshopSky" />
-                        </div>
-                        <div>
-                            <h3 className="font-bold text-gray-900 text-lg">
-                                Can't find your favorite brand?
-                            </h3>
-                            <p className="text-sm text-gray-600">
-                                We're always adding new trusted brands to our collection
-                            </p>
-                        </div>
-                    </div>
-                    <Link
-                        href="/contact"
-                        className="px-6 py-3 bg-gradient-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-105 whitespace-nowrap"
-                    >
-                        Request a Brand
-                    </Link>
+                            </span>
+                        </Link>
+                    ))}
                 </div>
+
+
             </div>
         </section>
     );
+}
+
+function ArrowRight({ className }: { className?: string }) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+            <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+        </svg>
+    )
 }
