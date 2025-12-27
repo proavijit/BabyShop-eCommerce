@@ -17,7 +17,7 @@ export default async function HomeBrand() {
     if (brands.length === 0) return null;
 
     return (
-        <section className="py-16 px-4 md:px-8 bg-white relative overflow-hidden">
+        <section className={`py-10 px-4 md:px-8 rounded-[2rem] bg-gradient-to-br from-slate-50 to-white border border-gray-100/50 shadow-sm transition-all duration-500 hover:shadow-md`}>
             <div className="max-w-7xl mx-auto relative">
 
                 {/* Section Header - Clean & Professional */}
