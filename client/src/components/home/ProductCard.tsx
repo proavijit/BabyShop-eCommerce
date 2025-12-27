@@ -3,17 +3,17 @@
 import { Product } from "@/types/type";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { Heart, ShoppingCart, Star } from "lucide-react";
+import { ShoppingCart, Star } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import AddToCartButton from "../common/AddToCartButton";
+import WishListButton from "../common/product/WishListButton";
 
 interface ProductCardProps {
     product: Product & { images?: string[]; discountPrice?: number };
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-    const [isWishlisted, setIsWishlisted] = useState(false);
     const imageUrl = product.images?.[0] || product.image || "/placeholder.png";
 
     const price = product.price;
@@ -48,17 +48,13 @@ export default function ProductCard({ product }: ProductCardProps) {
                 )}
 
                 {/* Wishlist Button */}
-                <button
-                    onClick={() => setIsWishlisted(!isWishlisted)}
-                    className="absolute right-3 top-3 z-10 w-9 h-9 rounded-full bg-white shadow-md flex items-center justify-center hover:bg-babyshopSky hover:scale-110 transition-all duration-300 group/heart"
-                >
-                    <Heart
-                        className={`w-4 h-4 transition-all duration-300 ${isWishlisted
-                            ? 'fill-babyshopRed text-babyshopRed'
-                            : 'text-gray-400 group-hover/heart:text-white'
-                            }`}
+                <div className="absolute right-3 top-3 z-10 transition-transform duration-300 hover:scale-110">
+                    <WishListButton
+                        productId={product._id}
+                        product={product}
+                        className="w-9 h-9 shadow-md"
                     />
-                </button>
+                </div>
 
                 {/* Product Image */}
                 <Link href={`/product/${product._id}`} className="block w-full h-full relative">

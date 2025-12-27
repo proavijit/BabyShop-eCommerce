@@ -11,6 +11,12 @@
     ],
     "[project]/src/app/product/[id]/page": [
       "static/media/379e710e6f0625c3-s.p.20b09c80.woff2"
+    ],
+    "[project]/src/app/profile/page": [
+      "static/media/379e710e6f0625c3-s.p.20b09c80.woff2"
+    ],
+    "[project]/src/app/wishlist/page": [
+      "static/media/379e710e6f0625c3-s.p.20b09c80.woff2"
     ]
   },
   "appUsingSizeAdjust": true,

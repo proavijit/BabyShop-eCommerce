@@ -114,7 +114,11 @@ export default function ProductAction({ product }: ProductActionProps) {
                     </motion.button>
 
                     <div className="w-14 h-14 flex items-center justify-center rounded-2xl border-2 border-gray-100 hover:border-babyshopSky/30 hover:bg-red-50 group transition-all duration-300">
-                        <WishListButton productId={product._id} className="w-full h-full rounded-2xl group-hover:text-red-500" />
+                        <WishListButton
+                            productId={product._id}
+                            product={product}
+                            className="w-full h-full rounded-2xl group-hover:text-red-500"
+                        />
                     </div>
                 </div>
 

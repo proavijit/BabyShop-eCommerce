@@ -1,21 +1,52 @@
 "use client";
 
-import { useState } from "react";
 import { Heart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useWishlist } from "@/hooks/useWishlist";
+import { useUserStore } from "@/lib/store";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Product } from "@/types/type";
 
 interface WishListButtonProps {
     productId: string;
+    product?: Product; // Full product object if available
     className?: string;
 }
 
-export default function WishListButton({ productId, className = "" }: WishListButtonProps) {
-    const [isWishlisted, setIsWishlisted] = useState(false);
+export default function WishListButton({ productId, product, className = "" }: WishListButtonProps) {
+    const { toggleWishlist, isInWishlist } = useWishlist();
+    const { isAuthenticated } = useUserStore();
+    const router = useRouter();
+    const isWishlisted = isInWishlist(productId);
 
-    const handleToggle = () => {
-        setIsWishlisted(!isWishlisted);
-        // Simulate API call
-        console.log(`Product ${productId} ${!isWishlisted ? 'added to' : 'removed from'} wishlist`);
+    const handleToggle = async (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (!isAuthenticated) {
+            toast.error("Please login to save favorites", {
+                description: "Redirecting you to the login page...",
+            });
+            router.push("/auth/signin");
+            return;
+        }
+
+        try {
+            // If product details aren't provided, we create a minimal product object
+            // for the store, but ideally the store should handle productId logic.
+            // For now, toggleWishlist expects a Product object.
+            const productToToggle = product || { _id: productId } as Product;
+            await toggleWishlist(productToToggle);
+
+            if (!isWishlisted) {
+                toast.success("Added to wishlist!");
+            } else {
+                toast.success("Removed from wishlist");
+            }
+        } catch (error) {
+            toast.error("Failed to update wishlist");
+        }
     };
 
     return (
