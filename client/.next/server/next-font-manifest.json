@@ -1,21 +1,12 @@
 {
   "app": {
-    "[project]/src/app/_not-found/page": [
-      "static/media/379e710e6f0625c3-s.p.20b09c80.woff2"
-    ],
-    "[project]/src/app/cart/page": [
+    "[project]/src/app/auth/signin/page": [
       "static/media/379e710e6f0625c3-s.p.20b09c80.woff2"
     ],
     "[project]/src/app/page": [
       "static/media/379e710e6f0625c3-s.p.20b09c80.woff2"
     ],
     "[project]/src/app/product/[id]/page": [
-      "static/media/379e710e6f0625c3-s.p.20b09c80.woff2"
-    ],
-    "[project]/src/app/profile/page": [
-      "static/media/379e710e6f0625c3-s.p.20b09c80.woff2"
-    ],
-    "[project]/src/app/wishlist/page": [
       "static/media/379e710e6f0625c3-s.p.20b09c80.woff2"
     ]
   },
