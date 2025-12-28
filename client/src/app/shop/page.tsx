@@ -1,14 +1,23 @@
 import ShopPageClient from "@/components/page/shop/ShopPageClient";
 import { fetchData } from "@/lib/api";
-import { CategoryResponse } from "@/types/type";
+import { CategoryResponse, BrandResponse, Category, Brand } from "@/types/type";
 
-const ShopPage = () => {
+const ShopPage = async () => {
+    let categories: Category[] = [];
+    let brands: Brand[] = [];
+
     try {
-        const brands = await fetchData<CategoryResponse>("/Categories");
-        categories = data.categories;
+        const categoryData = await fetchData<CategoryResponse>("/categories");
+        categories = categoryData.categories || [];
     } catch (error) {
-        error = interfaceof Error ? error.message : "an error occurred"
-        console.log(error)
+        console.error("Error fetching categories:", error);
+    }
+
+    try {
+        const brandData = await fetchData<BrandResponse>("/brands");
+        brands = brandData.brands || [];
+    } catch (error) {
+        console.error("Error fetching brands:", error);
     }
 
     return (

@@ -45,7 +45,7 @@ export default async function CatagorySection() {
                     </h3>
                     <ul className="space-y-2.5">
                         <li>
-                            <Link href="/new-arrivals" className="flex items-center gap-3 text-gray-700 hover:text-babyshopSky hover:bg-teal-50 px-3 py-2 rounded-lg transition-all group">
+                            <Link href="/shop?sort=newest" className="flex items-center gap-3 text-gray-700 hover:text-babyshopSky hover:bg-teal-50 px-3 py-2 rounded-lg transition-all group">
                                 <div className="w-8 h-8 rounded-lg bg-yellow-50 flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <Star className="w-4 h-4 text-yellow-500" />
                                 </div>
@@ -54,7 +54,7 @@ export default async function CatagorySection() {
                             </Link>
                         </li>
                         <li>
-                            <Link href="/best-sellers" className="flex items-center gap-3 text-gray-700 hover:text-babyshopPurple hover:bg-purple-50 px-3 py-2 rounded-lg transition-all group">
+                            <Link href="/shop?trending=true" className="flex items-center gap-3 text-gray-700 hover:text-babyshopPurple hover:bg-purple-50 px-3 py-2 rounded-lg transition-all group">
                                 <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <Zap className="w-4 h-4 text-babyshopPurple" />
                                 </div>
@@ -63,7 +63,7 @@ export default async function CatagorySection() {
                             </Link>
                         </li>
                         <li>
-                            <Link href="/features" className="flex items-center gap-3 text-gray-700 hover:text-babyshopSky hover:bg-teal-50 px-3 py-2 rounded-lg transition-all group">
+                            <Link href="/shop" className="flex items-center gap-3 text-gray-700 hover:text-babyshopSky hover:bg-teal-50 px-3 py-2 rounded-lg transition-all group">
                                 <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <Truck className="w-4 h-4 text-babyshopSky" />
                                 </div>
@@ -81,7 +81,7 @@ export default async function CatagorySection() {
                             <Zap className="w-3.5 h-3.5" />
                             Hot Categories
                         </h3>
-                        <Link href="/categories" className="text-xs text-babyshopSky hover:text-babyshopPurple font-semibold hover:underline transition-colors">View All</Link>
+                        <Link href="/shop" className="text-xs text-babyshopSky hover:text-babyshopPurple font-semibold hover:underline transition-colors">View All</Link>
                     </div>
 
                     <div className="flex flex-col gap-1.5">
@@ -89,7 +89,7 @@ export default async function CatagorySection() {
                             categories.slice(0, 8).map((category) => (
                                 <Link
                                     key={category._id}
-                                    href={`/category/${category.slug}`}
+                                    href={`/shop?category=${category._id}`}
                                     className="flex items-center justify-between text-gray-700 hover:text-babyshopSky hover:bg-gradient-to-r hover:from-teal-50 hover:to-cyan-50 px-3 py-2 rounded-lg transition-all group"
                                 >
                                     <div className="flex items-center gap-3">
@@ -100,7 +100,7 @@ export default async function CatagorySection() {
                                 </Link>
                             ))
                         ) : (
-                            <p className="text-sm text-gray-400 px-3">Loading...</p>
+                            <p className="text-sm text-gray-400 px-3 font-medium animate-pulse">Loading categories...</p>
                         )}
                     </div>
                 </div>
@@ -115,7 +115,7 @@ export default async function CatagorySection() {
                         {["0-6 M", "6-12 M", "1-2 Y", "2-4 Y", "4-6 Y", "6+ Y"].map((age) => (
                             <Link
                                 key={age}
-                                href={`/shop-by-age?age=${age.replace(' ', '-')}`}
+                                href={`/shop?ageGroup=${age}`}
                                 className="text-center text-xs font-semibold text-gray-700 bg-gradient-to-br from-gray-50 to-gray-100 hover:from-babyshopSky hover:to-teal-400 hover:text-white py-2.5 rounded-lg transition-all border border-gray-200 hover:border-transparent hover:shadow-md hover:scale-105"
                             >
                                 {age}
@@ -132,11 +132,11 @@ export default async function CatagorySection() {
                     </h3>
                     <ul className="space-y-2.5">
                         <li>
-                            <Link href="/offers/coupons" className="flex items-center gap-3 text-gray-700 hover:text-babyshopPurple hover:bg-pink-50 px-3 py-2 rounded-lg transition-all group">
+                            <Link href="/shop?onSale=true" className="flex items-center gap-3 text-gray-700 hover:text-babyshopPurple hover:bg-pink-50 px-3 py-2 rounded-lg transition-all group">
                                 <div className="w-8 h-8 rounded-lg bg-pink-50 flex items-center justify-center group-hover:scale-110 transition-transform">
                                     <Gift className="w-4 h-4 text-pink-500" />
                                 </div>
-                                <span className="text-sm font-semibold">Coupons</span>
+                                <span className="text-sm font-semibold">Bundle Deals</span>
                                 <ChevronRight className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-all" />
                             </Link>
                         </li>

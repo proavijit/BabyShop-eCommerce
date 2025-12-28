@@ -19,6 +19,19 @@ export interface Brand {
     image?: string;
 }
 
+export interface BrandResponse {
+    brands: Brand[];
+    total: number;
+}
+
+export interface ProductResponse {
+    products: Product[];
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+}
+
 export interface Product {
     _id: string;
     name: string;

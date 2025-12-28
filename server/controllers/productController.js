@@ -6,44 +6,113 @@ import cloudinary from "../config/cloudinary.js";
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = Number(req.query.perPage) || 20;
+  const pageSize = Number(req.query.limit) || Number(req.query.perPage) || 20;
   const page = Number(req.query.page) || 1;
-  const sortOrder = req.query.sortOrder || "desc";
 
-  const keyword = req.query.search
-    ? {
-      name: {
-        $regex: req.query.search,
-        $options: "i",
-      },
+  // Build query
+  const query = {};
+
+  // Search by name
+  if (req.query.search) {
+    query.name = {
+      $regex: req.query.search,
+      $options: "i",
+    };
+  }
+
+  // Filter by category (ID)
+  if (req.query.category) {
+    query.category = req.query.category;
+  }
+
+  // Filter by brands (comma-separated IDs)
+  if (req.query.brands) {
+    const brandIds = req.query.brands.split(",").filter(Boolean);
+    if (brandIds.length > 0) {
+      query.brand = { $in: brandIds };
     }
-    : {};
+  }
 
+  // Price range filter
+  if (req.query.minPrice || req.query.maxPrice) {
+    query.price = {};
+    if (req.query.minPrice) {
+      query.price.$gte = Number(req.query.minPrice);
+    }
+    if (req.query.maxPrice) {
+      query.price.$lte = Number(req.query.maxPrice);
+    }
+  }
+
+  // Feature flags
   if (req.query.featured) {
-    keyword.isFeatured = req.query.featured === "true";
+    query.isFeatured = req.query.featured === "true";
   }
 
   if (req.query.trending) {
-    keyword.isTrending = req.query.trending === "true";
+    query.isTrending = req.query.trending === "true";
   }
 
   if (req.query.isBestDeal) {
-    keyword.isBestDeal = req.query.isBestDeal === "true";
+    query.isBestDeal = req.query.isBestDeal === "true";
+  }
+
+  if (req.query.ageGroup) {
+    query.ageGroup = req.query.ageGroup;
   }
 
   if (req.query.onSale) {
-    keyword.discountPrice = { $gt: 0 };
+    query.discountPrice = { $gt: 0 };
   }
 
-  const count = await Product.countDocuments({ ...keyword });
-  const products = await Product.find({ ...keyword })
-    .populate("category", "name")
+  // Build sort object
+  let sortOption = { createdAt: -1 }; // Default: newest first
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort;
+    switch (sortBy) {
+      case "price-asc":
+        sortOption = { price: 1 };
+        break;
+      case "price-desc":
+        sortOption = { price: -1 };
+        break;
+      case "name-asc":
+        sortOption = { name: 1 };
+        break;
+      case "name-desc":
+        sortOption = { name: -1 };
+        break;
+      case "newest":
+        sortOption = { createdAt: -1 };
+        break;
+      case "oldest":
+        sortOption = { createdAt: 1 };
+        break;
+      default:
+        sortOption = { createdAt: -1 };
+    }
+  } else if (req.query.sortOrder) {
+    // Backward compatibility
+    sortOption = { createdAt: req.query.sortOrder === "asc" ? 1 : -1 };
+  }
+
+  const count = await Product.countDocuments(query);
+  const products = await Product.find(query)
+    .populate("category", "name slug")
     .populate("brand", "name")
     .limit(pageSize)
     .skip(pageSize * (page - 1))
-    .sort({ createdAt: sortOrder === "asc" ? 1 : -1 });
+    .sort(sortOption);
 
-  res.json({ products, page, pages: Math.ceil(count / pageSize), total: count });
+  res.json({
+    products,
+    page,
+    limit: pageSize,
+    pages: Math.ceil(count / pageSize),
+    total: count,
+    totalPages: Math.ceil(count / pageSize)
+  });
 });
 
 // @desc    Get product by ID
