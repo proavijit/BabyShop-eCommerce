@@ -55,65 +55,68 @@ export default function ProductAction({ product }: ProductActionProps) {
     };
 
     return (
-        <div className="space-y-8 pt-6">
-            {/* Price */}
-            <div className="space-y-1">
-                <div className="flex items-baseline gap-4">
-                    <span className="text-4xl font-extrabold text-gray-900 tracking-tight">
-                        ${finalPrice.toFixed(2)}
-                    </span>
-                    {hasDiscount && (
-                        <span className="text-xl text-gray-400 line-through font-medium">
-                            ${product.price.toFixed(2)}
-                        </span>
-                    )}
-                </div>
-                {hasDiscount && (
-                    <span className="inline-block px-3 py-1 bg-red-50 text-babyshopRed text-xs font-bold rounded-full animate-pulse">
-                        Save ${(product.price - product.discountPrice!).toFixed(2)}
-                    </span>
-                )}
-            </div>
-
+        <div className="space-y-6" role="form" aria-label="Product purchase options">
             {/* Actions */}
             <div className="space-y-6 pt-2">
                 <div className="flex flex-col sm:flex-row gap-4">
                     {/* Quantity - Playful & Round */}
-                    <div className="flex items-center justify-between px-2 w-full sm:w-40 h-14 bg-gray-50 rounded-2xl border border-gray-100">
+                    <div
+                        className="flex items-center justify-between px-2 w-full sm:w-40 h-14 bg-gray-50 rounded-2xl border border-gray-100"
+                        role="group"
+                        aria-label="Quantity selector"
+                    >
                         <button
                             onClick={() => handleQuantityChange(-1)}
                             disabled={quantity <= 1 || isLoading}
-                            className="w-10 h-10 flex items-center justify-center hover:bg-white hover:shadow-sm rounded-xl text-gray-500 transition-all disabled:opacity-30"
+                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-600 hover:text-babyshopSky hover:border-babyshopSky disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
+                            aria-label="Decrease quantity"
+                            aria-disabled={quantity <= 1 || isLoading}
                         >
-                            <Minus className="w-4 h-4" />
+                            <Minus className="w-4 h-4" aria-hidden="true" />
                         </button>
-                        <span className="text-lg font-bold text-gray-900">{quantity}</span>
+                        <span
+                            className="text-lg font-bold text-gray-900"
+                            role="status"
+                            aria-live="polite"
+                            aria-label={`Quantity: ${quantity}`}
+                        >
+                            {quantity}
+                        </span>
                         <button
                             onClick={() => handleQuantityChange(1)}
                             disabled={quantity >= product.stock || isLoading}
-                            className="w-10 h-10 flex items-center justify-center hover:bg-white hover:shadow-sm rounded-xl text-gray-500 transition-all disabled:opacity-30"
+                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-600 hover:text-babyshopSky hover:border-babyshopSky disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
+                            aria-label="Increase quantity"
+                            aria-disabled={quantity >= product.stock || isLoading}
                         >
-                            <Plus className="w-4 h-4" />
+                            <Plus className="w-4 h-4" aria-hidden="true" />
                         </button>
                     </div>
 
-                    {/* Add to Cart - Brand Gradient */}
+                    {/* Add to Cart - Bold & Vibrant */}
                     <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         disabled={product.stock === 0 || isLoading}
                         onClick={handleAddToCart}
                         className="flex-1 h-14 bg-gradient-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-bold rounded-2xl transition-all duration-300 shadow-lg shadow-babyshopSky/25 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
+                        aria-label={`Add ${quantity} ${quantity === 1 ? 'item' : 'items'} to cart`}
+                        aria-disabled={product.stock === 0 || isLoading}
                     >
                         {isLoading ? (
-                            <Loader2 className="w-5 h-5 animate-spin" />
+                            <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
                         ) : (
-                            <ShoppingCart className="w-5 h-5" />
+                            <ShoppingCart className="w-5 h-5" aria-hidden="true" />
                         )}
                         {product.stock > 0 ? (isLoading ? "Adding..." : "Add to Cart") : "Out of Stock"}
                     </motion.button>
 
-                    <div className="w-14 h-14 flex items-center justify-center rounded-2xl border-2 border-gray-100 hover:border-babyshopSky/30 hover:bg-red-50 group transition-all duration-300">
+                    {/* Quick Wishlist */}
+                    <div
+                        className="w-14 h-14 flex items-center justify-center rounded-2xl border-2 border-gray-100 hover:border-babyshopSky/30 hover:bg-red-50 group transition-all duration-300"
+                        role="group"
+                        aria-label="Add to wishlist"
+                    >
                         <WishListButton
                             productId={product._id}
                             product={product}

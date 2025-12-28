@@ -104,7 +104,7 @@ export default function WishlistPage() {
                             {/* Product Info */}
                             <div className="p-6 flex flex-col flex-1">
                                 <h3 className="font-bold text-gray-900 text-lg mb-2 line-clamp-1">
-                                    <Link href={`/product/${product._id}`}>{product.name}</Link>
+                                    <Link href={`/product/${product.slug}`}>{product.name}</Link>
                                 </h3>
                                 <div className="flex items-center gap-2 mb-4">
                                     <span className="text-2xl font-extrabold text-babyshopSky">

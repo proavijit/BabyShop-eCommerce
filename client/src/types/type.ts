@@ -53,6 +53,60 @@ export interface Product {
     createdAt: string;
     updatedAt: string;
     __v: number;
+    // SEO Fields (Optional)
+    metaTitle?: string;
+    metaDescription?: string;
+    ogImage?: string;
+    keywords?: string[];
+}
+
+// Breadcrumb item for navigation
+export interface BreadcrumbItem {
+    label: string;
+    href: string;
+    current?: boolean;
+}
+
+// JSON-LD Structured Data Types
+export interface StructuredProductData {
+    '@context': string;
+    '@type': string;
+    name: string;
+    image: string | string[];
+    description: string;
+    sku?: string;
+    mpn?: string;
+    brand?: {
+        '@type': string;
+        name: string;
+    };
+    offers: {
+        '@type': string;
+        url: string;
+        priceCurrency: string;
+        price: number;
+        priceValidUntil?: string;
+        availability: string;
+        itemCondition: string;
+    };
+    aggregateRating?: {
+        '@type': string;
+        ratingValue: number;
+        reviewCount: number;
+        bestRating: number;
+        worstRating: number;
+    };
+}
+
+export interface BreadcrumbListSchema {
+    '@context': string;
+    '@type': string;
+    itemListElement: Array<{
+        '@type': string;
+        position: number;
+        name: string;
+        item?: string;
+    }>;
 }
 
 export interface Review {

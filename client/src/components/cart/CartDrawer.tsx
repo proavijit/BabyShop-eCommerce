@@ -76,7 +76,7 @@ export default function CartDrawer({ children }: { children: React.ReactNode }) 
                                                 <div>
                                                     <div className="flex justify-between items-start">
                                                         <h3 className="font-bold text-gray-900 text-sm line-clamp-1 hover:text-babyshopSky transition-colors">
-                                                            <Link href={`/product/${item.product._id}`}>{item.product.name}</Link>
+                                                            <Link href={`/product/${item.product.slug}`}>{item.product.name}</Link>
                                                         </h3>
                                                         <button
                                                             onClick={() => removeFromCart(item.product._id)}

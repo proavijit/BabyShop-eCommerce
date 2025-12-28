@@ -71,7 +71,7 @@ export default function AddToCartPage() {
                                     <div>
                                         <div className="flex justify-between">
                                             <h3 className="font-bold text-gray-900 text-lg hover:text-babyshopSky transition-colors">
-                                                <Link href={`/product/${item.product._id}`}>{item.product.name}</Link>
+                                                <Link href={`/product/${item.product.slug}`}>{item.product.name}</Link>
                                             </h3>
                                             <button
                                                 onClick={() => removeFromCart(item.product._id)}

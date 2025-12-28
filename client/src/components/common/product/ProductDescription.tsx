@@ -1,14 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Product } from "@/types/type";
 import ProductReview from "./ProductReview";
-import { Plus } from "lucide-react";
-
-interface ProductDescriptionProps {
-    product: Product;
-}
 
 interface AccordionItemProps {
     title: string;
@@ -18,22 +14,32 @@ interface AccordionItemProps {
 }
 
 function AccordionItem({ title, isOpen, onToggle, children }: AccordionItemProps) {
+    const itemId = title.toLowerCase().replace(/\s+/g, '-');
+    const panelId = `panel-${itemId}`;
+    const buttonId = `button-${itemId}`;
+
     return (
         <div className="border-b border-gray-100 last:border-0">
             <button
+                id={buttonId}
                 onClick={onToggle}
                 className="w-full py-5 flex items-center justify-between text-left group"
+                aria-expanded={isOpen}
+                aria-controls={panelId}
             >
                 <span className={`text-base font-bold transition-colors ${isOpen ? 'text-babyshopSky' : 'text-gray-900 group-hover:text-babyshopSky'}`}>
                     {title}
                 </span>
                 <span className={`transition-all duration-300 ${isOpen ? "rotate-45 text-babyshopSky" : "text-gray-300 group-hover:text-babyshopSky"}`}>
-                    <Plus className="w-5 h-5" />
+                    <Plus className="w-5 h-5" aria-hidden="true" />
                 </span>
             </button>
             <AnimatePresence initial={false}>
                 {isOpen && (
                     <motion.div
+                        id={panelId}
+                        role="region"
+                        aria-labelledby={buttonId}
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
@@ -50,88 +56,64 @@ function AccordionItem({ title, isOpen, onToggle, children }: AccordionItemProps
     );
 }
 
-export default function ProductDescription({ product }: ProductDescriptionProps) {
-    const [openSection, setOpenSection] = useState<string | null>(null);
-
-    const toggleSection = (section: string) => {
-        setOpenSection(openSection === section ? null : section);
-    };
-
-    const brandName = (product.brand && typeof product.brand === 'object') ? product.brand.name : (product.brand || 'Unknown');
+export default function ProductDescription({ product }: { product: Product }) {
+    const [openSection, setOpenSection] = useState<string | null>("specs");
 
     return (
         <div className="w-full space-y-8">
             {/* Description Section - Always Open / Static */}
-            <div className="border-b border-gray-100 pb-8">
-                <h3 className="text-xl font-bold text-gray-900 mb-6">Description</h3>
+            <section className="border-b border-gray-100 pb-8" aria-labelledby="description-heading">
+                <h2 id="description-heading" className="text-xl font-bold text-gray-900 mb-6">Description</h2>
                 <div className="text-gray-600 text-base leading-relaxed space-y-6">
                     {product.description ? (
                         <div dangerouslySetInnerHTML={{ __html: product.description.replace(/\n/g, '<br/>') }} />
                     ) : (
-                        <p>No description available.</p>
+                        <p>No description available for this product.</p>
                     )}
 
-                    {/* Feature Bullets */}
-                    <div className="p-5 bg-gray-50/80 rounded-2xl border border-gray-100">
-                        <ul className="grid sm:grid-cols-2 gap-3">
-                            <li className="flex items-center gap-3">
-                                <span className="w-2 h-2 rounded-full bg-babyshopSky shadow-sm shadow-babyshopSky/50"></span>
-                                <span className="text-sm font-medium text-gray-700">Premium soft-touch materials</span>
-                            </li>
-                            <li className="flex items-center gap-3">
-                                <span className="w-2 h-2 rounded-full bg-babyshopSky shadow-sm shadow-babyshopSky/50"></span>
-                                <span className="text-sm font-medium text-gray-700">Designed for comfort</span>
-                            </li>
-                            <li className="flex items-center gap-3">
-                                <span className="w-2 h-2 rounded-full bg-babyshopSky shadow-sm shadow-babyshopSky/50"></span>
-                                <span className="text-sm font-medium text-gray-700">Eco-friendly production</span>
-                            </li>
-                            <li className="flex items-center gap-3">
-                                <span className="w-2 h-2 rounded-full bg-babyshopSky shadow-sm shadow-babyshopSky/50"></span>
-                                <span className="text-sm font-medium text-gray-700">Durable & Long-lasting</span>
-                            </li>
-                        </ul>
+                    <div className="bg-babyshopSky/5 rounded-2xl p-6 border border-babyshopSky/10">
+                        <h3 className="font-bold text-babyshopSky flex items-center gap-2 mb-3">
+                            <span className="w-1.5 h-1.5 rounded-full bg-babyshopSky"></span>
+                            Safety Information
+                        </h3>
+                        <p className="text-sm text-gray-500 italic">
+                            All our baby products are BPA-free and tested to meet international safety standards (ASTM F963).
+                        </p>
                     </div>
                 </div>
-            </div>
+            </section>
 
             {/* Accordion Sections for Details */}
-            <div>
+            <section aria-label="Product details accordion">
                 <AccordionItem
                     title="Specifications"
                     isOpen={openSection === "specs"}
-                    onToggle={() => toggleSection("specs")}
+                    onToggle={() => setOpenSection(openSection === "specs" ? null : "specs")}
                 >
-                    <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-                        <div className="space-y-1">
-                            <span className="text-xs uppercase tracking-wider text-gray-400 font-bold">Brand</span>
-                            <p className="font-bold text-gray-900">{brandName}</p>
-                        </div>
-                        {product.ageGroup && (
-                            <div className="space-y-1">
-                                <span className="text-xs uppercase tracking-wider text-gray-400 font-bold">Age Group</span>
-                                <p className="font-bold text-gray-900">{product.ageGroup}</p>
-                            </div>
-                        )}
-                        <div className="space-y-1">
-                            <span className="text-xs uppercase tracking-wider text-gray-400 font-bold">Category</span>
-                            <p className="font-bold text-gray-900">
-                                {(product.category && typeof product.category === 'object') ? product.category.name : (product.category || 'Unknown')}
-                            </p>
-                        </div>
-                        <div className="space-y-1">
-                            <span className="text-xs uppercase tracking-wider text-gray-400 font-bold">Stock Status</span>
-                            <p className={`font-bold ${product.stock > 0 ? 'text-teal-500' : 'text-red-500'}`}>
-                                {product.stock > 0 ? "In Stock" : "Out of Stock"}
-                            </p>
-                        </div>
-                    </div>
+                    <ul className="grid grid-cols-2 gap-y-4 gap-x-8">
+                        <li className="flex flex-col gap-1">
+                            <span className="text-gray-400 text-[11px] uppercase tracking-wider font-bold">Category</span>
+                            <span className="text-gray-900 font-medium">{(product.category && typeof product.category === 'object') ? product.category.name : 'Baby Gear'}</span>
+                        </li>
+                        <li className="flex flex-col gap-1">
+                            <span className="text-gray-400 text-[11px] uppercase tracking-wider font-bold">Suitability</span>
+                            <span className="text-gray-900 font-medium">{product.ageGroup || "0-24 Months"}</span>
+                        </li>
+                        <li className="flex flex-col gap-1">
+                            <span className="text-gray-400 text-[11px] uppercase tracking-wider font-bold">Material</span>
+                            <span className="text-gray-900 font-medium">100% Organic Cotton</span>
+                        </li>
+                        <li className="flex flex-col gap-1">
+                            <span className="text-gray-400 text-[11px] uppercase tracking-wider font-bold">Condition</span>
+                            <span className="text-gray-900 font-medium whitespace-nowrap">New in Box</span>
+                        </li>
+                    </ul>
                 </AccordionItem>
 
                 <AccordionItem
-                    title={`Reviews`}
+                    title="Customer Reviews"
                     isOpen={openSection === "reviews"}
-                    onToggle={() => toggleSection("reviews")}
+                    onToggle={() => setOpenSection(openSection === "reviews" ? null : "reviews")}
                 >
                     <ProductReview product={product} />
                 </AccordionItem>
@@ -139,15 +121,16 @@ export default function ProductDescription({ product }: ProductDescriptionProps)
                 <AccordionItem
                     title="Shipping & Returns"
                     isOpen={openSection === "shipping"}
-                    onToggle={() => toggleSection("shipping")}
+                    onToggle={() => setOpenSection(openSection === "shipping" ? null : "shipping")}
                 >
                     <p>
-                        We offer <span className="text-teal-500 font-bold">Free Shipping</span> on all orders over $50. Your order will be processed within 24 hours.
-                        <br /><br />
+                        Free standard shipping on orders over $50. Standard delivery time is 3-5 business days. Express shipping options available at checkout.
+                    </p>
+                    <p className="mt-2">
                         We want you to be 100% satisfied. You can return any item within 30 days of delivery, no questions asked.
                     </p>
                 </AccordionItem>
-            </div>
+            </section>
         </div>
     );
 }

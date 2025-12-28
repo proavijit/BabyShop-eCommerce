@@ -8,178 +8,141 @@ import {
     Gift,
     Baby,
     List as ListIcon,
-    HelpCircle,
     Truck,
-    ShieldCheck,
     Tag,
-    Sparkles
-} from "lucide-react";
+    Sparkles,
+    Heart
+} from "lucide-react"; // Or lucide-react
 import Link from "next/link";
 
-export default async function CatagorySection() {
+export default async function CategorySection() {
     let categories: Category[] = [];
     try {
         const response = await fetchData<CategoryResponse>(API_ENDPOINTS.CATEGORIES);
         categories = response.categories;
     } catch (error) {
-        console.error("Failed to fetch categories inside CatagorySection:", error);
+        console.error("Failed to fetch categories:", error);
     }
 
     return (
-        <div className="hidden md:flex flex-col bg-white h-full border border-gray-200 rounded-2xl shadow-lg min-w-[280px] overflow-hidden">
-            <div className="flex flex-col h-full overflow-y-auto custom-scrollbar divide-y divide-gray-100">
+        <aside className="hidden lg:flex flex-col w-[300px] h-fit bg-white/70 backdrop-blur-md border border-gray-100 rounded-[2rem] shadow-sm sticky top-24 overflow-hidden">
+            <div className="flex flex-col h-full overflow-y-auto custom-scrollbar p-6 space-y-8">
 
-                {/* Header */}
-                <div className="bg-gradient-to-r from-babyshopSky to-teal-400 p-5">
-                    <div className="flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-white" />
-                        <h2 className="text-base font-bold text-white uppercase tracking-wide">Shop Categories</h2>
+                {/* 1. Brand Header */}
+                <div className="relative group overflow-hidden rounded-2xl bg-gradient-to-br from-babyshopSky to-cyan-500 p-4 shadow-md shadow-blue-100">
+                    <Sparkles className="absolute -right-2 -top-2 w-16 h-16 text-white/10 rotate-12 group-hover:scale-110 transition-transform" />
+                    <div className="relative flex items-center gap-3">
+                        <div className="p-2 bg-white/20 rounded-xl backdrop-blur-sm">
+                            <ListIcon className="w-5 h-5 text-white" />
+                        </div>
+                        <h2 className="text-lg font-bold text-white tracking-tight">Explore</h2>
                     </div>
                 </div>
 
-                {/* Features Section */}
-                <div className="p-5">
-                    <h3 className="text-xs font-bold text-babyshopTextLight uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <Star className="w-3.5 h-3.5" />
-                        Features
-                    </h3>
-                    <ul className="space-y-2.5">
-                        <li>
-                            <Link href="/shop?sort=newest" className="flex items-center gap-3 text-gray-700 hover:text-babyshopSky hover:bg-teal-50 px-3 py-2 rounded-lg transition-all group">
-                                <div className="w-8 h-8 rounded-lg bg-yellow-50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <Star className="w-4 h-4 text-yellow-500" />
-                                </div>
-                                <span className="text-sm font-semibold">New Arrivals</span>
-                                <ChevronRight className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-all" />
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/shop?trending=true" className="flex items-center gap-3 text-gray-700 hover:text-babyshopPurple hover:bg-purple-50 px-3 py-2 rounded-lg transition-all group">
-                                <div className="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <Zap className="w-4 h-4 text-babyshopPurple" />
-                                </div>
-                                <span className="text-sm font-semibold">Best Sellers</span>
-                                <ChevronRight className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-all" />
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/shop" className="flex items-center gap-3 text-gray-700 hover:text-babyshopSky hover:bg-teal-50 px-3 py-2 rounded-lg transition-all group">
-                                <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <Truck className="w-4 h-4 text-babyshopSky" />
-                                </div>
-                                <span className="text-sm font-semibold">Free Shipping</span>
-                                <ChevronRight className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-all" />
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
+                {/* 2. Curated Discovery Section */}
+                <section>
+                    <h3 className="px-2 text-[11px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-4">Discovery</h3>
+                    <nav className="space-y-1">
+                        <FeatureLink
+                            href="/shop?sort=newest"
+                            icon={<Star className="w-4 h-4" />}
+                            label="New Arrivals"
+                            color="text-amber-500"
+                            bg="bg-amber-50"
+                        />
+                        <FeatureLink
+                            href="/shop?trending=true"
+                            icon={<Zap className="w-4 h-4" />}
+                            label="Best Sellers"
+                            color="text-purple-500"
+                            bg="bg-purple-50"
+                        />
+                        <FeatureLink
+                            href="/shop?shipping=free"
+                            icon={<Truck className="w-4 h-4" />}
+                            label="Free Shipping"
+                            color="text-emerald-500"
+                            bg="bg-emerald-50"
+                        />
+                    </nav>
+                </section>
 
-                {/* Hot Categories */}
-                <div className="p-5">
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xs font-bold text-babyshopTextLight uppercase tracking-wider flex items-center gap-2">
-                            <Zap className="w-3.5 h-3.5" />
-                            Hot Categories
-                        </h3>
-                        <Link href="/shop" className="text-xs text-babyshopSky hover:text-babyshopPurple font-semibold hover:underline transition-colors">View All</Link>
+                {/* 3. Dynamic Categories Section */}
+                <section>
+                    <div className="flex items-center justify-between px-2 mb-4">
+                        <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-[0.2em]">Categories</h3>
+                        <Link href="/shop" className="text-[11px] font-bold text-babyshopSky hover:underline">See All</Link>
                     </div>
-
-                    <div className="flex flex-col gap-1.5">
+                    <div className="space-y-1">
                         {categories && categories.length > 0 ? (
-                            categories.slice(0, 8).map((category) => (
+                            categories.slice(0, 7).map((cat) => (
                                 <Link
-                                    key={category._id}
-                                    href={`/shop?category=${category._id}`}
-                                    className="flex items-center justify-between text-gray-700 hover:text-babyshopSky hover:bg-gradient-to-r hover:from-teal-50 hover:to-cyan-50 px-3 py-2 rounded-lg transition-all group"
+                                    key={cat._id}
+                                    href={`/shop?category=${cat._id}`}
+                                    className="flex items-center group px-3 py-2.5 rounded-xl hover:bg-gray-50 transition-all"
                                 >
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-2 h-2 rounded-full bg-babyshopSky/30 group-hover:bg-babyshopSky group-hover:scale-125 transition-all"></div>
-                                        <span className="text-sm font-medium truncate max-w-[160px]">{category.name}</span>
-                                    </div>
-                                    <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-babyshopSky opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-1" />
+                                    <span className="w-1.5 h-1.5 rounded-full bg-gray-200 group-hover:bg-babyshopSky group-hover:scale-150 transition-all mr-3" />
+                                    <span className="text-sm font-medium text-gray-600 group-hover:text-gray-900">{cat.name}</span>
+                                    <ChevronRight className="w-4 h-4 ml-auto text-gray-300 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                                 </Link>
                             ))
                         ) : (
-                            <p className="text-sm text-gray-400 px-3 font-medium animate-pulse">Loading categories...</p>
+                            <div className="space-y-2 animate-pulse px-2">
+                                {[1, 2, 3].map(i => <div key={i} className="h-4 bg-gray-100 rounded w-full" />)}
+                            </div>
                         )}
                     </div>
-                </div>
+                </section>
 
-                {/* Shop By Age */}
-                <div className="p-5">
-                    <h3 className="text-xs font-bold text-babyshopTextLight uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <Baby className="w-3.5 h-3.5" />
-                        Shop By Age
+                {/* 4. Shop By Age Section (Modern Chips) */}
+                <section>
+                    <h3 className="px-2 text-[11px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
+                        <Baby className="w-3 h-3" /> Age Group
                     </h3>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-2 px-1">
                         {["0-6 M", "6-12 M", "1-2 Y", "2-4 Y", "4-6 Y", "6+ Y"].map((age) => (
                             <Link
                                 key={age}
                                 href={`/shop?ageGroup=${age}`}
-                                className="text-center text-xs font-semibold text-gray-700 bg-gradient-to-br from-gray-50 to-gray-100 hover:from-babyshopSky hover:to-teal-400 hover:text-white py-2.5 rounded-lg transition-all border border-gray-200 hover:border-transparent hover:shadow-md hover:scale-105"
+                                className="text-center text-[11px] font-bold text-gray-500 bg-gray-50/50 border border-gray-100 py-2 rounded-xl hover:bg-white hover:border-babyshopSky hover:text-babyshopSky hover:shadow-sm transition-all"
                             >
                                 {age}
                             </Link>
                         ))}
                     </div>
-                </div>
+                </section>
 
-                {/* Special Offers */}
-                <div className="p-5">
-                    <h3 className="text-xs font-bold text-babyshopTextLight uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <Tag className="w-3.5 h-3.5" />
-                        Special Offers
-                    </h3>
-                    <ul className="space-y-2.5">
-                        <li>
-                            <Link href="/shop?onSale=true" className="flex items-center gap-3 text-gray-700 hover:text-babyshopPurple hover:bg-pink-50 px-3 py-2 rounded-lg transition-all group">
-                                <div className="w-8 h-8 rounded-lg bg-pink-50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <Gift className="w-4 h-4 text-pink-500" />
-                                </div>
-                                <span className="text-sm font-semibold">Bundle Deals</span>
-                                <ChevronRight className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-all" />
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/offers/bundles" className="flex items-center gap-3 text-gray-700 hover:text-babyshopSky hover:bg-teal-50 px-3 py-2 rounded-lg transition-all group">
-                                <div className="w-8 h-8 rounded-lg bg-teal-50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <Tag className="w-4 h-4 text-babyshopSky" />
-                                </div>
-                                <span className="text-sm font-semibold">Bundle Deals</span>
-                                <ChevronRight className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-all" />
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
-
-                {/* Customer Support & List */}
-                <div className="p-5">
-                    <h3 className="text-xs font-bold text-babyshopTextLight uppercase tracking-wider mb-4 flex items-center gap-2">
-                        <HeadphonesIcon className="w-3.5 h-3.5" />
-                        Support & Lists
-                    </h3>
-                    <ul className="space-y-2.5">
-                        <li>
-                            <Link href="/support" className="flex items-center gap-3 text-gray-700 hover:text-babyshopSky hover:bg-teal-50 px-3 py-2 rounded-lg transition-all group">
-                                <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <HeadphonesIcon className="w-4 h-4 text-indigo-500" />
-                                </div>
-                                <span className="text-sm font-semibold">Customer Support</span>
-                                <ChevronRight className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-all" />
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href="/wishlist" className="flex items-center gap-3 text-gray-700 hover:text-babyshopPurple hover:bg-purple-50 px-3 py-2 rounded-lg transition-all group">
-                                <div className="w-8 h-8 rounded-lg bg-orange-50 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <ListIcon className="w-4 h-4 text-orange-500" />
-                                </div>
-                                <span className="text-sm font-semibold">My Wishlist</span>
-                                <ChevronRight className="w-4 h-4 ml-auto opacity-0 group-hover:opacity-100 transition-all" />
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
+                {/* 5. Support & Utility */}
+                <section className="pt-4 border-t border-gray-100">
+                    <div className="bg-gray-50 rounded-2xl p-2 space-y-1">
+                        <FeatureLink
+                            href="/wishlist"
+                            icon={<Heart className="w-4 h-4" />}
+                            label="Wishlist"
+                            color="text-rose-500"
+                        />
+                        <FeatureLink
+                            href="/support"
+                            icon={<HeadphonesIcon className="w-4 h-4" />}
+                            label="Help Center"
+                            color="text-indigo-500"
+                        />
+                    </div>
+                </section>
             </div>
-        </div>
+        </aside>
+    );
+}
+
+// Reusable Sub-component for clean code
+function FeatureLink({ href, icon, label, color, bg = "transparent" }: { href: string, icon: React.ReactNode, label: string, color: string, bg?: string }) {
+    return (
+        <Link href={href} className="flex items-center gap-3 p-2 rounded-xl hover:bg-white hover:shadow-sm transition-all group">
+            <div className={`w-8 h-8 rounded-lg ${bg} flex items-center justify-center ${color} group-hover:scale-110 transition-transform`}>
+                {icon}
+            </div>
+            <span className="text-sm font-semibold text-gray-700 group-hover:text-gray-900">{label}</span>
+            <ChevronRight className="w-3.5 h-3.5 ml-auto text-gray-300 opacity-0 group-hover:opacity-100 transition-all" />
+        </Link>
     );
 }

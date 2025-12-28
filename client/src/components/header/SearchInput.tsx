@@ -98,7 +98,7 @@ export default function SearchInput() {
     };
 
     const handleProductClick = (product: Product) => {
-        router.push(`/product/${product._id}`);
+        router.push(`/product/${product.slug}`);
         setIsOpen(false);
         setSearchQuery("");
         setSuggestions([]);

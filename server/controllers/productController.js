@@ -287,9 +287,26 @@ const getProductStats = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc    Get product by slug
+// @route   GET /api/products/slug/:slug
+// @access  Public
+const getProductBySlug = asyncHandler(async (req, res) => {
+  const product = await Product.findOne({ slug: req.params.slug })
+    .populate("category", "name slug")
+    .populate("brand", "name");
+
+  if (product) {
+    res.json(product);
+  } else {
+    res.status(404);
+    throw new Error("Product not found");
+  }
+});
+
 export {
   getProducts,
   getProductById,
+  getProductBySlug,
   createProduct,
   updateProduct,
   deleteProduct,

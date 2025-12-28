@@ -39,7 +39,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                     <WishListButton productId={product._id} product={product} />
                 </div>
 
-                <Link href={`/product/${product._id}`} className="block h-full w-full">
+                <Link href={`/product/${product.slug}`} className="block h-full w-full">
                     <Image
                         src={imageUrl}
                         alt={product.name}
@@ -55,7 +55,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                     {brandName}
                 </span>
 
-                <Link href={`/product/${product._id}`} className="flex-grow">
+                <Link href={`/product/${product.slug}`} className="flex-grow">
                     <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 mb-2 min-h-[40px]">
                         {product.name}
                     </h3>

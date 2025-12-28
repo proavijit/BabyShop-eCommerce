@@ -37,22 +37,25 @@ export default function ImageGallery({
                     spaceBetween={0}
                     effect={'fade'}
                     navigation={{
-                        nextEl: '.swiper-button-next-custom',
-                        prevEl: '.swiper-button-prev-custom',
+                        prevEl: ".swiper-button-prev-custom",
+                        nextEl: ".swiper-button-next-custom",
                     }}
                     thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
                     modules={[FreeMode, Navigation, Thumbs, EffectFade]}
                     className="w-full aspect-[4/5] md:aspect-square bg-[#fafafa]/50 rounded-xl overflow-hidden"
+                    aria-label="Product image gallery"
                 >
                     {images.map((img, index) => (
                         <SwiperSlide key={index} className="flex items-center justify-center p-8 bg-white">
-                            <div className="relative w-full h-full max-w-xl mx-auto">
+                            <div className="relative w-full h-full">
                                 <Image
                                     src={img}
-                                    alt={`${name} - ${index + 1}`}
+                                    alt={`${name} - Image ${index + 1} of ${images.length}`}
                                     fill
                                     className="object-contain hover:scale-105 transition-transform duration-700 ease-out"
                                     priority={index === 0}
+                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 58vw, 700px"
+                                    quality={90}
                                 />
                             </div>
                         </SwiperSlide>
@@ -60,26 +63,32 @@ export default function ImageGallery({
                 </Swiper>
 
                 {/* Minimal Custom Navigation */}
-                <button className="swiper-button-prev-custom absolute top-1/2 left-4 z-10 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm border border-gray-100 flex items-center justify-center -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:scale-110 shadow-sm cursor-pointer text-gray-800">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
+                <button
+                    className="swiper-button-prev-custom absolute top-1/2 left-4 z-10 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm border border-gray-100 flex items-center justify-center -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:scale-110 shadow-sm cursor-pointer text-gray-800"
+                    aria-label="Previous image"
+                >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6" /></svg>
                 </button>
-                <button className="swiper-button-next-custom absolute top-1/2 right-4 z-10 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm border border-gray-100 flex items-center justify-center -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:scale-110 shadow-sm cursor-pointer text-gray-800">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+                <button
+                    className="swiper-button-next-custom absolute top-1/2 right-4 z-10 w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm border border-gray-100 flex items-center justify-center -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-all hover:bg-white hover:scale-110 shadow-sm cursor-pointer text-gray-800"
+                    aria-label="Next image"
+                >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6" /></svg>
                 </button>
             </div>
 
-            {/* Thumbnail Slider - Minimalist Strip */}
+            {/* Thumbnails - Optimized for scroll and focus */}
             {images.length > 1 && (
-                <div className="">
+                <div className="" role="region" aria-label="Product thumbnail images">
                     <Swiper
                         onSwiper={setThumbsSwiper}
                         loop={false}
-                        spaceBetween={10}
+                        spaceBetween={12}
                         slidesPerView={5}
                         freeMode={true}
                         watchSlidesProgress={true}
                         modules={[FreeMode, Navigation, Thumbs]}
-                        className="thumbs-swiper"
+                        className="thumbs-swiper mt-4"
                         breakpoints={{
                             640: { slidesPerView: 6 },
                             1024: { slidesPerView: 6 },
@@ -90,9 +99,11 @@ export default function ImageGallery({
                                 <div className="aspect-square relative rounded-lg overflow-hidden border border-transparent transition-all group-[.swiper-slide-thumb-active]:border-gray-900 group-[.swiper-slide-thumb-active]:ring-1 group-[.swiper-slide-thumb-active]:ring-gray-900 opacity-60 group-[.swiper-slide-thumb-active]:opacity-100 hover:opacity-100">
                                     <Image
                                         src={img}
-                                        alt={`${name} thumb - ${index + 1}`}
+                                        alt={`${name} thumbnail ${index + 1}`}
                                         fill
                                         className="object-cover"
+                                        loading="lazy"
+                                        sizes="(max-width: 768px) 15vw, 10vw"
                                     />
                                 </div>
                             </SwiperSlide>
