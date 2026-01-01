@@ -51,7 +51,7 @@ export default function WishListButton({ productId, product, className = "" }: W
             } else {
                 toast.success("Removed from wishlist");
             }
-        } catch (error) {
+        } catch {
             toast.error("Failed to update wishlist");
         }
     };

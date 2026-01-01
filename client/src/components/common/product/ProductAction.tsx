@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Product } from "@/types/type";
 import { motion } from "framer-motion";
-import { Plus, Minus, ShoppingCart, Heart, Loader2 } from "lucide-react";
+import { Plus, Minus, ShoppingCart, Loader2 } from "lucide-react";
 import WishListButton from "./WishListButton";
 import { useCart } from "@/hooks/useCart";
 import { toast } from "sonner";
@@ -20,8 +20,6 @@ export default function ProductAction({ product }: ProductActionProps) {
     const { isAuthenticated } = useUserStore();
     const router = useRouter();
 
-    const hasDiscount = product.discountPrice && product.discountPrice < product.price;
-    const finalPrice = hasDiscount ? product.discountPrice! : product.price;
 
     const handleQuantityChange = (delta: number) => {
         const newQuantity = quantity + delta;
@@ -49,7 +47,7 @@ export default function ProductAction({ product }: ProductActionProps) {
         try {
             await addToCart(product, quantity);
             toast.success(`${product.name} added to cart!`);
-        } catch (error) {
+        } catch {
             toast.error("Failed to add to cart");
         }
     };

@@ -5,11 +5,9 @@ import {
     Star,
     Zap,
     HeadphonesIcon,
-    Gift,
     Baby,
     List as ListIcon,
     Truck,
-    Tag,
     Sparkles,
     Heart
 } from "lucide-react"; // Or lucide-react

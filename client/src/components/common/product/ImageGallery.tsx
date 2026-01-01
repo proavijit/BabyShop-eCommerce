@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { FreeMode, Navigation, Thumbs, Pagination, EffectFade } from "swiper/modules";
+import { FreeMode, Navigation, Thumbs, EffectFade } from "swiper/modules";
 import type { Swiper as SwiperType } from "swiper";
 
 // Import Swiper styles
@@ -17,9 +17,6 @@ import "swiper/css/effect-fade";
 interface ImageGalleryProps {
     name: string;
     images: string[];
-    isFeatured?: boolean;
-    isTrending?: boolean;
-    isBestDeal?: boolean;
 }
 
 export default function ImageGallery({

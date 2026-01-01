@@ -2,7 +2,6 @@
 
 import { Product } from "@/types/type";
 import Image from "next/image";
-import { Star } from "lucide-react";
 import Link from "next/link";
 import AddToCartButton from "../common/AddToCartButton";
 import WishListButton from "../common/product/WishListButton";
@@ -22,7 +21,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         : null;
 
     const brandName = product.brand
-        ? (typeof product.brand === 'object' ? (product.brand as any).name : product.brand)
+        ? (typeof product.brand === 'object' ? (product.brand as Record<string, unknown>).name as string : product.brand)
         : "Baby Care";
 
     return (

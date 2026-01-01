@@ -320,7 +320,7 @@ interface OrderState {
     clearLocalOrders: () => void;
 }
 
-export const useOrderStore = create<OrderState>()((set, get) => ({
+export const useOrderStore = create<OrderState>()((set) => ({
     orders: [],
     isLoading: false,
     fetchOrders: async () => {

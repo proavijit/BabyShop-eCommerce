@@ -116,9 +116,11 @@ export default function SearchInput() {
         setSelectedIndex(-1);
     };
 
-    const getPrice = (product: Product) => {
-        const hasDiscount = product.discountPrice && product.discountPrice > 0;
-        return hasDiscount ? product.discountPrice : (product.price ?? 0);
+    const getPrice = (product: Product): number => {
+        if (product.discountPrice && product.discountPrice > 0) {
+            return product.discountPrice;
+        }
+        return product.price || 0;
     };
 
     return (
@@ -199,7 +201,7 @@ export default function SearchInput() {
                                                 </span>
                                                 {product.discountPrice && product.discountPrice > 0 && product.price && (
                                                     <span className="text-sm text-gray-400 line-through">
-                                                        ${product.price.toFixed(2)}
+                                                        ${(product.price || 0).toFixed(2)}
                                                     </span>
                                                 )}
                                             </div>

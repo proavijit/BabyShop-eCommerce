@@ -7,7 +7,6 @@ import { Banner } from "@/types/type";
 import { API_ENDPOINTS, fetchData } from "@/lib/api";
 
 export default function BannerComponent() {
-    const [banners, setBanners] = useState<Banner[]>([]);
     const [loading, setLoading] = useState(true);
 
     // Main Slider State
@@ -31,7 +30,6 @@ export default function BannerComponent() {
                     allBanners = response.banners;
                 }
 
-                setBanners(allBanners);
 
                 // Filter banners
                 const sliders = allBanners.filter(b => b.bannerType === 'slider');
@@ -94,7 +92,7 @@ export default function BannerComponent() {
 
     if (loading) {
         return (
-            <div className="w-full h-[300px] md:h-[400px] bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse rounded-2xl flex items-center justify-center shadow-lg">
+            <div className="w-full h-[300px] md:h-[400px] bg-linear-to-br from-gray-100 to-gray-200 animate-pulse rounded-2xl flex items-center justify-center shadow-lg">
                 <div className="flex items-center gap-3">
                     <Sparkles className="w-5 h-5 text-babyshopSky animate-spin" />
                     <p className="text-gray-500 font-medium">Loading amazing offers...</p>
@@ -105,7 +103,7 @@ export default function BannerComponent() {
 
     if (mainBanners.length === 0 && sideBanners.length === 0) {
         return (
-            <div className="w-full h-[300px] md:h-[400px] bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl flex flex-col items-center justify-center text-gray-400 shadow-lg border border-gray-200">
+            <div className="w-full h-[300px] md:h-[400px] bg-linear-to-br from-gray-50 to-gray-100 rounded-2xl flex flex-col items-center justify-center text-gray-400 shadow-lg border border-gray-200">
                 <Sparkles className="w-12 h-12 mb-3 text-gray-300" />
                 <p className="font-medium">No offers available at the moment</p>
             </div>
@@ -125,18 +123,19 @@ export default function BannerComponent() {
                         {mainBanners.map((banner) => (
                             <div
                                 key={banner._id}
-                                className="w-full h-full shrink-0 relative bg-gradient-to-br from-gray-100 to-gray-200"
+                                className="w-full h-full shrink-0 relative bg-linear-to-br from-gray-100 to-gray-200"
                             >
-                                <img
+                                <Image
                                     src={banner.image}
-                                    alt={banner.name || banner.title}
-                                    className="w-full h-full object-cover"
+                                    alt={banner.name || banner.title || "Banner"}
+                                    fill
+                                    className="object-cover"
                                 />
 
                                 {/* Content Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent flex items-center">
+                                <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/40 to-transparent flex items-center">
                                     <div className="px-8 md:px-16 max-w-[650px] space-y-5 animate-in slide-in-from-left-6 duration-700">
-                                        <span className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-babyshopSky to-teal-400 text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-lg">
+                                        <span className="inline-flex items-center gap-2 px-4 py-2 bg-linear-to-r from-babyshopSky to-teal-400 text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-lg">
                                             <Sparkles className="w-3.5 h-3.5" />
                                             {banner.bannerType || 'Special Offer'}
                                         </span>
@@ -147,7 +146,7 @@ export default function BannerComponent() {
                                             Starting at <span className="text-yellow-300 font-bold text-2xl md:text-3xl">${banner.startFrom}</span>
                                         </p>
                                         <div className="pt-2">
-                                            <button className="bg-gradient-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white px-8 py-3.5 rounded-full font-bold transition-all transform hover:scale-105 shadow-xl flex items-center gap-2 group/btn">
+                                            <button className="bg-linear-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white px-8 py-3.5 rounded-full font-bold transition-all transform hover:scale-105 shadow-xl flex items-center gap-2 group/btn">
                                                 Shop Now
                                                 <ChevronRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                                             </button>
@@ -207,12 +206,13 @@ export default function BannerComponent() {
                                 key={banner._id}
                                 className="w-full h-full shrink-0 relative"
                             >
-                                <img
+                                <Image
                                     src={banner.image}
-                                    alt={banner.name || banner.title}
-                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                                    alt={banner.name || banner.title || "Banner"}
+                                    fill
+                                    className="object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/80 flex flex-col justify-end p-6">
+                                <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/30 to-black/80 flex flex-col justify-end p-6">
                                     <span className="inline-flex items-center gap-1.5 text-yellow-300 font-bold text-xs uppercase tracking-wider mb-2">
                                         <Sparkles className="w-3 h-3" />
                                         {banner.bannerType || 'Exclusive'}
@@ -231,7 +231,7 @@ export default function BannerComponent() {
                 </div>
             ) : (
                 // Fallback static banner if no API data found for side slot
-                <div className="w-full lg:w-[25%] h-[220px] lg:h-full relative rounded-2xl overflow-hidden shadow-xl group cursor-pointer bg-gradient-to-br from-gray-100 to-gray-200 border border-gray-200">
+                <div className="w-full lg:w-[25%] h-[220px] lg:h-full relative rounded-2xl overflow-hidden shadow-xl group cursor-pointer bg-linear-to-br from-gray-100 to-gray-200 border border-gray-200">
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
                         <Sparkles className="w-10 h-10 mb-2 text-gray-300" />
                         <span className="text-sm font-medium">Side Banner</span>

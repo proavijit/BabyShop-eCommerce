@@ -2,7 +2,7 @@ import { API_ENDPOINTS, fetchData, buildQueryString } from "@/lib/api";
 import { Product } from "@/types/type";
 import ProductCard from "./ProductCard";
 import Link from "next/link";
-import { ChevronRight, Sparkles, TrendingUp, Tag, ArrowRight } from "lucide-react";
+import { Sparkles, TrendingUp, Tag, ArrowRight } from "lucide-react";
 
 interface ProductSectionProps {
     title: string;

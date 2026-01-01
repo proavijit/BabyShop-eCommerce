@@ -1,13 +1,13 @@
-"use client";
+﻿"use client";
 
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { Category, Brand, Product, ProductResponse } from "@/types/type";
 import { fetchWithConfig, buildQueryString } from "@/lib/config";
 import ProductCard from "@/components/home/ProductCard";
 import {
-    Filter, X, ChevronDown, Search, Loader2,
-    SlidersHorizontal, Trash2, LayoutGrid, ListFilter
+    X, Search, Loader2,
+    SlidersHorizontal, Trash2, ListFilter
 } from "lucide-react";
 import ShopSkeleton from "@/components/skeleton/ShopSkeleton";
 
@@ -46,39 +46,39 @@ export default function ShopPageClient({ categories, brands }: Props) {
         return [category, selectedBrands.length > 0, searchQuery, minPrice, maxPrice, ageGroup, trending, featured, onSale].filter(Boolean).length;
     }, [category, selectedBrands, searchQuery, minPrice, maxPrice, ageGroup, trending, featured, onSale]);
 
-    // Fetch logic (kept your existing logic for functionality)
+    const fetchProducts = useCallback(async () => {
+        if (page === 1) setLoading(true);
+        else setLoadingMore(true);
+        try {
+            const params: Record<string, string | number | boolean> = {
+                page,
+                limit,
+                category,
+                brands: selectedBrands.join(","),
+                search: searchQuery,
+                sort: sortBy,
+                minPrice,
+                maxPrice,
+                ageGroup,
+                trending,
+                featured,
+                onSale
+            };
+            const queryString = buildQueryString(params);
+            const data = await fetchWithConfig<ProductResponse>(`/products${queryString}`);
+            setProducts(prev => (page === 1 ? data.products : [...prev, ...data.products]));
+            setTotal(data.total || 0);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+            setLoadingMore(false);
+        }
+    }, [page, limit, category, selectedBrands, searchQuery, sortBy, minPrice, maxPrice, ageGroup, trending, featured, onSale]);
+
     useEffect(() => {
-        const fetchProducts = async () => {
-            if (page === 1) setLoading(true);
-            else setLoadingMore(true);
-            try {
-                const params: Record<string, any> = {
-                    page,
-                    limit,
-                    category,
-                    brands: selectedBrands.join(","),
-                    search: searchQuery,
-                    sort: sortBy,
-                    minPrice,
-                    maxPrice,
-                    ageGroup,
-                    trending,
-                    featured,
-                    onSale
-                };
-                const queryString = buildQueryString(params);
-                const data = await fetchWithConfig<ProductResponse>(`/products${queryString}`);
-                setProducts(prev => (page === 1 ? data.products : [...prev, ...data.products]));
-                setTotal(data.total || 0);
-            } catch (error) {
-                console.error(error);
-            } finally {
-                setLoading(false);
-                setLoadingMore(false);
-            }
-        };
         fetchProducts();
-    }, [category, selectedBrands, searchQuery, sortBy, page, minPrice, maxPrice, ageGroup, trending, featured, onSale]);
+    }, [fetchProducts]);
 
     // URL Sync
     useEffect(() => {
@@ -94,7 +94,7 @@ export default function ShopPageClient({ categories, brands }: Props) {
         if (featured) params.set("featured", featured);
         if (onSale) params.set("onSale", onSale);
         router.push(`${pathname}?${params.toString()}`, { scroll: false });
-    }, [category, selectedBrands, searchQuery, sortBy, minPrice, maxPrice, ageGroup, trending, featured, onSale]);
+    }, [category, selectedBrands, searchQuery, sortBy, minPrice, maxPrice, ageGroup, trending, featured, onSale, pathname, router]);
 
     const handleClearFilters = () => {
         setCategory("");
@@ -259,7 +259,7 @@ export default function ShopPageClient({ categories, brands }: Props) {
                                     <Search className="w-8 h-8 text-gray-300" />
                                 </div>
                                 <h3 className="text-xl font-bold text-gray-900 mb-2">No results found</h3>
-                                <p className="text-gray-500 mb-8">We couldn't find anything matching your current filters.</p>
+                                <p className="text-gray-500 mb-8">{"We couldn't find anything matching your current filters."}</p>
                                 <button onClick={handleClearFilters} className="px-8 py-3 bg-gray-900 text-white rounded-2xl font-semibold hover:bg-gray-800 transition-all">
                                     Clear all filters
                                 </button>

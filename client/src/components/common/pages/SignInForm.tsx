@@ -6,7 +6,7 @@ import * as z from "zod";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { useUserStore } from "@/lib/store";
+import { useUserStore, User } from "@/lib/store";
 import { login } from "@/lib/authApi";
 import { Loader2, Mail, Lock, Eye, EyeOff, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,7 @@ export default function SignInForm() {
                     email: response.email,
                     role: response.role,
                     avatar: response.avatar,
-                    addresses: response.address
+                    addresses: response.address as User["addresses"]
                 };
 
                 setAuth(user, response.token);
@@ -66,9 +66,9 @@ export default function SignInForm() {
             } else {
                 toast.error("Invalid credentials or server error");
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("Login Error:", err);
-            const msg = err.message || "Something went wrong. Please try again.";
+            const msg = err instanceof Error ? err.message : "Something went wrong. Please try again.";
             toast.error(msg);
         } finally {
             setIsLoading(false);
@@ -143,7 +143,7 @@ export default function SignInForm() {
                     <Button
                         type="submit"
                         disabled={isLoading}
-                        className="w-full h-14 rounded-2xl bg-gradient-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-black text-lg transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-100 border-none"
+                        className="w-full h-14 rounded-2xl bg-linear-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-black text-lg transition-all duration-300 hover:shadow-lg hover:scale-[1.02] active:scale-100 border-none"
                     >
                         {isLoading ? (
                             <Loader2 className="w-6 h-6 animate-spin" />

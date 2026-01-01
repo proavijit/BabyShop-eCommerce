@@ -4,10 +4,10 @@
   "/auth/signup/page": "app/auth/signup/page.js",
   "/auth/signin/page": "app/auth/signin/page.js",
   "/page": "app/page.js",
+  "/profile/page": "app/profile/page.js",
   "/(user)/user/profile/page": "app/(user)/user/profile/page.js",
   "/cart/page": "app/cart/page.js",
-  "/profile/page": "app/profile/page.js",
-  "/shop/page": "app/shop/page.js",
   "/wishlist/page": "app/wishlist/page.js",
+  "/shop/page": "app/shop/page.js",
   "/product/[slug]/page": "app/product/[slug]/page.js"
 }

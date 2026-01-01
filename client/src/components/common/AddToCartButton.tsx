@@ -54,7 +54,7 @@ export default function AddToCartButton({
         try {
             await addToCart(product, 1);
             toast.success(`${product.name} added to cart!`);
-        } catch (error) {
+        } catch {
             toast.error("Failed to add to cart");
         } finally {
             setLocalLoading(false);
@@ -75,7 +75,7 @@ export default function AddToCartButton({
             } else {
                 toast.success(`Updated ${product.name} quantity to ${newQty}`);
             }
-        } catch (error) {
+        } catch {
             toast.error("Failed to update quantity");
         } finally {
             setLocalLoading(false);
@@ -94,7 +94,7 @@ export default function AddToCartButton({
                 >
                     <Minus className="h-4 w-4" />
                 </Button>
-                <span className="font-bold text-gray-900 min-w-[1rem] text-center">
+                <span className="font-bold text-gray-900 min-w-4 text-center">
                     {quantity}
                 </span>
                 <Button

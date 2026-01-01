@@ -9,13 +9,13 @@ interface ProductReviewProps {
 
 export default function ProductReview({ product }: ProductReviewProps) {
     // Check if product has reviews
-    const reviews = (product as any).reviews || [];
+    const reviews = (product as Product & { reviews?: unknown[] }).reviews || [];
     const hasReviews = reviews.length > 0;
 
     return (
         <div className="space-y-8">
             {!hasReviews ? (
-                <div className="flex flex-col items-center justify-center py-12 px-4 text-center bg-gray-50/50 rounded-[2rem] border border-gray-100">
+                <div className="flex flex-col items-center justify-center py-12 px-4 text-center bg-gray-50/50 rounded-4xl border border-gray-100">
                     <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm mb-4 rotate-3 transform transition-transform hover:rotate-6">
                         <MessageSquare className="w-8 h-8 text-babyshopSky" />
                     </div>
@@ -23,7 +23,7 @@ export default function ProductReview({ product }: ProductReviewProps) {
                     <p className="text-gray-500 max-w-xs mx-auto mb-6 text-sm leading-relaxed">
                         Be the first parent to share your thoughts on <span className="text-babyshopSky font-bold">{product.name}</span>!
                     </p>
-                    <button className="px-8 py-3 bg-gradient-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-105 whitespace-nowrap shadow-babyshopSky/20">
+                    <button className="px-8 py-3 bg-linear-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-105 whitespace-nowrap shadow-babyshopSky/20">
                         Write a Review
                     </button>
                 </div>
@@ -42,7 +42,7 @@ export default function ProductReview({ product }: ProductReviewProps) {
                         </div>
 
                         <div className="flex-1 w-full flex justify-center md:justify-end">
-                            <button className="px-6 py-3 bg-gradient-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-105 whitespace-nowrap shadow-babyshopSky/20">
+                            <button className="px-6 py-3 bg-linear-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:scale-105 whitespace-nowrap shadow-babyshopSky/20">
                                 Write a Review
                             </button>
                         </div>

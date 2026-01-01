@@ -1,5 +1,6 @@
-import { fetchWithConfig, API_ENDPOINTS, getAuthHeaders } from "./config";
+import { fetchWithConfig, API_ENDPOINTS, getAuthHeaders, getApiConfig } from "./config";
 import { User } from "./store";
+import Cookies from "js-cookie";
 
 export interface AuthResponse {
     success?: boolean;
@@ -7,7 +8,7 @@ export interface AuthResponse {
     name: string;
     email: string;
     role: string;
-    address?: any[];
+    address?: unknown[];
     avatar?: string;
     token: string;
     message?: string;
@@ -73,9 +74,9 @@ export const logout = async (): Promise<{ message: string }> => {
     // For now, I will explicitly get the token from cookies here.
 
     const token = typeof window !== 'undefined' ?
-        require('js-cookie').get('auth_token') : null;
+        Cookies.get('auth_token') : null;
 
-    return fetchWithConfig<{ message: string }>((API_ENDPOINTS as any).LOGOUT, {
+    return fetchWithConfig<{ message: string }>(API_ENDPOINTS.LOGOUT, {
         method: "POST",
         headers: getAuthHeaders(token || ""),
     });
@@ -92,8 +93,8 @@ export const uploadImage = async (file: File, token: string): Promise<{ success:
     const formData = new FormData();
     formData.append("image", file);
 
-    const { baseUrl } = require("./config").getApiConfig();
-    const response = await fetch(`${baseUrl}${API_ENDPOINTS.UPLOAD || "/upload"}`, {
+    const { baseUrl } = getApiConfig();
+    const response = await fetch(`${baseUrl}${API_ENDPOINTS.UPLOAD}`, {
         method: "POST",
         headers: {
             Authorization: `Bearer ${token}`,

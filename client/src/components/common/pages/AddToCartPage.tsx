@@ -27,7 +27,7 @@ export default function AddToCartPage() {
                     </div>
                     <h1 className="text-3xl font-bold text-gray-900">Your cart is empty</h1>
                     <p className="text-gray-500 max-w-md mx-auto">
-                        Looks like you haven't added anything to your cart yet.
+                        Looks like you haven&apos;t added anything to your cart yet.
                         Explore our collections and find something you love!
                     </p>
                     <Link href="/">

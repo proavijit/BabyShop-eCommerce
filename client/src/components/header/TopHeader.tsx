@@ -1,5 +1,5 @@
 import React from "react";
-import { Truck, Facebook, Twitter, Instagram, Sparkles } from "lucide-react";
+import { Truck, Facebook, Twitter, Instagram } from "lucide-react";
 import Container from "../common/Container";
 import { Button } from "../ui/button";
 import SelectCurrency from "./SelectCurrency";
@@ -7,7 +7,7 @@ import SelectLanguage from "./SelectLanguage";
 
 const TopHeader = () => {
     return (
-        <div className="w-full bg-gradient-to-r from-babyshopSky to-teal-400 text-white py-3 border-b border-white/10 shadow-md">
+        <div className="w-full bg-linear-to-r from-babyshopSky to-teal-400 text-white py-3 border-b border-white/10 shadow-md">
             <Container className="flex items-center justify-between text-xs sm:text-sm">
                 {/* Left Section: Promo & Socials */}
                 <div className="flex items-center gap-6">

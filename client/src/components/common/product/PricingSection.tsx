@@ -5,8 +5,8 @@ interface PricingSectionProps {
 
 export default function PricingSection({ price, discountPrice }: PricingSectionProps) {
     const hasDiscount = discountPrice && discountPrice < price;
-    const finalPrice = hasDiscount ? discountPrice : price;
-    const savings = hasDiscount ? price - discountPrice : 0;
+    const finalPrice = hasDiscount ? discountPrice! : price;
+    const savings = hasDiscount ? price - discountPrice! : 0;
 
     return (
         <div className="space-y-2 py-6">

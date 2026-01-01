@@ -6,7 +6,7 @@ import * as z from "zod";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useUserStore } from "@/lib/store";
+import { useUserStore, User as StoreUser } from "@/lib/store";
 import { register as registerUser } from "@/lib/authApi";
 import { Loader2, Mail, Lock, User, Eye, EyeOff, ArrowRight, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,7 @@ export default function SignUpForm() {
                     email: response.email,
                     role: response.role,
                     avatar: response.avatar,
-                    addresses: response.address
+                    addresses: response.address as StoreUser["addresses"]
                 };
 
                 setAuth(user, response.token);
@@ -69,9 +69,9 @@ export default function SignUpForm() {
             } else {
                 throw new Error("Registration failed");
             }
-        } catch (err: any) {
-            const msg = err.response?.data?.message || err.message || "Something went wrong";
-            toast.error(msg);
+        } catch (err: unknown) {
+            const errorMessage = err instanceof Error ? err.message : "Something went wrong";
+            toast.error(errorMessage);
         } finally {
             setIsLoading(false);
         }
@@ -158,7 +158,7 @@ export default function SignUpForm() {
                         disabled={isLoading || isSuccess}
                         className={`w-full h-14 rounded-2xl font-black text-lg transition-all duration-300 border-none shadow-md active:scale-95 ${isSuccess
                             ? "bg-green-500 text-white"
-                            : "bg-gradient-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white hover:shadow-babyshopSky/20 hover:shadow-lg"
+                            : "bg-linear-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white hover:shadow-babyshopSky/20 hover:shadow-lg"
                             }`}
                     >
                         {isLoading ? (

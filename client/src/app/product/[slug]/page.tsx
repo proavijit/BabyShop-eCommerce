@@ -1,4 +1,4 @@
-import { API_ENDPOINTS, fetchData, getApiConfig } from "@/lib/api";
+import { API_ENDPOINTS, fetchData } from "@/lib/api";
 import { Product, BreadcrumbItem, StructuredProductData } from "@/types/type";
 import Container from "@/components/common/Container";
 import ProductAction from "@/components/common/product/ProductAction";
@@ -11,9 +11,10 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 interface ProductPageProps {
-    params: {
+    params: Promise<{
         slug: string;
-    };
+    }>;
+    searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 // Generate metadata for SEO
@@ -86,7 +87,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
                 'product:price:currency': 'USD',
             },
         };
-    } catch (error) {
+    } catch {
         return {
             title: 'Product Not Found | BabyShop',
             description: 'The requested product could not be found.'

@@ -1,7 +1,6 @@
 "use client";
 
 import { useCartStore } from "@/lib/store";
-import { Product } from "@/types/type";
 
 export const useCart = () => {
     const {

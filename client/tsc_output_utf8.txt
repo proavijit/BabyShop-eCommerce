@@ -1,0 +1,2 @@
+﻿src/components/header/SearchInput.tsx(198,55): error TS2532: Object is possibly 'undefined'.
+src/lib/authApi.ts(97,61): error TS2339: Property 'UPLOAD' does not exist on type '{ readonly LOGIN: "/auth/login"; readonly REGISTER: "/auth/register"; readonly REFRESH: "/auth/refresh"; readonly LOGOUT: "/auth/logout"; readonly PRODUCTS: "/products"; readonly PRODUCT_BY_ID: (id: string) => string; ... 17 more ...; readonly WISHLIST: "/wishlist"; }'.

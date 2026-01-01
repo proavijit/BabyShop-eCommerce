@@ -1,7 +1,6 @@
 "use client";
 
 import { ShoppingCart } from "lucide-react";
-import Link from "next/link";
 import { useCart } from "@/hooks/useCart";
 import { motion, AnimatePresence } from "framer-motion";
 import CartDrawer from "../cart/CartDrawer";

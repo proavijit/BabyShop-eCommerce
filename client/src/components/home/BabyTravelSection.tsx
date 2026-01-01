@@ -1,4 +1,4 @@
-import { Plane, Car, Baby, ShoppingBag, Shield, Star, ArrowRight } from "lucide-react";
+import { Plane, Car, Baby, ShoppingBag, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function BabyTravelSection() {
@@ -42,7 +42,7 @@ export default function BabyTravelSection() {
     ];
 
     return (
-        <section className="py-14 px-4 md:px-8 rounded-[2.5rem] bg-gradient-to-br from-slate-50 to-white border border-gray-100/50 shadow-sm transition-all duration-500 hover:shadow-md mt-12">
+        <section className="py-14 px-4 md:px-8 rounded-[2.5rem] bg-linear-to-br from-slate-50 to-white border border-gray-100/50 shadow-sm transition-all duration-500 hover:shadow-md mt-12">
             <div className="max-w-7xl mx-auto relative">
 
                 {/* Section Header - Styled to match "Trusted Brands" */}

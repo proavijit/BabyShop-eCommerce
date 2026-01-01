@@ -1,0 +1,45 @@
+﻿
+> client@0.1.0 build
+> next build
+
+node.exe :  ΓÜá 
+Warning: Found 
+multiple lockfiles. 
+Selecting C:\Users\Avi
+jit~Ghosh\Desktop\baby
+shop-ecommerce\yarn.lo
+ck.
+At line:1 char:1
++ & "C:\Program Files\
+nodejs/node.exe" "C:\U
+sers\Avijit~Ghosh\AppD
+ata\R ...
++ ~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo    
+          : 
+NotSpecified    : ( 
+ΓÜá Warning: F.    
+..erce\yarn.lock.:S   
+ tring) [], RemoteEx  
+  ception
+    + 
+FullyQualifiedErr    
+orId : NativeComman   
+ dError
+ 
+   Consider removing 
+the lockfiles at:
+   * C:\Users\Avijit~G
+hosh\Desktop\babyshop-
+ecommerce\client\packa
+ge-lock.json
+
+   Γû▓ Next.js 15.4.5
+   - Environments: .env
+
+   Creating an optimized production build ...
+ Γ£ô Compiled successfully in 1000ms
+   Linting and checking validity of types ...

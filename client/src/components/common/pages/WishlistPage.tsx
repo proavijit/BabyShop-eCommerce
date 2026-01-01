@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useWishlist } from "@/hooks/useWishlist";
 import { useCart } from "@/hooks/useCart";
 import Container from "@/components/common/Container";
@@ -8,6 +8,7 @@ import { Trash2, ShoppingCart, Heart, ArrowLeft, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { Product } from "@/types/type";
 import { useUserStore } from "@/lib/store";
 import { toast } from "sonner";
 
@@ -46,7 +47,7 @@ export default function WishlistPage() {
                     </div>
                     <h1 className="text-3xl font-bold text-gray-900">Your wishlist is empty</h1>
                     <p className="text-gray-500 max-w-md mx-auto">
-                        You haven't saved any items yet. Start exploring our cute collections!
+                        You haven&apos;t saved any items yet. Start exploring our cute collections!
                     </p>
                     <Link href="/">
                         <Button className="rounded-full px-8 bg-babyshopSky hover:bg-babyshopSky/90 font-bold">
@@ -58,11 +59,11 @@ export default function WishlistPage() {
         );
     }
 
-    const handleAddToCart = async (product: any) => {
+    const handleAddToCart = async (product: Product) => {
         try {
             await addToCart(product, 1);
             toast.success(`${product.name} added to cart!`);
-        } catch (error) {
+        } catch {
             toast.error("Failed to add to cart");
         }
     };

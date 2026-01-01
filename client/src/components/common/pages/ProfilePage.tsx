@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
@@ -73,9 +73,10 @@ export default function ProfilePage() {
             } else {
                 toast.error("Failed to upload image", { id: toastId });
             }
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Avatar update error:", error);
-            toast.error(error.message || "Failed to update avatar", { id: toastId });
+            const errorMessage = error instanceof Error ? error.message : "Failed to update avatar";
+            toast.error(errorMessage, { id: toastId });
         } finally {
             setIsUploading(false);
             if (fileInputRef.current) fileInputRef.current.value = "";
@@ -107,7 +108,7 @@ export default function ProfilePage() {
             className="max-w-4xl mx-auto py-20 px-4 sm:px-6 lg:px-8"
         >
             <Card className="rounded-[48px] border-none shadow-2xl shadow-primary/5 bg-white overflow-hidden">
-                <div className="relative h-40 bg-gradient-to-r from-babyshopSky to-teal-400" />
+                <div className="relative h-40 bg-linear-to-r from-babyshopSky to-teal-400" />
 
                 <div className="px-10 pb-12">
                     <div className="relative -mt-20 mb-8 flex flex-col items-center">
@@ -177,7 +178,7 @@ export default function ProfilePage() {
                     </div>
 
                     <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <Button className="px-8 py-6 bg-gradient-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-black rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 h-auto">
+                        <Button className="px-8 py-6 bg-linear-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-black rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 h-auto">
                             Update Details
                         </Button>
                         <Button

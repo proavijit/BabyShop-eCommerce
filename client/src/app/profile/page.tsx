@@ -1,7 +1,6 @@
 "use client";
 
 import ProfilePage from "@/components/common/pages/ProfilePage";
-import Container from "@/components/common/Container";
 import { useUserStore } from "@/lib/store";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";

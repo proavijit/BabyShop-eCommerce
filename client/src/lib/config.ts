@@ -51,7 +51,7 @@ export async function fetchWithConfig<T>(
 
     // ✅ Only add Next.js revalidate option on the server
     if (typeof window === "undefined") {
-        (mergedOptions as any).next = { revalidate: 100 };
+        (mergedOptions as Record<string, unknown>).next = { revalidate: 100 };
     }
 
     const response = await fetch(endpoint, mergedOptions);
@@ -146,4 +146,5 @@ export const API_ENDPOINTS = {
 
     // Wishlist
     WISHLIST: "/wishlist",
+    UPLOAD: "/upload"
 } as const;
