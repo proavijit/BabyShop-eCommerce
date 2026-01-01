@@ -11,13 +11,26 @@ import { Activity, Server, Database, Globe } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { api } from '../lib/config';
 import { toast } from 'sonner';
+import type { Order } from '../types/order';
+import type { DataItem } from './Dashboard/components/DistributionCharts';
 
 // Define types for the data we expect
 interface DashboardData {
-    stats: any;
-    contacts?: any;
-    recentOrders: any[];
-    salesData: any[];
+    stats: {
+        totalRevenue: number;
+        revenueChange: number;
+        totalOrders: number;
+        ordersChange: number;
+        activeUsers: number;
+        usersChange: number;
+    } | null;
+    contacts?: {
+        categories: DataItem[];
+        brands: DataItem[];
+        roles: DataItem[];
+    };
+    recentOrders: Order[];
+    salesData: { name: string; total: number }[];
     loading: boolean;
 }
 
@@ -25,6 +38,11 @@ export const Dashboard: React.FC = () => {
     const [data, setData] = useState<DashboardData>({
         stats: null,
         recentOrders: [],
+        contacts: {
+            categories: [],
+            brands: [],
+            roles: []
+        },
         salesData: [],
         loading: true
     });
@@ -51,7 +69,7 @@ export const Dashboard: React.FC = () => {
 
                 // Sort orders by date descending and take top 5
                 const sortedOrders = Array.isArray(ordersRes.data) ?
-                    [...ordersRes.data].sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5)
+                    [...ordersRes.data].sort((a: Order, b: Order) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 5)
                     : [];
 
                 setData({

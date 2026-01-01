@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import api, { API_ENDPOINTS } from "../lib/config";
+import type { Address } from "../types/user";
 
 // User interface - updated to match server Model
 export interface User {
@@ -11,7 +12,7 @@ export interface User {
     isAdmin?: boolean; // Derived field for UI
     avatar?: string;
     createdAt?: string;
-    address?: any[];
+    address?: Address[];
 }
 
 // Auth state interface
@@ -32,7 +33,7 @@ interface AuthState {
 }
 
 // Helper to normalize user data from server
-const normalizeUser = (userData: any): User | null => {
+const normalizeUser = (userData: Record<string, unknown> | null): User | null => {
     if (!userData) return null;
 
     // Check for both 'role' and 'isAdmin' depending on server version
@@ -41,15 +42,18 @@ const normalizeUser = (userData: any): User | null => {
 
     return {
         ...userData,
+        _id: String(userData._id || ""),
+        name: String(userData.name || ""),
+        email: String(userData.email || ""),
+        role: (userData.role as User['role']) || (userData.isAdmin ? "admin" : "user"),
         isAdmin, // Ensure this is always a boolean for the UI
-        role: userData.role || (userData.isAdmin ? "admin" : "user")
-    };
+    } as User;
 };
 
 // Create auth store with Zustand
 export const useAuthStore = create<AuthState>()(
     persist(
-        (set, get) => ({
+        (set) => ({
             user: null,
             token: null,
             isLoading: false,
@@ -91,11 +95,18 @@ export const useAuthStore = create<AuthState>()(
                         isLoading: false,
                         error: null,
                     });
-                } catch (error: any) {
-                    const errorMessage =
-                        error.response?.data?.message ||
-                        error.message ||
-                        "Login failed. Please check your credentials.";
+                } catch (error: unknown) {
+                    let errorMessage = "Login failed. Please check your credentials.";
+
+                    if (error instanceof Error) {
+                        errorMessage = error.message;
+                    }
+
+                    // Specific Axios error handling if needed, but for now generic
+                    const axiosError = error as { response?: { data?: { message?: string } } };
+                    if (axiosError.response?.data?.message) {
+                        errorMessage = axiosError.response.data.message;
+                    }
 
                     set({
                         error: errorMessage,
@@ -139,11 +150,17 @@ export const useAuthStore = create<AuthState>()(
                         isLoading: false,
                         error: null,
                     });
-                } catch (error: any) {
-                    const errorMessage =
-                        error.response?.data?.message ||
-                        error.message ||
-                        "Registration failed. Please try again.";
+                } catch (error: unknown) {
+                    let errorMessage = "Registration failed. Please try again.";
+
+                    if (error instanceof Error) {
+                        errorMessage = error.message;
+                    }
+
+                    const axiosError = error as { response?: { data?: { message?: string } } };
+                    if (axiosError.response?.data?.message) {
+                        errorMessage = axiosError.response.data.message;
+                    }
 
                     set({
                         error: errorMessage,
@@ -211,7 +228,7 @@ export const useAuthStore = create<AuthState>()(
                         error: null,
                         isLoading: false,
                     });
-                } catch (error: any) {
+                } catch (error: unknown) {
                     // Token is invalid, clear auth state
                     localStorage.removeItem("adminToken");
                     localStorage.removeItem("adminUser");
@@ -233,7 +250,7 @@ export const useAuthStore = create<AuthState>()(
 
             // Set user (for updates)
             setUser: (user: User) => {
-                const normalizedUser = normalizeUser(user);
+                const normalizedUser = normalizeUser(user as unknown as Record<string, unknown>);
                 if (normalizedUser) {
                     localStorage.setItem("adminUser", JSON.stringify(normalizedUser));
                     set({ user: normalizedUser });
@@ -246,7 +263,7 @@ export const useAuthStore = create<AuthState>()(
                 user: state.user,
                 token: state.token,
                 isAuthenticated: state.isAuthenticated,
-            }),
+            } as any), // Cast to any here is acceptable as it's a boundary for persistence
         }
     )
 );

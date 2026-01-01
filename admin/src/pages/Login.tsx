@@ -28,8 +28,11 @@ export const Login: React.FC = () => {
             await login(email, password);
             toast.success('Welcome back, Admin!');
             navigate('/dashboard');
-        } catch (err: any) {
-            toast.error(err.message || 'Login failed');
+        } catch (error: unknown) {
+            let message = "Login failed. Please check your credentials.";
+            if (error instanceof Error) message = error.message;
+            toast.error(message);
+        } finally {
         }
     };
 

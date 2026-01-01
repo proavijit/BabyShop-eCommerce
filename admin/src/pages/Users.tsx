@@ -55,7 +55,7 @@ export const Users: React.FC = () => {
             const res = await userApi.getAllUsers();
             if (res.success) {
                 // Ensure each user has required fields for UI
-                const normalizedUsers = res.users.map((u: any) => ({
+                const normalizedUsers = res.users.map((u: User) => ({
                     ...u,
                     status: u.status || 'active',
                     address: u.address || []

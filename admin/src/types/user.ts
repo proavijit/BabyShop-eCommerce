@@ -12,8 +12,8 @@ export interface User {
     _id: string;
     name: string;
     email: string;
-    role: 'user' | 'admin' | 'proavijit';
-    status: 'active' | 'suspended';
+    role: 'user' | 'admin' | 'proavijit' | 'manager';
+    status: 'active' | 'suspended' | 'blocked';
     avatar?: string;
     createdAt?: string;
     updatedAt?: string;

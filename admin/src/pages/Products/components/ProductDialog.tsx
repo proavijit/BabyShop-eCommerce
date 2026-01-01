@@ -90,7 +90,7 @@ export const ProductDialog: React.FC<ProductDialogProps> = ({
 
     const handleSubmit = (e: React.MouseEvent) => {
         e.preventDefault();
-        onSubmit(e as any);
+        onSubmit(e as unknown as React.FormEvent);
     };
 
     return (

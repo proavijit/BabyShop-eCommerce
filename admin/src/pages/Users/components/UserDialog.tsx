@@ -84,7 +84,7 @@ export const UserDialog: React.FC<UserDialogProps> = ({
                         <Label htmlFor="role" className="text-slate-300">Access Level</Label>
                         <Select
                             value={formData.role}
-                            onValueChange={(v: any) => setFormData({ ...formData, role: v })}
+                            onValueChange={(v: string) => setFormData({ ...formData, role: v as any })}
                         >
                             <SelectTrigger className="bg-[#0f172a]/50 border-white/10 focus:ring-blue-500/20">
                                 <SelectValue placeholder="Select Role" />

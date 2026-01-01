@@ -29,8 +29,11 @@ export const Register: React.FC = () => {
             await register(name, email, password);
             toast.success('Admin account created successfully!');
             navigate('/dashboard');
-        } catch (err: any) {
-            toast.error(err.message || 'Registration failed');
+        } catch (error: unknown) {
+            let message = "Registration failed. Please try again.";
+            if (error instanceof Error) message = error.message;
+            toast.error(message);
+        } finally {
         }
     };
 

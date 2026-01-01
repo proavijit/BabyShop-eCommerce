@@ -4,7 +4,7 @@ import axios, { type AxiosInstance, type InternalAxiosRequestConfig, type AxiosR
 
 // Get API Configuration for admin
 const API_BASE_URL =
-    (typeof import.meta !== "undefined" && (import.meta as any).env?.VITE_API_URL) ||
+    ((import.meta as unknown as { env: Record<string, string> }).env?.VITE_API_URL) ||
     (typeof process !== "undefined" && process.env?.VITE_API_URL) ||
     "http://localhost:8000";
 

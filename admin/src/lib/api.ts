@@ -1,7 +1,7 @@
 import api, { API_ENDPOINTS } from "./config";
 
 // Generic API response type
-export interface ApiResponse<T = any> {
+export interface ApiResponse<T = unknown> {
     success: boolean;
     data: T;
     message?: string;
@@ -36,7 +36,7 @@ export const authApi = {
 // USER API
 // ============================================
 export const userApi = {
-    getAllUsers: async (params?: any) => {
+    getAllUsers: async (params?: Record<string, unknown>) => {
         const response = await api.get(API_ENDPOINTS.USERS.BASE, { params });
         return response.data;
     },
@@ -46,12 +46,12 @@ export const userApi = {
         return response.data;
     },
 
-    createUser: async (userData: any) => {
+    createUser: async <T extends object>(userData: T) => {
         const response = await api.post(API_ENDPOINTS.USERS.BASE, userData);
         return response.data;
     },
 
-    updateUser: async (id: string, userData: any) => {
+    updateUser: async <T extends object>(id: string, userData: T) => {
         const response = await api.put(API_ENDPOINTS.USERS.BY_ID(id), userData);
         return response.data;
     },
@@ -61,7 +61,7 @@ export const userApi = {
         return response.data;
     },
 
-    updateUserAddress: async (id: string, address: any) => {
+    updateUserAddress: async (id: string, address: Record<string, unknown>) => {
         const response = await api.post(API_ENDPOINTS.USERS.ADDRESS(id), address);
         return response.data;
     },
@@ -71,7 +71,7 @@ export const userApi = {
 // PRODUCT API
 // ============================================
 export const productApi = {
-    getAllProducts: async (params?: any) => {
+    getAllProducts: async (params?: Record<string, unknown>) => {
         const response = await api.get(API_ENDPOINTS.PRODUCTS.BASE, { params });
         return response.data;
     },
@@ -81,12 +81,12 @@ export const productApi = {
         return response.data;
     },
 
-    createProduct: async (productData: any) => {
+    createProduct: async (productData: Record<string, unknown> | FormData) => {
         const response = await api.post(API_ENDPOINTS.PRODUCTS.BASE, productData);
         return response.data;
     },
 
-    updateProduct: async (id: string, productData: any) => {
+    updateProduct: async (id: string, productData: Record<string, unknown> | FormData) => {
         const response = await api.put(API_ENDPOINTS.PRODUCTS.BY_ID(id), productData);
         return response.data;
     },
@@ -106,7 +106,7 @@ export const productApi = {
 // CATEGORY API
 // ============================================
 export const categoryApi = {
-    getAllCategories: async (params?: any) => {
+    getAllCategories: async (params?: Record<string, unknown>) => {
         const response = await api.get(API_ENDPOINTS.CATEGORIES.BASE, { params });
         return response.data;
     },
@@ -116,12 +116,12 @@ export const categoryApi = {
         return response.data;
     },
 
-    createCategory: async (categoryData: any) => {
+    createCategory: async <T extends object>(categoryData: T) => {
         const response = await api.post(API_ENDPOINTS.CATEGORIES.BASE, categoryData);
         return response.data;
     },
 
-    updateCategory: async (id: string, categoryData: any) => {
+    updateCategory: async <T extends object>(id: string, categoryData: T) => {
         const response = await api.put(API_ENDPOINTS.CATEGORIES.BY_ID(id), categoryData);
         return response.data;
     },
@@ -146,12 +146,12 @@ export const brandApi = {
         return response.data;
     },
 
-    createBrand: async (brandData: any) => {
+    createBrand: async <T extends object>(brandData: T) => {
         const response = await api.post(API_ENDPOINTS.BRANDS.BASE, brandData);
         return response.data;
     },
 
-    updateBrand: async (id: string, brandData: any) => {
+    updateBrand: async <T extends object>(id: string, brandData: T) => {
         const response = await api.put(API_ENDPOINTS.BRANDS.BY_ID(id), brandData);
         return response.data;
     },
@@ -166,12 +166,12 @@ export const brandApi = {
 // ORDER API
 // ============================================
 export const orderApi = {
-    getAllOrders: async (params?: any) => {
+    getAllOrders: async (params?: Record<string, unknown>) => {
         const response = await api.get(API_ENDPOINTS.ORDERS.BASE, { params });
         return response.data;
     },
 
-    getAllOrdersAdmin: async (params?: any) => {
+    getAllOrdersAdmin: async (params?: Record<string, unknown>) => {
         const response = await api.get(API_ENDPOINTS.ORDERS.ADMIN, { params });
         return response.data;
     },
@@ -206,12 +206,12 @@ export const bannerApi = {
         return response.data;
     },
 
-    createBanner: async (bannerData: any) => {
+    createBanner: async <T extends object>(bannerData: T) => {
         const response = await api.post(API_ENDPOINTS.BANNERS.BASE, bannerData);
         return response.data;
     },
 
-    updateBanner: async (id: string, bannerData: any) => {
+    updateBanner: async <T extends object>(id: string, bannerData: T) => {
         const response = await api.put(API_ENDPOINTS.BANNERS.BY_ID(id), bannerData);
         return response.data;
     },
@@ -243,7 +243,7 @@ export const statsApi = {
 // ANALYTICS API
 // ============================================
 export const analyticsApi = {
-    getAnalytics: async (params?: any) => {
+    getAnalytics: async (params?: Record<string, unknown>) => {
         const response = await api.get(API_ENDPOINTS.ANALYTICS.BASE, { params });
         return response.data;
     },
@@ -327,7 +327,7 @@ export const wishlistApi = {
 // PAYMENT API
 // ============================================
 export const paymentApi = {
-    processPayment: async (paymentData: any) => {
+    processPayment: async (paymentData: Record<string, unknown>) => {
         const response = await api.post(API_ENDPOINTS.PAYMENT.PROCESS, paymentData);
         return response.data;
     },

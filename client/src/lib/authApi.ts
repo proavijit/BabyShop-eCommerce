@@ -93,20 +93,13 @@ export const uploadImage = async (file: File, token: string): Promise<{ success:
     const formData = new FormData();
     formData.append("image", file);
 
-    const { baseUrl } = getApiConfig();
-    const response = await fetch(`${baseUrl}${API_ENDPOINTS.UPLOAD}`, {
+    return fetchWithConfig<{ success: boolean; url: string }>((API_ENDPOINTS as any).UPLOAD, {
         method: "POST",
         headers: {
             Authorization: `Bearer ${token}`,
         },
         body: formData,
     });
-
-    if (!response.ok) {
-        throw new Error("Failed to upload image");
-    }
-
-    return response.json();
 };
 
 export const updateUserProfile = async (userId: string, data: Partial<User>, token: string): Promise<{ success: boolean; user: User }> => {

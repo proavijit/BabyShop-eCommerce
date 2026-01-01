@@ -3,10 +3,10 @@ import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recha
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { motion } from 'framer-motion';
 
-interface DataItem {
+export interface DataItem {
     name: string;
     value: number;
-    [key: string]: any;
+    [key: string]: string | number | undefined;
 }
 
 interface DistributionChartsProps {
@@ -18,7 +18,12 @@ interface DistributionChartsProps {
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d', '#ffc658', '#8dd1e1', '#a4de6c', '#d0ed57'];
 
-const CustomTooltip = ({ active, payload }: any) => {
+interface CustomTooltipProps {
+    active?: boolean;
+    payload?: Array<{ name: string; value: number }>;
+}
+
+const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
         return (
             <div className="bg-slate-800 border border-slate-700 p-2 rounded-lg shadow-xl">

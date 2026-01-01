@@ -88,8 +88,9 @@ export const Orders: React.FC = () => {
             });
             setOrders(data.orders);
             setTotalPages(data.totalPages);
-        } catch (error: any) {
-            toast.error(error.message || 'Failed to fetch orders');
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'Failed to fetch orders';
+            toast.error(message);
         } finally {
             setLoading(false);
         }
@@ -100,8 +101,9 @@ export const Orders: React.FC = () => {
             await orderApi.updateOrderStatus(id, status);
             toast.success(`Order status updated to ${status}`);
             fetchOrders();
-        } catch (error: any) {
-            toast.error(error.message || 'Update failed');
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'Update failed';
+            toast.error(message);
         }
     };
 
@@ -111,8 +113,9 @@ export const Orders: React.FC = () => {
             await orderApi.deleteOrder(id);
             toast.success('Order deleted successfully');
             fetchOrders();
-        } catch (error: any) {
-            toast.error(error.message || 'Deletion failed');
+        } catch (error: unknown) {
+            const message = error instanceof Error ? error.message : 'Deletion failed';
+            toast.error(message);
         }
     };
 
@@ -322,8 +325,8 @@ export const Orders: React.FC = () => {
                                     variant={currentPage === i + 1 ? "default" : "outline"}
                                     onClick={() => setCurrentPage(i + 1)}
                                     className={`h-9 w-9 rounded-xl text-xs font-bold transition-all ${currentPage === i + 1
-                                            ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20 hover:bg-blue-500 border-0'
-                                            : 'bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10'
+                                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20 hover:bg-blue-500 border-0'
+                                        : 'bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10'
                                         }`}
                                 >
                                     {i + 1}

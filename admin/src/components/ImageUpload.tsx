@@ -44,8 +44,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ value, onChange, class
                     return data;
                 }
                 throw new Error(data.message || 'Upload failed');
-            } catch (error: any) {
-                throw new Error(error.response?.data?.message || error.message || 'Failed to upload');
+            } catch (error: unknown) {
+                const message = error instanceof Error ? error.message : 'Failed to upload';
+                throw new Error(message);
             }
         })();
 

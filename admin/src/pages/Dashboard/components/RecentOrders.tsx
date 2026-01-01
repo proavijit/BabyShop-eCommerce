@@ -13,14 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Clock, AlertCircle, ArrowRight } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
+import type { Order } from '../../../types/order';
 
-interface Order {
-    _id: string;
-    user?: { name: string };
-    totalPrice: number;
-    status: string; // 'delivered' | 'pending' | 'processing' | 'cancelled'
-    createdAt: string;
-}
 
 interface RecentOrdersProps {
     orders: Order[];
@@ -97,7 +91,9 @@ export const RecentOrders: React.FC<RecentOrdersProps> = ({ orders, loading }) =
                                             #{order._id.substring(0, 8)}...
                                         </TableCell>
                                         <TableCell className="font-medium text-white">
-                                            {order.user?.name || 'Guest User'}
+                                            {typeof order.user === 'object' && order.user !== null && 'name' in order.user
+                                                ? order.user.name
+                                                : 'Guest User'}
                                         </TableCell>
                                         <TableCell className="font-bold text-white">
                                             ${order.totalPrice.toFixed(2)}

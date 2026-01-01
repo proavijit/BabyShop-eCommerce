@@ -197,7 +197,7 @@ export default function SearchInput() {
                                             </h3>
                                             <div className="flex items-center gap-2 mt-1">
                                                 <span className="text-[#29beb3] font-semibold">
-                                                    ${getPrice(product).toFixed(2)}
+                                                    ${product ? getPrice(product).toFixed(2) : '0.00'}
                                                 </span>
                                                 {product.discountPrice && product.discountPrice > 0 && product.price && (
                                                     <span className="text-sm text-gray-400 line-through">

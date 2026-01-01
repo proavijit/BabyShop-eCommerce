@@ -123,7 +123,7 @@ export const CategoryDialog: React.FC<CategoryDialogProps> = ({
                             </Label>
                             <Select
                                 value={formData.categoryType}
-                                onValueChange={(val: any) => setFormData({ ...formData, categoryType: val })}
+                                onValueChange={(val: string) => setFormData({ ...formData, categoryType: val as any })}
                             >
                                 <SelectTrigger className="bg-white/5 border-white/10 text-white h-12 rounded-xl focus:ring-blue-500/20">
                                     <SelectValue placeholder="Select type" />
