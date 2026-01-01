@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { useWishlist } from "@/hooks/useWishlist";
 import { useCart } from "@/hooks/useCart";
 import Container from "@/components/common/Container";

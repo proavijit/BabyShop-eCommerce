@@ -1,4 +1,4 @@
-import { fetchWithConfig, API_ENDPOINTS, getAuthHeaders, getApiConfig } from "./config";
+import { fetchWithConfig, API_ENDPOINTS, getAuthHeaders } from "./config";
 import { User } from "./store";
 import Cookies from "js-cookie";
 
@@ -93,7 +93,7 @@ export const uploadImage = async (file: File, token: string): Promise<{ success:
     const formData = new FormData();
     formData.append("image", file);
 
-    return fetchWithConfig<{ success: boolean; url: string }>((API_ENDPOINTS as any).UPLOAD, {
+    return fetchWithConfig<{ success: boolean; url: string }>(API_ENDPOINTS.UPLOAD, {
         method: "POST",
         headers: {
             Authorization: `Bearer ${token}`,
