@@ -11,6 +11,18 @@ import {
 } from "@/components/ui/select"
 
 export default function SelectLanguage() {
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    if (!mounted) {
+        return (
+            <div className="w-[80px] h-4 bg-white/10 animate-pulse rounded-md" />
+        );
+    }
+
     return (
         <Select defaultValue="en">
             <SelectTrigger className="w-auto h-auto border-none bg-transparent text-white/90 text-xs font-medium   gap-1 p-0 hover:text-emerald-300 data-[state=open]:bg-transparent transition-colors">

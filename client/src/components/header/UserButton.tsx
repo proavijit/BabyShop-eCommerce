@@ -26,13 +26,18 @@ import { Button } from "@/components/ui/button";
 export default function UserButton() {
     const { authUser, isAuthenticated, logout } = useUserStore();
     const router = useRouter();
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const handleLogout = () => {
         logout();
         router.push("/");
     };
 
-    if (!isAuthenticated || !authUser) {
+    if (!mounted || !isAuthenticated || !authUser) {
         return (
             <Link href="/auth/signin">
                 <Button variant="ghost" className="flex items-center gap-2 text-gray-700 hover:text-primary hover:bg-primary/5 rounded-full px-4 border border-transparent hover:border-primary/20 transition-all duration-300">
