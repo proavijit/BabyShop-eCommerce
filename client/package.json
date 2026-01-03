@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "analyze": "set ANALYZE=true && next build"
+    "analyze": "cross-env ANALYZE=true next build --webpack",
+    "analyze:dev": "cross-env ANALYZE=true next dev",
+    "analyze:turbo": "next experimental-analyze"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -63,6 +65,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cross-env": "^10.1.0",
     "eslint": "^9",
     "eslint-config-next": "15.4.5",
     "tailwindcss": "^4",

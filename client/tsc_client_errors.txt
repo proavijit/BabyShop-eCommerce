@@ -1,2 +1,0 @@
-﻿../admin/src/store/useAuthStore.ts(253,54): error TS2345: Argument of type 'User' is not assignable to parameter of type 'Record<string, unknown>'.
-  Index signature for type 'string' is missing in type 'User'.

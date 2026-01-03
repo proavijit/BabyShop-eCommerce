@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import { Toaster } from "sonner";
+import { LazyMotion, domAnimation } from "framer-motion";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -23,13 +24,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${plusJakartaSans.className} antialiased`} suppressHydrationWarning>
-        {/* Header */}
-        <Header />
-        {children}
-        {/* Footer */}
-
-        <Footer />
-        <Toaster position="top-right" richColors />
+        <LazyMotion features={domAnimation}> {/* পুরো অ্যাপকে কভার করবে */}
+          <Header />
+          {children}
+          <Footer />
+          <Toaster position="top-right" richColors />
+        </LazyMotion>
       </body>
     </html>
   );
