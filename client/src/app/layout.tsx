@@ -4,12 +4,14 @@ import "./globals.css";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import { Toaster } from "sonner";
-import { LazyMotion, domAnimation } from "framer-motion";
-
+import { LazyMotion, domMax } from "framer-motion";
+import { Suspense } from "react";
+import WebVitalsReporter from "../components/WebVitalsReporter";
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-plus-jakarta",
   display: 'swap',
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -24,12 +26,15 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${plusJakartaSans.className} antialiased`} suppressHydrationWarning>
-        <LazyMotion features={domAnimation}> {/* পুরো অ্যাপকে কভার করবে */}
-          <Header />
-          {children}
-          <Footer />
-          <Toaster position="top-right" richColors />
+        <Header />
+        <LazyMotion features={domMax} strict>
+          <Suspense fallback={null}>
+            {children}
+          </Suspense>
         </LazyMotion>
+        <Footer />
+        <Toaster position="top-right" richColors />
+        <WebVitalsReporter />
       </body>
     </html>
   );

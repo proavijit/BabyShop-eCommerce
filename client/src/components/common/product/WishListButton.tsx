@@ -1,7 +1,7 @@
 "use client";
 
 import { Heart } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { useWishlist } from "@/hooks/useWishlist";
 import { useUserStore } from "@/lib/store";
 import { useRouter } from "next/navigation";
@@ -57,7 +57,7 @@ export default function WishListButton({ productId, product, className = "" }: W
     };
 
     return (
-        <motion.button
+        <m.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={handleToggle}
@@ -66,29 +66,29 @@ export default function WishListButton({ productId, product, className = "" }: W
         >
             <AnimatePresence mode="wait">
                 {isWishlisted ? (
-                    <motion.div
+                    <m.div
                         key="filled"
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
                     >
                         <Heart className="w-5 h-5 fill-babyshopRed text-babyshopRed" />
-                    </motion.div>
+                    </m.div>
                 ) : (
-                    <motion.div
+                    <m.div
                         key="outline"
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
                     >
                         <Heart className="w-5 h-5 text-gray-400 group-hover:text-babyshopRed transition-colors" />
-                    </motion.div>
+                    </m.div>
                 )}
             </AnimatePresence>
 
             {/* Subtle glow effect when wishlisted */}
             {isWishlisted && (
-                <motion.div
+                <m.div
                     layoutId="glow"
                     className="absolute inset-0 rounded-full bg-babyshopRed/10 -z-10"
                     initial={{ scale: 1.2, opacity: 0 }}
@@ -96,6 +96,6 @@ export default function WishListButton({ productId, product, className = "" }: W
                     transition={{ repeat: Infinity, duration: 2, repeatType: "reverse" }}
                 />
             )}
-        </motion.button>
+        </m.button>
     );
 }

@@ -27,7 +27,13 @@ async function ProductSection({
 
     try {
         const queryString = buildQueryString({ ...query, perPage: 5 });
-        const data = await fetchData<{ products: Product[] }>(`${API_ENDPOINTS.PRODUCTS}${queryString}`);
+        const data = await fetchData<{ products: Product[] }>(
+            `${API_ENDPOINTS.PRODUCTS}${queryString}`,
+            {
+                next: { revalidate: 3600 }, // Cache for 1 hour
+                cache: 'force-cache'
+            }
+        );
         products = data.products || [];
     } catch (error) {
         console.error(`Failed to fetch products:`, error);

@@ -18,7 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { uploadImage, updateUserProfile } from "@/lib/authApi";
 import { useRef, useState } from "react";
 
@@ -101,7 +101,7 @@ export default function ProfilePage() {
     };
 
     return (
-        <motion.div
+        <m.div
             initial="hidden"
             animate="visible"
             variants={containerVariants}
@@ -192,6 +192,6 @@ export default function ProfilePage() {
                     </div>
                 </div>
             </Card>
-        </motion.div>
+        </m.div>
     );
 }

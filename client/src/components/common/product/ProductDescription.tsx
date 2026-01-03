@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Plus } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { Product } from "@/types/type";
 import ProductReview from "./ProductReview";
 
@@ -36,7 +36,7 @@ function AccordionItem({ title, isOpen, onToggle, children }: AccordionItemProps
             </button>
             <AnimatePresence initial={false}>
                 {isOpen && (
-                    <motion.div
+                    <m.div
                         id={panelId}
                         role="region"
                         aria-labelledby={buttonId}
@@ -49,7 +49,7 @@ function AccordionItem({ title, isOpen, onToggle, children }: AccordionItemProps
                         <div className="pb-6 text-gray-500 text-sm leading-relaxed space-y-4">
                             {children}
                         </div>
-                    </motion.div>
+                    </m.div>
                 )}
             </AnimatePresence>
         </div>

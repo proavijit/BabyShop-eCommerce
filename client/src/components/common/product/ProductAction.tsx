@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Product } from "@/types/type";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Plus, Minus, ShoppingCart, Loader2 } from "lucide-react";
 import WishListButton from "./WishListButton";
 import { useCart } from "@/hooks/useCart";
@@ -92,7 +92,7 @@ export default function ProductAction({ product }: ProductActionProps) {
                     </div>
 
                     {/* Add to Cart - Bold & Vibrant */}
-                    <motion.button
+                    <m.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         disabled={product.stock === 0 || isLoading}
@@ -107,7 +107,7 @@ export default function ProductAction({ product }: ProductActionProps) {
                             <ShoppingCart className="w-5 h-5" aria-hidden="true" />
                         )}
                         {product.stock > 0 ? (isLoading ? "Adding..." : "Add to Cart") : "Out of Stock"}
-                    </motion.button>
+                    </m.button>
 
                     {/* Quick Wishlist */}
                     <div

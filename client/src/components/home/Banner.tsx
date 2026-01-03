@@ -120,7 +120,7 @@ export default function BannerComponent() {
                         className="w-full h-full flex transition-transform duration-700 ease-out"
                         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
                     >
-                        {mainBanners.map((banner) => (
+                        {mainBanners.map((banner, bannerIndex) => (
                             <div
                                 key={banner._id}
                                 className="w-full h-full shrink-0 relative bg-linear-to-br from-gray-100 to-gray-200"
@@ -129,6 +129,9 @@ export default function BannerComponent() {
                                     src={banner.image}
                                     alt={banner.name || banner.title || "Banner"}
                                     fill
+                                    sizes="(max-width: 1024px) 100vw, 75vw"
+                                    quality={85}
+                                    priority={bannerIndex === 0}
                                     className="object-cover"
                                 />
 
@@ -210,6 +213,9 @@ export default function BannerComponent() {
                                     src={banner.image}
                                     alt={banner.name || banner.title || "Banner"}
                                     fill
+                                    sizes="(max-width: 1024px) 100vw, 25vw"
+                                    quality={80}
+                                    loading="lazy"
                                     className="object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
                                 <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/30 to-black/80 flex flex-col justify-end p-6">

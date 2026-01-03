@@ -64,6 +64,9 @@ export default function ProductCard({ product }: ProductCardProps) {
                         src={imageUrl}
                         alt={product.name}
                         fill
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+                        quality={85}
+                        loading="lazy"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                 </Link>

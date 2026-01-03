@@ -2,7 +2,7 @@
 
 import { ShoppingCart } from "lucide-react";
 import { useCart } from "@/hooks/useCart";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import CartDrawer from "../cart/CartDrawer";
 import { useEffect, useState } from "react";
 
@@ -24,7 +24,7 @@ export default function CartIcon() {
 
                     <AnimatePresence mode="wait">
                         {count > 0 && (
-                            <motion.span
+                            <m.span
                                 key="cart-badge"
                                 initial={{ scale: 0, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
@@ -32,7 +32,7 @@ export default function CartIcon() {
                                 className="absolute -top-2 -right-2 bg-babyshopRed text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm border-2 border-white"
                             >
                                 {count > 99 ? "99+" : count}
-                            </motion.span>
+                            </m.span>
                         )}
                     </AnimatePresence>
                 </div>
