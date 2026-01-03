@@ -9,6 +9,18 @@ import UserButton from "./UserButton";
 import CartIcon from "./CartIcon";
 import TopHeader from "./TopHeader";
 
+/**
+ * ARCHITECTURE: Client Component
+ * 
+ * JUSTIFICATION:
+ * - Contains interactive child components (SearchInput, CartIcon, etc.)
+ * - Manages sticky header behavior
+ * - Requires client-side state for user session
+ * 
+ * NOTE: This component MUST be a Client Component because it contains
+ * interactive elements and session-dependent UI (UserButton, CartIcon).
+ */
+
 export default function Header() {
     return (
         <>
@@ -16,7 +28,7 @@ export default function Header() {
             {/* Main Header with Modern Floating Feel */}
             <header className="sticky top-0 z-50 w-full transition-all duration-300">
                 {/* Background Layer with Glassmorphism */}
-                <div className="absolute inset-0 bg-white/80 backdrop-blur-xl border-b border-slate-100 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)]" />
+                <div className="absolute inset-0 bg-background/80 backdrop-blur-xl border-b border-border shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)]" />
 
                 <Container className="relative">
                     <div className="flex items-center justify-between gap-6 py-3 lg:py-4">
@@ -28,7 +40,7 @@ export default function Header() {
 
                         {/* Center: Search Bar (Redesigned for better focus) */}
                         <div className="hidden md:flex flex-1 max-w-[600px] mx-auto group">
-                            <div className="w-full transition-all duration-300 focus-within:ring-2 focus-within:ring-babyshopSky/20 rounded-2xl">
+                            <div className="w-full transition-all duration-300 focus-within:ring-2 focus-within:ring-primary/20 rounded-2xl">
                                 <SearchInput />
                             </div>
                         </div>
@@ -37,23 +49,23 @@ export default function Header() {
                         <div className="flex items-center gap-2 lg:gap-4">
 
                             {/* Desktop Exclusive: Orders */}
-                            <div className="hidden lg:block hover:bg-slate-50 p-2 rounded-xl transition-colors cursor-pointer">
+                            <div className="hidden lg:block hover:bg-muted p-2 rounded-xl transition-colors cursor-pointer">
                                 <OrdersIcon />
                             </div>
 
                             {/* Wishlist */}
-                            <div className="hover:bg-slate-50 p-2 rounded-xl transition-colors cursor-pointer relative">
+                            <div className="hover:bg-muted p-2 rounded-xl transition-colors cursor-pointer relative">
                                 <WishlistIcon />
                             </div>
 
                             {/* Cart - More prominent like in your screenshots */}
-                            <div className="bg-babyshopSky/5 hover:bg-babyshopSky/10 p-2 rounded-xl transition-all cursor-pointer">
+                            <div className="bg-primary/5 hover:bg-primary/10 p-2 rounded-xl transition-all cursor-pointer">
                                 <CartIcon />
                             </div>
 
                             {/* User Profile - Rounded Style */}
-                            <div className="pl-2 ml-2 border-l border-slate-100">
-                                <div className="p-0.5 rounded-full border-2 border-transparent hover:border-babyshopSky transition-all">
+                            <div className="pl-2 ml-2 border-l border-border">
+                                <div className="p-0.5 rounded-full border-2 border-transparent hover:border-primary transition-all">
                                     <UserButton />
                                 </div>
                             </div>
@@ -62,7 +74,7 @@ export default function Header() {
 
                     {/* Mobile Search - Bottom padding adjusted */}
                     <div className="md:hidden pb-3 px-1">
-                        <div className="bg-slate-50 rounded-2xl border border-slate-100 focus-within:bg-white transition-all shadow-sm">
+                        <div className="bg-muted rounded-2xl border border-border focus-within:bg-background transition-all shadow-sm">
                             <SearchInput />
                         </div>
                     </div>

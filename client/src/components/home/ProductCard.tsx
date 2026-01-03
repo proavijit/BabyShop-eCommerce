@@ -1,10 +1,31 @@
-"use client";
-
 import { Product } from "@/types/type";
 import Image from "next/image";
 import Link from "next/link";
 import AddToCartButton from "../common/AddToCartButton";
 import WishListButton from "../common/product/WishListButton";
+
+/**
+ * ARCHITECTURE: Server Component
+ * 
+ * RENDERING STRATEGY: SSR/SSG (Server-Side Rendering / Static Site Generation)
+ * 
+ * JUSTIFICATION:
+ * - No client-side state or interactivity in this component
+ * - Renders static product information (name, price, image)
+ * - Interactive children (AddToCartButton, WishListButton) are Client Components
+ * - Maximum SEO benefit (server-rendered HTML)
+ * 
+ * PERFORMANCE IMPACT:
+ * - Zero hydration cost (Server Component)
+ * - Minimal JS payload (only child Client Components hydrate)
+ * - Excellent SEO (fully server-rendered)
+ * - Fast TTFB with ISR caching
+ * 
+ * ECOMMERCE CONSIDERATIONS:
+ * - Critical for SEO (product listings, search results)
+ * - Used in: Home page, Shop page, Category pages
+ * - Must be fast and lightweight for conversion
+ */
 
 interface ProductCardProps {
     product: Product & { images?: string[]; discountPrice?: number };
@@ -25,11 +46,11 @@ export default function ProductCard({ product }: ProductCardProps) {
         : "Baby Care";
 
     return (
-        <div className="group relative bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full">
+        <div className="group relative bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full">
             {/* Image Section */}
-            <div className="relative aspect-square w-full overflow-hidden bg-gray-50">
+            <div className="relative aspect-square w-full overflow-hidden bg-muted">
                 {hasDiscount && (
-                    <div className="absolute left-2 top-2 z-10 bg-rose-500 text-white text-[10px] font-bold px-2 py-1 rounded-md uppercase">
+                    <div className="absolute left-2 top-2 z-10 bg-destructive text-destructive-foreground text-[10px] font-bold px-2 py-1 rounded-md uppercase">
                         {discountPercentage}% OFF
                     </div>
                 )}
@@ -50,12 +71,12 @@ export default function ProductCard({ product }: ProductCardProps) {
 
             {/* Details Section */}
             <div className="p-4 flex flex-col flex-grow">
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1">
                     {brandName}
                 </span>
 
                 <Link href={`/product/${product.slug}`} className="flex-grow">
-                    <h3 className="text-sm font-semibold text-gray-800 line-clamp-2 mb-2 min-h-[40px]">
+                    <h3 className="text-sm font-semibold text-foreground line-clamp-2 mb-2 min-h-[40px]">
                         {product.name}
                     </h3>
                 </Link>
@@ -63,11 +84,11 @@ export default function ProductCard({ product }: ProductCardProps) {
                 <div className="flex flex-col gap-3 mt-auto">
                     {/* Price Area */}
                     <div className="flex items-baseline gap-2">
-                        <span className="text-lg font-bold text-gray-900">
+                        <span className="text-lg font-bold text-foreground">
                             ${(hasDiscount ? discountPrice : price).toFixed(2)}
                         </span>
                         {hasDiscount && (
-                            <span className="text-xs text-gray-400 line-through">
+                            <span className="text-xs text-muted-foreground line-through">
                                 ${price.toFixed(2)}
                             </span>
                         )}
@@ -76,8 +97,8 @@ export default function ProductCard({ product }: ProductCardProps) {
                     {/* Footer: Stock & Add to Cart */}
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-1.5">
-                            <span className={`w-1.5 h-1.5 rounded-full ${product.stock > 0 ? 'bg-emerald-500' : 'bg-red-500'}`} />
-                            <span className="text-[11px] text-gray-500 font-medium">
+                            <span className={`w-1.5 h-1.5 rounded-full ${product.stock > 0 ? 'bg-green-500' : 'bg-destructive'}`} />
+                            <span className="text-[11px] text-muted-foreground font-medium">
                                 {product.stock} left
                             </span>
                         </div>
@@ -86,7 +107,7 @@ export default function ProductCard({ product }: ProductCardProps) {
                         <div className="max-w-[120px]">
                             <AddToCartButton
                                 product={product}
-                                className="!py-2 !px-3 text-xs bg-babyshopSky text-white rounded-lg hover:bg-opacity-90 transition-all flex items-center gap-2"
+                                className="!py-2 !px-3 text-xs"
                             />
                         </div>
                     </div>
