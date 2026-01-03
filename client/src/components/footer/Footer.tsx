@@ -43,11 +43,11 @@ export default function Footer() {
     ];
 
     return (
-        <footer className="bg-white border-t border-gray-200">
+        <footer className="bg-white border-t border-gray-200" suppressHydrationWarning={true}>
             {/* Features Bar */}
-            <div className="bg-gradient-to-br from-teal-50/60 via-cyan-50/60 to-white border-b border-gray-200">
-                <div className="container mx-auto px-4 py-8">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="bg-gradient-to-br from-teal-50/60 via-cyan-50/60 to-white border-b border-gray-200" suppressHydrationWarning={true}>
+                <div className="container mx-auto px-4 py-8" suppressHydrationWarning={true}>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-6" suppressHydrationWarning={true}>
                         {features.map((feature, index) => {
                             const IconComponent = feature.icon;
                             return (
@@ -55,7 +55,7 @@ export default function Footer() {
                                     <div className="w-12 h-12 rounded-xl bg-white shadow-md flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
                                         <IconComponent className="w-6 h-6 text-babyshopSky" />
                                     </div>
-                                    <div>
+                                    <div suppressHydrationWarning={true}>
                                         <h4 className="font-bold text-gray-900 text-sm">{feature.text}</h4>
                                         <p className="text-xs text-gray-600">{feature.subtext}</p>
                                     </div>
@@ -67,8 +67,8 @@ export default function Footer() {
             </div>
 
             {/* Main Footer Content */}
-            <div className="container mx-auto px-4 py-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12">
+            <div className="container mx-auto px-4 py-12" suppressHydrationWarning={true}>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12" suppressHydrationWarning={true}>
                     {/* Brand Section */}
                     <div className="lg:col-span-2">
                         <Link href="/" className="flex items-center gap-2 mb-4 group">
@@ -102,9 +102,9 @@ export default function Footer() {
                     </div>
 
                     {/* Shop Links */}
-                    <div>
-                        <h3 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider flex items-center gap-2">
-                            <div className="w-1 h-5 bg-gradient-to-b from-babyshopSky to-teal-400 rounded-full"></div>
+                    <div suppressHydrationWarning={true}>
+                        <h3 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider flex items-center gap-2" suppressHydrationWarning={true}>
+                            <div className="w-1 h-5 bg-gradient-to-b from-babyshopSky to-teal-400 rounded-full" suppressHydrationWarning={true}></div>
                             Shop
                         </h3>
                         <ul className="space-y-2.5">
@@ -120,9 +120,9 @@ export default function Footer() {
                     </div>
 
                     {/* Categories Links */}
-                    <div>
-                        <h3 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider flex items-center gap-2">
-                            <div className="w-1 h-5 bg-gradient-to-b from-babyshopSky to-teal-400 rounded-full"></div>
+                    <div suppressHydrationWarning={true}>
+                        <h3 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider flex items-center gap-2" suppressHydrationWarning={true}>
+                            <div className="w-1 h-5 bg-gradient-to-b from-babyshopSky to-teal-400 rounded-full" suppressHydrationWarning={true}></div>
                             Categories
                         </h3>
                         <ul className="space-y-2.5">
@@ -138,9 +138,9 @@ export default function Footer() {
                     </div>
 
                     {/* Support Links */}
-                    <div>
-                        <h3 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider flex items-center gap-2">
-                            <div className="w-1 h-5 bg-gradient-to-b from-babyshopSky to-teal-400 rounded-full"></div>
+                    <div suppressHydrationWarning={true}>
+                        <h3 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider flex items-center gap-2" suppressHydrationWarning={true}>
+                            <div className="w-1 h-5 bg-gradient-to-b from-babyshopSky to-teal-400 rounded-full" suppressHydrationWarning={true}></div>
                             Support
                         </h3>
                         <ul className="space-y-2.5">
@@ -156,9 +156,9 @@ export default function Footer() {
                     </div>
 
                     {/* Company Links */}
-                    <div>
-                        <h3 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider flex items-center gap-2">
-                            <div className="w-1 h-5 bg-gradient-to-b from-babyshopSky to-teal-400 rounded-full"></div>
+                    <div suppressHydrationWarning={true}>
+                        <h3 className="text-gray-900 font-bold mb-4 text-sm uppercase tracking-wider flex items-center gap-2" suppressHydrationWarning={true}>
+                            <div className="w-1 h-5 bg-gradient-to-b from-babyshopSky to-teal-400 rounded-full" suppressHydrationWarning={true}></div>
                             Company
                         </h3>
                         <ul className="space-y-2.5">
@@ -195,7 +195,7 @@ export default function Footer() {
                         <div className="h-px w-24 bg-gray-200" />
 
                         {/* Branding & Attribution */}
-                        <div className="text-center">
+                        <div className="text-center" suppressHydrationWarning={true}>
                             <p className="text-sm text-gray-600 mb-1">
                                 © {currentYear} <span className="text-babyshopSky font-bold">BabyShop</span>.
                                 Created by Avijit Ghosh  <Heart className="w-3.5 h-3.5 inline-block mx-1 fill-babyshopRed text-babyshopRed" />

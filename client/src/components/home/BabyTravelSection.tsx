@@ -42,8 +42,11 @@ export default function BabyTravelSection() {
     ];
 
     return (
-        <section className="py-14 px-4 md:px-8 rounded-[2.5rem] bg-linear-to-br from-slate-50 to-white border border-gray-100/50 shadow-sm transition-all duration-500 hover:shadow-md mt-12">
-            <div className="max-w-7xl mx-auto relative">
+        <section
+            className="py-14 px-4 md:px-8 rounded-[2.5rem] bg-linear-to-br from-slate-50 to-white border border-gray-100/50 shadow-sm transition-all duration-500 hover:shadow-md mt-12"
+            suppressHydrationWarning={true}
+        >
+            <div className="max-w-7xl mx-auto relative" suppressHydrationWarning={true}>
 
                 {/* Section Header - Styled to match "Trusted Brands" */}
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 border-b border-slate-100 pb-8">

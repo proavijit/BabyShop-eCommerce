@@ -92,7 +92,10 @@ export default function BannerComponent() {
 
     if (loading) {
         return (
-            <div className="w-full h-[300px] md:h-[400px] bg-linear-to-br from-gray-100 to-gray-200 animate-pulse rounded-2xl flex items-center justify-center shadow-lg">
+            <div
+                className="w-full h-[300px] md:h-[400px] bg-linear-to-br from-gray-100 to-gray-200 animate-pulse rounded-2xl flex items-center justify-center shadow-lg"
+                suppressHydrationWarning={true}
+            >
                 <div className="flex items-center gap-3">
                     <Sparkles className="w-5 h-5 text-babyshopSky animate-spin" />
                     <p className="text-gray-500 font-medium">Loading amazing offers...</p>
@@ -111,7 +114,10 @@ export default function BannerComponent() {
     }
 
     return (
-        <div className="w-full flex flex-col lg:flex-row gap-5 h-auto lg:h-[420px] mb-6">
+        <div
+            className="w-full flex flex-col lg:flex-row gap-5 h-auto lg:h-[420px] mb-6"
+            suppressHydrationWarning={true}
+        >
             {/* Main Slider - 75% width on desktop (if side banners exist) */}
             {mainBanners.length > 0 ? (
                 <div className={`relative w-full ${sideBanners.length > 0 ? 'lg:w-[75%]' : 'lg:w-full'} h-[320px] lg:h-full group overflow-hidden rounded-2xl shadow-xl border border-gray-200`}>

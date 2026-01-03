@@ -1,75 +1,60 @@
-import React from "react";
-import { Truck, Facebook, Twitter, Instagram } from "lucide-react";
+
+import dynamic from "next/dynamic"; // Import dynamic for lazy loading
+import { TiSocialFacebook, TiSocialTwitter, TiSocialLinkedin, TiSocialYoutube } from "react-icons/ti";
 import Container from "../common/Container";
-import { Button } from "../ui/button";
-import SelectCurrency from "./SelectCurrency";
-import SelectLanguage from "./SelectLanguage";
+
+// Dynamic imports with SSR disabled for browser-heavy components
+const SelectCurrency = dynamic(() => import("./client/SelectCurrency"), {
+    ssr: false,
+    loading: () => <div className="w-12 h-4 bg-white/10 animate-pulse rounded-md" />,
+});
+
+const SelectLanguage = dynamic(() => import("./client/SelectLanguage"), {
+    ssr: false,
+    loading: () => <div className="w-12 h-4 bg-white/10 animate-pulse rounded-md" />,
+});
 
 const TopHeader = () => {
     return (
-        <div className="w-full bg-linear-to-r from-babyshopSky to-teal-400 text-white py-3 border-b border-white/10 shadow-md">
-            <Container className="flex items-center justify-between text-xs sm:text-sm">
-                {/* Left Section: Promo & Socials */}
-                <div className="flex items-center gap-6">
-                    <div className="flex items-center gap-2.5 text-white/95">
-                        <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
-                            <Truck className="h-4 w-4 text-white" />
-                        </div>
-                        <p className="font-medium">
-                            Free Shipping on orders over{" "}
-                            <span className="font-bold text-white bg-white/20 px-2 py-0.5 rounded-full">$50</span>
-                        </p>
-                    </div>
-                    <div className="hidden md:flex items-center gap-3">
-                        <a
-                            href="#"
-                            className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all hover:scale-110 backdrop-blur-sm"
-                            aria-label="Facebook"
-                        >
-                            <Facebook className="h-3.5 w-3.5 text-white" />
-                        </a>
-                        <a
-                            href="#"
-                            className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all hover:scale-110 backdrop-blur-sm"
-                            aria-label="Twitter"
-                        >
-                            <Twitter className="h-3.5 w-3.5 text-white" />
-                        </a>
-                        <a
-                            href="#"
-                            className="w-7 h-7 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-all hover:scale-110 backdrop-blur-sm"
-                            aria-label="Instagram"
-                        >
-                            <Instagram className="h-3.5 w-3.5 text-white" />
-                        </a>
-                    </div>
+        <div className="relative z-[60] w-full bg-purple-400 text-white text-xs sm:text-sm overflow-visible">
+            <Container className="flex flex-col md:flex-row items-center justify-between py-2 gap-3 md:gap-0 overflow-visible">
+
+                {/* Left Section: Links */}
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-6">
+                    <a href="#" className="hover:underline whitespace-nowrap">Help Center</a>
+                    <a href="#" className="hover:underline whitespace-nowrap">Wishlist</a>
+                    <a href="#" className="hover:underline whitespace-nowrap">Order Tracking</a>
                 </div>
 
-                {/* Right Section: Actions */}
-                <div className="flex items-center gap-4">
-                    <div className="hidden sm:flex items-center gap-3">
+                {/* Center Section */}
+                <div className="hidden lg:flex items-center text-center bg-purple-500/50 px-4 py-1 rounded-full text-[11px] sm:text-xs">
+                    100% Secure delivery without contacting the courier
+                </div>
+
+                {/* Right Section: Actions & Socials */}
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                    <div className="flex items-center gap-2 border-r border-white/20 pr-3 mr-1 md:border-0 md:p-0 md:m-0">
+                        {/* These now load only on the client */}
                         <SelectCurrency />
                         <SelectLanguage />
                     </div>
 
-                    <div className="h-5 w-px bg-white/30 hidden sm:block" />
-
                     <div className="flex items-center gap-2">
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-auto px-3 py-1.5 text-white/90 hover:text-white hover:bg-white/20 font-semibold rounded-full transition-all"
-                        >
-                            Sign In
-                        </Button>
-                        <span className="text-white/50">|</span>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-auto px-3 py-1.5 text-white/90 hover:text-white hover:bg-white/20 font-semibold rounded-full transition-all"
-                        >
-                            Sign Up
-                        </Button>
+                        {[
+                            { icon: <TiSocialFacebook />, label: "Facebook" },
+                            { icon: <TiSocialTwitter />, label: "Twitter" },
+                            { icon: <TiSocialLinkedin />, label: "LinkedIn" },
+                            { icon: <TiSocialYoutube />, label: "YouTube" }
+                        ].map((social, idx) => (
+                            <a
+                                key={idx}
+                                href="#"
+                                aria-label={social.label}
+                                className="w-7 h-7 flex items-center justify-center rounded-full bg-white/20 hover:bg-white/40 transition-all hover:scale-110 backdrop-blur-sm"
+                            >
+                                <span className="text-lg">{social.icon}</span>
+                            </a>
+                        ))}
                     </div>
                 </div>
             </Container>

@@ -17,8 +17,11 @@ export default async function HomeBrand() {
     if (brands.length === 0) return null;
 
     return (
-        <section className={`py-10 px-4 md:px-8 rounded-[2rem] bg-gradient-to-br from-slate-50 to-white border border-gray-100/50 shadow-sm transition-all duration-500 hover:shadow-md`}>
-            <div className="max-w-7xl mx-auto relative">
+        <section
+            className={`py-10 px-4 md:px-8 rounded-[2rem] bg-gradient-to-br from-slate-50 to-white border border-gray-100/50 shadow-sm transition-all duration-500 hover:shadow-md`}
+            suppressHydrationWarning={true}
+        >
+            <div className="max-w-7xl mx-auto relative" suppressHydrationWarning={true}>
 
                 {/* Section Header - Clean & Professional */}
                 <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 border-b border-slate-100 pb-8">

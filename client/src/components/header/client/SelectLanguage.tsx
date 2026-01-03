@@ -1,5 +1,6 @@
-import * as React from "react"
+"use client";
 
+import * as React from "react"
 import {
     Select,
     SelectContent,
@@ -18,17 +19,26 @@ export default function SelectLanguage() {
     }, []);
 
     if (!mounted) {
-        return (
-            <div className="w-[80px] h-4 bg-white/10 animate-pulse rounded-md" />
-        );
+        return <div className="w-12 h-4 bg-white/10 animate-pulse rounded-md" />;
     }
 
     return (
         <Select defaultValue="en">
-            <SelectTrigger className="w-auto h-auto border-none bg-transparent text-white/90 text-xs font-medium   gap-1 p-0 hover:text-emerald-300 data-[state=open]:bg-transparent transition-colors">
+            <SelectTrigger
+                className="w-auto h-auto border-none bg-transparent text-white/90 text-[11px] sm:text-xs font-medium gap-1 p-0 hover:text-white focus:ring-0 focus:ring-offset-0 transition-colors shadow-none outline-none"
+            >
                 <SelectValue placeholder="Language" />
             </SelectTrigger>
-            <SelectContent className="min-w-[100px]">
+
+            {/* 1. Added position="popper" for better floating behavior
+               2. sideOffset ensures it doesn't touch the trigger
+               3. Higher z-index just in case
+            */}
+            <SelectContent
+                position="popper"
+                sideOffset={10}
+                className="min-w-[120px] z-[100] bg-white text-slate-950 shadow-md"
+            >
                 <SelectGroup>
                     <SelectLabel>Language</SelectLabel>
                     <SelectItem value="en" className="cursor-pointer">English</SelectItem>

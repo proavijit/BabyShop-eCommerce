@@ -44,7 +44,10 @@ async function ProductSection({
 
     return (
         // ১. সেকশন কার্ডকে আরও প্রিমিয়াম লুক দিতে shadow-sm এবং subtle border ব্যবহার করা হয়েছে
-        <section className={`py-10 px-4 md:px-8 rounded-[2rem] bg-gradient-to-br ${gradient} border border-gray-100/50 shadow-sm transition-all duration-500 hover:shadow-md`}>
+        <section
+            className={`py-10 px-4 md:px-8 rounded-[2rem] bg-gradient-to-br ${gradient} border border-gray-100/50 shadow-sm transition-all duration-500 hover:shadow-md`}
+            suppressHydrationWarning={true}
+        >
 
             {/* Header Section */}
             <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center mb-8 gap-4">

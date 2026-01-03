@@ -124,9 +124,9 @@ export default function SearchInput() {
     };
 
     return (
-        <div ref={searchRef} className="relative w-full max-w-xl">
+        <div ref={searchRef} className="relative w-full max-w-xl" suppressHydrationWarning={true}>
             {/* Search Input */}
-            <div className="relative">
+            <div className="relative" suppressHydrationWarning={true}>
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                     type="text"
@@ -138,6 +138,7 @@ export default function SearchInput() {
                     }}
                     placeholder="Search for products..."
                     className="w-full pl-12 pr-12 py-3 rounded-full border-2 border-gray-200 focus:border-[#29beb3] focus:ring-4 focus:ring-pink-100 outline-none transition-all duration-200 bg-white/80 backdrop-blur-sm"
+                    suppressHydrationWarning={true}
                 />
                 {isLoading && (
                     <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#29beb3] animate-spin" />

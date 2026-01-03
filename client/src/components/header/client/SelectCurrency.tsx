@@ -1,5 +1,6 @@
-import * as React from "react"
+"use client";
 
+import * as React from "react"
 import {
     Select,
     SelectContent,
@@ -19,16 +20,24 @@ export default function SelectCurrency() {
 
     if (!mounted) {
         return (
-            <div className="w-[60px] h-4 bg-white/10 animate-pulse rounded-md" />
+            <div className="w-[50px] h-4 bg-white/10 animate-pulse rounded-md" />
         );
     }
 
     return (
         <Select defaultValue="usd">
-            <SelectTrigger className="w-auto h-auto border-none bg-transparent text-white/90 text-xs font-medium  gap-1 p-0 hover:text-emerald-300 data-[state=open]:bg-transparent transition-colors">
+            <SelectTrigger className="w-auto h-auto border-none bg-transparent text-white/90 text-[11px] sm:text-xs font-medium gap-1 p-0 hover:text-white focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 transition-colors shadow-none outline-none">
                 <SelectValue placeholder="Currency" />
             </SelectTrigger>
-            <SelectContent className="min-w-[80px]">
+
+            {/* FIX: Added position="popper" and sideOffset.
+               This ensures the dropdown floats correctly outside the purple bar.
+            */}
+            <SelectContent
+                position="popper"
+                sideOffset={8}
+                className="min-w-[100px] z-[100] bg-white text-slate-950 shadow-xl border border-slate-200"
+            >
                 <SelectGroup>
                     <SelectLabel>Currency</SelectLabel>
                     <SelectItem value="usd" className="cursor-pointer">USD</SelectItem>

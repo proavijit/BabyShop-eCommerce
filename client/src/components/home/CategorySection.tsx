@@ -23,8 +23,14 @@ export default async function CategorySection() {
     }
 
     return (
-        <aside className="hidden lg:flex flex-col w-[300px] h-fit bg-white/70 backdrop-blur-md border border-gray-100 rounded-[2rem] shadow-sm sticky top-24 overflow-hidden">
-            <div className="flex flex-col h-full overflow-y-auto custom-scrollbar p-6 space-y-8">
+        <aside
+            className="hidden lg:flex flex-col w-[300px] h-fit bg-white/70 backdrop-blur-md border border-gray-100 rounded-[2rem] shadow-sm sticky top-24 overflow-hidden"
+            suppressHydrationWarning={true}
+        >
+            <div
+                className="flex flex-col h-full overflow-y-auto custom-scrollbar p-6 space-y-8"
+                suppressHydrationWarning={true}
+            >
 
                 {/* 1. Brand Header */}
                 <div className="relative group overflow-hidden rounded-2xl bg-gradient-to-br from-babyshopSky to-cyan-500 p-4 shadow-md shadow-blue-100">

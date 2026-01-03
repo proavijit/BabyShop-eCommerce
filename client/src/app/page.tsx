@@ -1,5 +1,5 @@
 import Container from "@/components/common/Container";
-import CatagorySection from "@/components/home/CatagorySection";
+import CategorySection from "@/components/home/CategorySection";
 import ProductList from "@/components/home/ProductList";
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
@@ -21,9 +21,9 @@ const BabyTravelSection = dynamic(() => import("@/components/home/BabyTravelSect
 
 export default function Home() {
   return (
-    <div className="bg-babyShopLightWhite min-h-screen">
+    <div className="bg-babyShopLightWhite min-h-screen" suppressHydrationWarning={true}>
       <Container className="flex py-7 gap-3">
-        <CatagorySection />
+        <CategorySection />
 
         <div className="flex-1">
           <Suspense fallback={<div className="w-full h-[300px] md:h-[400px] bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse rounded-2xl" />}>
