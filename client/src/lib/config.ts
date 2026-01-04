@@ -34,17 +34,18 @@ export async function fetchWithConfig<T>(
     const { baseUrl } = getApiConfig();
     const endpoint = url.startsWith("/") ? `${baseUrl}${url}` : url;
 
-    const defaultOptions: RequestInit = {
-        headers: {
-            "Content-Type": "application/json",
-        },
-    };
+    // Default headers
+    const defaultHeaders: Record<string, string> = {};
+
+    // Only set Content-Type if body is NOT FormData
+    if (!(options?.body instanceof FormData)) {
+        defaultHeaders["Content-Type"] = "application/json";
+    }
 
     const mergedOptions: RequestInit = {
-        ...defaultOptions,
         ...options,
         headers: {
-            ...(defaultOptions.headers ?? {}),
+            ...defaultHeaders,
             ...(options?.headers ?? {}),
         },
     };
@@ -69,10 +70,12 @@ export async function fetchWithConfig<T>(
 /**
  * Get authentication headers for API requests
  */
-export const getAuthHeaders = (token?: string): Record<string, string> => {
-    const headers: Record<string, string> = {
-        "Content-Type": "application/json",
-    };
+export const getAuthHeaders = (token?: string, includeContentType = true): Record<string, string> => {
+    const headers: Record<string, string> = {};
+
+    if (includeContentType) {
+        headers["Content-Type"] = "application/json";
+    }
 
     if (token) {
         headers.Authorization = `Bearer ${token}`;

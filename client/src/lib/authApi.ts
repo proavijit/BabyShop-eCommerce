@@ -95,9 +95,7 @@ export const uploadImage = async (file: File, token: string): Promise<{ success:
 
     return fetchWithConfig<{ success: boolean; url: string }>(API_ENDPOINTS.UPLOAD, {
         method: "POST",
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
+        headers: getAuthHeaders(token, false),
         body: formData,
     });
 };

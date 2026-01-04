@@ -42,11 +42,16 @@ router.post('/', protect, upload.single('image'), asyncHandler(async (req, res) 
             public_id: uploadResponse.public_id
         });
     } catch (error) {
-        console.error('Cloudinary Upload Error Details:', error);
-        res.status(500).json({
+        console.error('--- Cloudinary Upload Error ---');
+        console.error('Error Message:', error.message);
+        console.error('Error Code:', error.http_code);
+        console.error('Full Error Object:', JSON.stringify(error, null, 2));
+
+        res.status(error.http_code || 500).json({
             success: false,
-            message: 'Failed to upload image to Cloudinary',
+            message: error.message || 'Failed to upload image to Cloudinary',
             error: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
             details: error
         });
     }

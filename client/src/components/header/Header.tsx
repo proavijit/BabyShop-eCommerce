@@ -1,88 +1,85 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Container from "../common/Container";
 import Logo from "./Logo";
-import SearchInput from "./SearchInput";
-import OrdersIcon from "./OrdersIcon";
-import WishlistIcon from "./WishlistIcon";
-import UserButton from "./UserButton";
-import CartIcon from "./CartIcon";
 import TopHeader from "./TopHeader";
 
+// Skeleton Components (এগুলোকে আলদা ফাইলে রাখা ভালো, তবে এখানে থাকলেও সমস্যা নেই)
+const IconSkeleton = () => <div className="w-8 h-8 bg-gray-100 rounded-full animate-pulse" />;
+const UserSkeleton = () => (
+    <div className="flex items-center gap-2">
+        <div className="w-8 h-8 bg-gray-100 rounded-full animate-pulse" />
+        <div className="hidden sm:flex flex-col gap-1">
+            <div className="w-10 h-2 bg-gray-100 rounded animate-pulse" />
+            <div className="w-14 h-3 bg-gray-100 rounded animate-pulse" />
+        </div>
+    </div>
+);
 
+// Dynamic Imports with Loading Skeletons
+const UserButton = dynamic(() => import("./UserButton"), {
+    ssr: false,
+    loading: () => <UserSkeleton />
+});
 
-/**
- * ARCHITECTURE: Client Component
- * 
- * JUSTIFICATION:
- * - Contains interactive child components (SearchInput, CartIcon, etc.)
- * - Manages sticky header behavior
- * - Requires client-side state for user session
- * 
- * NOTE: This component MUST be a Client Component because it contains
- * interactive elements and session-dependent UI (UserButton, CartIcon).
- */
+const CartIcon = dynamic(() => import("./CartIcon"), {
+    ssr: false,
+    loading: () => <IconSkeleton />
+});
+
+const SearchInput = dynamic(() => import("./SearchInput"), {
+    ssr: false,
+    loading: () => <div className="h-10 w-full bg-gray-50 rounded-lg animate-pulse" />
+});
+
+const OrdersIcon = dynamic(() => import("./OrdersIcon"), {
+    ssr: false,
+    loading: () => <IconSkeleton />
+});
+
+const WishlistIcon = dynamic(() => import("./WishlistIcon"), {
+    ssr: false,
+    loading: () => <IconSkeleton />
+});
 
 export default function Header() {
     return (
         <>
             <TopHeader />
-            {/* Main Header with Modern Floating Feel */}
-            <header
-                className="sticky top-0 z-50 w-full transition-all duration-300"
-                suppressHydrationWarning={true}
-            >
-                {/* Background Layer with Glassmorphism */}
-                <div
-                    className="absolute inset-0 bg-background/80 backdrop-blur-xl border-b border-border shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07)]"
-                    suppressHydrationWarning={true}
-                />
+            <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200">
+                <Container>
+                    <div className="flex items-center justify-between gap-4 h-16 md:h-20">
 
-                <Container className="relative" suppressHydrationWarning={true}>
-                    <div className="flex items-center justify-between gap-6 py-3 lg:py-4" suppressHydrationWarning={true}>
-
-                        {/* Left: Brand Logo */}
-                        <div className="flex-shrink-0 group cursor-pointer" suppressHydrationWarning={true}>
+                        {/* 1. Static Logo */}
+                        <div className="flex-shrink-0">
                             <Logo />
                         </div>
 
-                        {/* Center: Search Bar (Redesigned for better focus) */}
-                        <div className="hidden md:flex flex-1 max-w-[600px] mx-auto group" suppressHydrationWarning={true}>
-                            <div className="w-full transition-all duration-300 focus-within:ring-2 focus-within:ring-primary/20 rounded-2xl" suppressHydrationWarning={true}>
+                        {/* 2. Search Bar - Desktop */}
+                        <div className="hidden md:flex flex-1 max-w-[650px] mx-6">
+                            <div className="w-full border border-gray-300 rounded-lg bg-white overflow-hidden min-h-[42px]">
                                 <SearchInput />
                             </div>
                         </div>
 
-                        {/* Right: User Actions */}
-                        <div className="flex items-center gap-2 lg:gap-4" suppressHydrationWarning={true}>
-
-                            {/* Desktop Exclusive: Orders */}
-                            <div className="hidden lg:block hover:bg-muted p-2 rounded-xl transition-colors cursor-pointer" suppressHydrationWarning={true}>
+                        {/* 3. Icons & Actions */}
+                        <div className="flex items-center gap-4 lg:gap-6">
+                            <div className="hidden lg:flex items-center gap-5 border-r border-gray-200 pr-5">
                                 <OrdersIcon />
-                            </div>
-
-                            {/* Wishlist */}
-                            <div className="hover:bg-muted p-2 rounded-xl transition-colors cursor-pointer relative" suppressHydrationWarning={true}>
                                 <WishlistIcon />
                             </div>
 
-                            {/* Cart - More prominent like in your screenshots */}
-                            <div className="bg-primary/5 hover:bg-primary/10 p-2 rounded-xl transition-all cursor-pointer" suppressHydrationWarning={true}>
+                            <div className="flex items-center gap-3 sm:gap-4">
+                                <UserButton />
                                 <CartIcon />
-                            </div>
-
-                            {/* User Profile - Rounded Style */}
-                            <div className="pl-2 ml-2 border-l border-border" suppressHydrationWarning={true}>
-                                <div className="p-0.5 rounded-full border-2 border-transparent hover:border-primary transition-all" suppressHydrationWarning={true}>
-                                    <UserButton />
-                                </div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Mobile Search - Bottom padding adjusted */}
-                    <div className="md:hidden pb-3 px-1" suppressHydrationWarning={true}>
-                        <div className="bg-muted rounded-2xl border border-border focus-within:bg-background transition-all shadow-sm" suppressHydrationWarning={true}>
+                    {/* Mobile Search */}
+                    <div className="md:hidden pb-4 px-1">
+                        <div className="border border-gray-300 rounded-lg bg-white min-h-[40px]">
                             <SearchInput />
                         </div>
                     </div>

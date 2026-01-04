@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
-import { useUserStore } from "@/lib/store";
+import React, { useRef, useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { m } from "framer-motion";
 import {
     User,
     Mail,
@@ -9,189 +10,196 @@ import {
     Calendar,
     LogOut,
     Camera,
-    Loader2
+    Loader2,
+    Edit2,
 } from "lucide-react";
+import { toast } from "sonner";
+
+import { useUserStore } from "@/lib/store";
+import { uploadImage, updateUserProfile } from "@/lib/authApi";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-import { m } from "framer-motion";
-import { uploadImage, updateUserProfile } from "@/lib/authApi";
-import { useRef, useState } from "react";
+import { Separator } from "@/components/ui/separator";
+
+// ✅ shadcn-style reusable field (no motion here)
+const ProfileField = ({
+    label,
+    value,
+    icon: Icon,
+}: {
+    label: string;
+    value: string;
+    icon: any;
+}) => (
+    <div className="space-y-1">
+        <Label className="text-xs text-muted-foreground">{label}</Label>
+        <div className="flex items-center gap-3 rounded-md border bg-background px-4 py-3">
+            <Icon className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm font-medium">{value}</span>
+        </div>
+    </div>
+);
 
 export default function ProfilePage() {
-    const { authUser, isAuthenticated, logout, auth_token, updateUser } = useUserStore();
+    const { authUser, isAuthenticated, logout, auth_token, updateUser } =
+        useUserStore();
     const router = useRouter();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isUploading, setIsUploading] = useState(false);
 
-    if (!isAuthenticated || !authUser || !auth_token) {
-        return null;
-    }
+    // redirect if not authenticated
+    useEffect(() => {
+        if (!isAuthenticated) router.push("/login");
+    }, [isAuthenticated, router]);
+
+    if (!authUser || !auth_token) return null;
 
     const handleLogout = () => {
         logout();
-        toast.info("Logged out successfully");
+        toast.success("Logged out successfully");
         router.push("/");
     };
 
-    const handleAvatarClick = () => {
-        fileInputRef.current?.click();
-    };
-
-    const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleAvatarChange = async (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        // Size check (max 2MB)
         if (file.size > 2 * 1024 * 1024) {
             toast.error("File size should be less than 2MB");
             return;
         }
 
         setIsUploading(true);
-        const toastId = toast.loading("Uploading avatar...");
+        const toastId = toast.loading("Updating profile picture...");
 
         try {
-            // 1. Upload to Cloudinary
             const uploadRes = await uploadImage(file, auth_token);
-
             if (uploadRes.success) {
-                // 2. Update user profile in DB
-                const updateRes = await updateUserProfile(authUser._id, { avatar: uploadRes.url }, auth_token);
-
+                const updateRes = await updateUserProfile(
+                    authUser._id,
+                    { avatar: uploadRes.url },
+                    auth_token
+                );
                 if (updateRes.success) {
-                    // 3. Update local store
                     updateUser({ avatar: uploadRes.url });
-                    toast.success("Avatar updated successfully", { id: toastId });
-                } else {
-                    toast.error("Failed to update profile", { id: toastId });
+                    toast.success("Avatar updated", { id: toastId });
                 }
-            } else {
-                toast.error("Failed to upload image", { id: toastId });
             }
-        } catch (error: unknown) {
-            console.error("Avatar update error:", error);
-            const errorMessage = error instanceof Error ? error.message : "Failed to update avatar";
-            toast.error(errorMessage, { id: toastId });
+        } catch {
+            toast.error("Failed to upload image", { id: toastId });
         } finally {
             setIsUploading(false);
             if (fileInputRef.current) fileInputRef.current.value = "";
         }
     };
 
-    const initials = authUser.name
-        ? authUser.name
-            .split(" ")
+    const initials =
+        authUser.name
+            ?.split(" ")
             .map((n) => n[0])
             .join("")
-            .toUpperCase()
-        : "U";
-
-    const containerVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.6 }
-        }
-    };
+            .toUpperCase() || "U";
 
     return (
-        <m.div
-            initial="hidden"
-            animate="visible"
-            variants={containerVariants}
-            className="max-w-4xl mx-auto py-20 px-4 sm:px-6 lg:px-8"
-        >
-            <Card className="rounded-[48px] border-none shadow-2xl shadow-primary/5 bg-white overflow-hidden">
-                <div className="relative h-40 bg-linear-to-r from-babyshopSky to-teal-400" />
-
-                <div className="px-10 pb-12">
-                    <div className="relative -mt-20 mb-8 flex flex-col items-center">
-                        <div className="relative group">
-                            <Avatar className="w-40 h-40 border-8 border-white shadow-2xl rounded-[48px]">
-                                <AvatarImage src={authUser.avatar} alt={authUser.name} className="object-cover" />
-                                <AvatarFallback className="bg-primary/10 text-primary text-5xl font-black">
+        <div className="flex min-h-screen items-center justify-center px-4 py-10">
+            {/* ✅ ONLY m.div — LazyMotion safe */}
+            <m.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="w-full max-w-3xl"
+            >
+                <Card className="mx-auto">
+                    <CardHeader className="flex flex-col items-center gap-4 text-center">
+                        <div className="relative">
+                            <Avatar className="h-28 w-28">
+                                <AvatarImage src={authUser.avatar} />
+                                <AvatarFallback className="text-xl font-semibold">
                                     {initials}
                                 </AvatarFallback>
                             </Avatar>
+
+                            <button
+                                type="button"
+                                onClick={() => fileInputRef.current?.click()}
+                                disabled={isUploading}
+                                className="absolute -bottom-2 -right-2 rounded-full border bg-background p-2 shadow-sm hover:bg-accent disabled:opacity-60"
+                            >
+                                {isUploading ? (
+                                    <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                    <Camera className="h-4 w-4" />
+                                )}
+                            </button>
+
                             <input
-                                type="file"
                                 ref={fileInputRef}
-                                className="hidden"
+                                type="file"
                                 accept="image/*"
                                 onChange={handleAvatarChange}
+                                className="hidden"
                             />
-                            <button
-                                onClick={handleAvatarClick}
-                                disabled={isUploading}
-                                className={`absolute bottom-2 right-2 p-3 bg-white rounded-2xl shadow-xl border border-primary/10 text-primary hover:bg-primary hover:text-white transition-all duration-300 ${isUploading ? "opacity-50 cursor-not-allowed" : ""}`}
-                            >
-                                {isUploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <Camera className="w-5 h-5" />}
-                            </button>
                         </div>
 
-                        <div className="text-center mt-6">
-                            <h1 className="text-3xl font-black text-gray-900 tracking-tight">{authUser.name}</h1>
-                            <Badge className="mt-2 bg-primary/10 text-primary border-none px-4 py-1 rounded-xl font-black text-xs uppercase tracking-widest">
+                        <div className="space-y-1">
+                            <h1 className="text-2xl font-semibold leading-none">
+                                {authUser.name}
+                            </h1>
+                            <Badge variant="secondary" className="mx-auto">
                                 {authUser.role}
                             </Badge>
                         </div>
-                    </div>
+                    </CardHeader>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-                        <div className="space-y-1.5">
-                            <Label className="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-black ml-1">Full Name</Label>
-                            <div className="p-4 rounded-3xl bg-gray-50/50 border border-gray-100 font-bold text-gray-700 flex items-center gap-3">
-                                <User className="w-4 h-4 text-primary/50" />
-                                {authUser.name}
-                            </div>
+                    <CardContent className="space-y-8">
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <ProfileField
+                                label="Full Name"
+                                value={authUser.name}
+                                icon={User}
+                            />
+                            <ProfileField
+                                label="Email Address"
+                                value={authUser.email}
+                                icon={Mail}
+                            />
+                            <ProfileField
+                                label="Account Type"
+                                value={authUser.role}
+                                icon={Shield}
+                            />
+                            <ProfileField
+                                label="Member Since"
+                                value="December 2025"
+                                icon={Calendar}
+                            />
                         </div>
 
-                        <div className="space-y-1.5">
-                            <Label className="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-black ml-1">Email Address</Label>
-                            <div className="p-4 rounded-3xl bg-gray-50/50 border border-gray-100 font-bold text-gray-700 flex items-center gap-3">
-                                <Mail className="w-4 h-4 text-primary/50" />
-                                {authUser.email}
-                            </div>
-                        </div>
+                        <Separator />
 
-                        <div className="space-y-1.5">
-                            <Label className="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-black ml-1">Account Type</Label>
-                            <div className="p-4 rounded-3xl bg-gray-50/50 border border-gray-100 font-bold text-gray-700 flex items-center gap-3 capitalize">
-                                <Shield className="w-4 h-4 text-primary/50" />
-                                {authUser.role}
-                            </div>
+                        <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+                            <Button className="w-full sm:w-auto">
+                                <Edit2 className="mr-2 h-4 w-4" />
+                                Edit Profile
+                            </Button>
+                            <Button
+                                variant="ghost"
+                                className="w-full sm:w-auto text-destructive"
+                                onClick={handleLogout}
+                            >
+                                <LogOut className="mr-2 h-4 w-4" />
+                                Sign Out
+                            </Button>
                         </div>
-
-                        <div className="space-y-1.5">
-                            <Label className="text-[10px] uppercase tracking-[0.2em] text-gray-400 font-black ml-1">Member Since</Label>
-                            <div className="p-4 rounded-3xl bg-gray-50/50 border border-gray-100 font-bold text-gray-700 flex items-center gap-3">
-                                <Calendar className="w-4 h-4 text-primary/50" />
-                                December 2025
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <Button className="px-8 py-6 bg-linear-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-black rounded-2xl transition-all duration-300 hover:shadow-xl hover:scale-105 h-auto">
-                            Update Details
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            onClick={handleLogout}
-                            className="px-8 py-6 text-red-500 font-black rounded-2xl hover:bg-red-50 hover:text-red-600 transition-all h-auto"
-                        >
-                            <LogOut className="w-5 h-5 mr-2" />
-                            Sign Out
-                        </Button>
-                    </div>
-                </div>
-            </Card>
-        </m.div>
+                    </CardContent>
+                </Card>
+            </m.div>
+        </div>
     );
 }

@@ -7,11 +7,15 @@ import { Loader2 } from "lucide-react";
 
 export default function SignInPage() {
     return (
-        <div className="min-h-[80vh] flex items-center justify-center bg-gray-50/50 py-12">
+        <div className="w-full py-12">
             <Container>
-                <Suspense fallback={
-                    <div className="flex items-center justify-center"><Loader2 className="w-10 h-10 animate-spin text-primary" /></div>
-                }>
+                <Suspense
+                    fallback={
+                        <div className="flex justify-center py-20">
+                            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        </div>
+                    }
+                >
                     <SignInForm />
                 </Suspense>
             </Container>

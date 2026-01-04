@@ -7,13 +7,15 @@ import { Loader2 } from "lucide-react";
 
 export default function SignUpPage() {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50/30 py-20">
+        <div className="w-full py-12">
             <Container>
-                <Suspense fallback={
-                    <div className="flex items-center justify-center min-h-[400px]">
-                        <Loader2 className="w-12 h-12 animate-spin text-primary opacity-50" />
-                    </div>
-                }>
+                <Suspense
+                    fallback={
+                        <div className="flex justify-center py-20">
+                            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+                        </div>
+                    }
+                >
                     <SignUpForm />
                 </Suspense>
             </Container>
