@@ -1,43 +1,43 @@
+import { Suspense } from "react";
 import Container from "@/components/common/Container";
 import CategorySection from "@/components/home/CategorySection";
 import ProductList from "@/components/home/ProductList";
-import { Suspense } from "react";
-import dynamic from "next/dynamic";
+import Banner from "@/components/home/Banner"; // PPR এর জন্য ডিরেক্ট ইম্পোর্ট
+import HomeBrand from "@/components/home/HomeBrand"; // PPR এর জন্য ডিরেক্ট ইম্পোর্ট
+import BabyTravelSection from "@/components/home/BabyTravelSection"; // PPR এর জন্য ডিরেক্ট ইম্পোর্ট
 
-// Dynamic imports for below-the-fold components
-const Banner = dynamic(() => import("@/components/home/Banner"), {
-  loading: () => (
-    <div className="w-full h-[300px] md:h-[400px] bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse rounded-2xl" />
-  ),
-});
-
-const HomeBrand = dynamic(() => import("@/components/home/HomeBrand"), {
-  loading: () => null,
-});
-
-const BabyTravelSection = dynamic(() => import("@/components/home/BabyTravelSection"), {
-  loading: () => null,
-});
+// নোট: export const experimental_ppr = true; এখানে দেওয়ার দরকার নেই, 
+// কারণ আপনার next.config.ts এ cacheComponents: true দেওয়া আছে।
 
 export default function Home() {
   return (
-    <div className="bg-babyShopLightWhite min-h-screen" suppressHydrationWarning={true}>
+    <div className="bg-babyShopLightWhite min-h-screen">
       <Container className="flex py-7 gap-3">
+        {/* লেফট সাইডবার ক্যাটাগরি */}
         <CategorySection />
 
         <div className="flex-1">
+          {/* ১. ব্যানার সেকশন */}
           <Suspense fallback={<div className="w-full h-[300px] md:h-[400px] bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse rounded-2xl" />}>
             <Banner />
           </Suspense>
-          <ProductList />
+
+          {/* ২. প্রোডাক্ট লিস্ট (সরাসরি ব্যবহারের বদলে সাসপেন্স দেওয়া ভালো পারফরম্যান্সের জন্য) */}
+          <Suspense fallback={<div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-5"><div className="h-64 bg-gray-100 animate-pulse rounded-lg col-span-full" /></div>}>
+            <ProductList />
+          </Suspense>
+
+          {/* ৩. হোম ব্র্যান্ড সেকশন */}
           <Suspense fallback={null}>
             <HomeBrand />
           </Suspense>
+
+          {/* ৪. বেবি ট্রাভেল সেকশন */}
           <Suspense fallback={null}>
             <BabyTravelSection />
           </Suspense>
-          {/* ComfyApparelSection */}
-          {/* FeaturedServicesSection */}
+
+          {/* ComfyApparelSection ও FeaturedServicesSection এখানে যোগ করতে পারেন */}
         </div>
       </Container>
     </div>

@@ -6,7 +6,8 @@ import Footer from "@/components/footer/Footer";
 import { Toaster } from "sonner";
 import { LazyMotion, domMax } from "framer-motion";
 import { Suspense } from "react";
-import WebVitalsReporter from "../components/WebVitalsReporter";
+import WebVitalsReporter from "@/components/WebVitalsReporter";
+
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-plus-jakarta",
@@ -16,8 +17,9 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: "Babyshop | Online shopping places",
-  description: "Babyshop for onlne shopping",
+  description: "Babyshop for online shopping",
 };
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -26,13 +28,18 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${plusJakartaSans.className} antialiased`} suppressHydrationWarning>
+        {/* Header সাধারণত স্ট্যাটিক হয়, তাই একে সাসপেন্সের বাইরে রাখাই ভালো */}
         <Header />
+
         <LazyMotion features={domMax} strict>
-          <Suspense fallback={null}>
-            {children}
+          {/* PPR এর পূর্ণ সুবিধা পেতে চিলড্রেনকে একটি সাসপেন্স বাউন্ডারিতে রাখা হয়েছে */}
+          <Suspense fallback={<main className="min-h-screen" />}>
+            <main>{children}</main>
           </Suspense>
         </LazyMotion>
+
         <Footer />
+
         <Toaster position="top-right" richColors />
         <WebVitalsReporter />
       </body>

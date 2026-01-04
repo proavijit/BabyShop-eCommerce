@@ -5,7 +5,7 @@ import Container from "../common/Container";
 import Logo from "./Logo";
 import TopHeader from "./TopHeader";
 
-// Skeleton Components (এগুলোকে আলদা ফাইলে রাখা ভালো, তবে এখানে থাকলেও সমস্যা নেই)
+// Skeleton Components 
 const IconSkeleton = () => <div className="w-8 h-8 bg-gray-100 rounded-full animate-pulse" />;
 const UserSkeleton = () => (
     <div className="flex items-center gap-2">
