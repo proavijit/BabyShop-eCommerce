@@ -91,21 +91,7 @@ export default async function CategorySection() {
                     </div>
                 </section>
 
-                {/* 3. Age Group - Thin Minimalist Chips */}
-                <section>
-                    <h3 className="px-2 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-3">Age Group</h3>
-                    <div className="grid grid-cols-2 gap-1.5 px-1">
-                        {["0-6 M", "6-12 M", "1-2 Y", "2-4 Y", "4-6 Y", "6+ Y"].map((age) => (
-                            <Link
-                                key={age}
-                                href={`/shop?ageGroup=${age}`}
-                                className="text-center text-[10px] font-bold text-gray-500 border border-gray-100 py-2 rounded-sm hover:bg-black hover:text-white transition-all duration-200"
-                            >
-                                {age}
-                            </Link>
-                        ))}
-                    </div>
-                </section>
+
 
                 {/* 4. Minimal Support */}
                 <section className="pt-4 border-t border-gray-50">

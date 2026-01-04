@@ -30,7 +30,12 @@ const CartIcon = dynamic(() => import("./CartIcon"), {
 
 const SearchInput = dynamic(() => import("./SearchInput"), {
     ssr: false,
-    loading: () => <div className="h-10 w-full bg-gray-50 rounded-lg animate-pulse" />
+    loading: () => (
+        <div className="relative w-full h-10 bg-white border border-gray-100 rounded-md flex items-center px-4">
+            <div className="h-4 w-32 bg-gray-100 animate-pulse rounded" />
+            <div className="ml-auto h-5 w-5 bg-gray-100 animate-pulse rounded-full" />
+        </div>
+    )
 });
 
 const OrdersIcon = dynamic(() => import("./OrdersIcon"), {
