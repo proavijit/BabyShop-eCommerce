@@ -2,251 +2,131 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { Banner } from "@/types/type";
 import { API_ENDPOINTS, fetchData } from "@/lib/api";
 
 export default function BannerComponent() {
     const [loading, setLoading] = useState(true);
-
-    // Main Slider State
     const [mainBanners, setMainBanners] = useState<Banner[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-
-    // Side Banner State
     const [sideBanners, setSideBanners] = useState<Banner[]>([]);
-    const [sideCurrentIndex, setSideCurrentIndex] = useState(0);
 
     useEffect(() => {
         const fetchBanners = async () => {
             try {
-                // The server returns Banner[] directly, not { banners: Banner[] }
                 const response = await fetchData<Banner[] | { banners: Banner[] }>(API_ENDPOINTS.BANNERS);
                 let allBanners: Banner[] = [];
+                if (Array.isArray(response)) { allBanners = response; }
+                else if (response && 'banners' in response) { allBanners = response.banners; }
 
-                if (Array.isArray(response)) {
-                    allBanners = response;
-                } else if (response && 'banners' in response && Array.isArray(response.banners)) {
-                    allBanners = response.banners;
-                }
-
-
-                // Filter banners
                 const sliders = allBanners.filter(b => b.bannerType === 'slider');
                 const statics = allBanners.filter(b => b.bannerType === 'static' || b.bannerType === 'popup');
 
-                if (sliders.length > 0) {
-                    setMainBanners(sliders);
-                } else if (allBanners.length > 0 && statics.length === 0) {
-                    // Fallback: Use all if only mixed types without explicit static/slider differentiation
-                    setMainBanners(allBanners);
-                }
-
-                if (statics.length > 0) {
-                    setSideBanners(statics);
-                } else {
-                    // Fallback logic if needed, or leave empty
-                }
-
+                setMainBanners(sliders.length > 0 ? sliders : allBanners);
+                setSideBanners(statics);
             } catch (error) {
                 console.error("Failed to fetch banners:", error);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchBanners();
     }, []);
 
-    // Main Slider Interval (5s)
+    // Auto-slide logic
     useEffect(() => {
         if (mainBanners.length <= 1) return;
-
         const interval = setInterval(() => {
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % mainBanners.length);
+            setCurrentIndex((prev) => (prev + 1) % mainBanners.length);
         }, 5000);
-
         return () => clearInterval(interval);
     }, [mainBanners.length]);
 
-    // Side Slider Interval (10s)
-    useEffect(() => {
-        if (sideBanners.length <= 1) return;
-
-        const interval = setInterval(() => {
-            setSideCurrentIndex((prevIndex) => (prevIndex + 1) % sideBanners.length);
-        }, 10000);
-
-        return () => clearInterval(interval);
-    }, [sideBanners.length]);
-
-    const nextSlide = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % mainBanners.length);
-    };
-
-    const prevSlide = () => {
-        setCurrentIndex((prevIndex) =>
-            prevIndex === 0 ? mainBanners.length - 1 : prevIndex - 1
-        );
-    };
-
+    // 1. PERFECT MINIMALIST LOADING STATE
     if (loading) {
         return (
-            <div
-                className="w-full h-[300px] md:h-[400px] bg-linear-to-br from-gray-100 to-gray-200 animate-pulse rounded-2xl flex items-center justify-center shadow-lg"
-                suppressHydrationWarning={true}
-            >
-                <div className="flex items-center gap-3">
-                    <Sparkles className="w-5 h-5 text-babyshopSky animate-spin" />
-                    <p className="text-gray-500 font-medium">Loading amazing offers...</p>
+            <div className="w-full flex flex-col lg:flex-row gap-3 h-auto lg:h-[400px] mb-6">
+                <div className="w-full lg:w-[75%] h-[300px] lg:h-full bg-gray-100 animate-pulse rounded-md border border-gray-50 flex flex-col items-center justify-center space-y-4">
+                    <div className="w-48 h-3 bg-gray-200 rounded-full" />
+                    <div className="w-64 h-8 bg-gray-200 rounded-md" />
+                </div>
+                <div className="hidden lg:flex lg:w-[25%] h-full bg-gray-50 animate-pulse rounded-md border border-gray-50 flex-col items-center pt-10 space-y-4">
+                    <div className="w-20 h-3 bg-gray-100 rounded-full" />
+                    <div className="w-32 h-6 bg-gray-100 rounded-md" />
                 </div>
             </div>
         );
     }
 
+    // 2. EMPTY STATE
     if (mainBanners.length === 0 && sideBanners.length === 0) {
         return (
-            <div className="w-full h-[300px] md:h-[400px] bg-linear-to-br from-gray-50 to-gray-100 rounded-2xl flex flex-col items-center justify-center text-gray-400 shadow-lg border border-gray-200">
-                <Sparkles className="w-12 h-12 mb-3 text-gray-300" />
-                <p className="font-medium">No offers available at the moment</p>
+            <div className="w-full h-[300px] lg:h-[400px] bg-white rounded-md flex flex-col items-center justify-center text-gray-400 border border-gray-100 mb-6">
+                <Sparkles className="w-8 h-8 text-gray-200 mb-3" />
+                <p className="text-sm font-semibold">No offers available</p>
             </div>
         );
     }
 
     return (
-        <div
-            className="w-full flex flex-col lg:flex-row gap-5 h-auto lg:h-[420px] mb-6"
-            suppressHydrationWarning={true}
-        >
-            {/* Main Slider - 75% width on desktop (if side banners exist) */}
-            {mainBanners.length > 0 ? (
-                <div className={`relative w-full ${sideBanners.length > 0 ? 'lg:w-[75%]' : 'lg:w-full'} h-[320px] lg:h-full group overflow-hidden rounded-2xl shadow-xl border border-gray-200`}>
-                    {/* Slides */}
-                    <div
-                        className="w-full h-full flex transition-transform duration-700 ease-out"
-                        style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-                    >
-                        {mainBanners.map((banner, bannerIndex) => (
-                            <div
-                                key={banner._id}
-                                className="w-full h-full shrink-0 relative bg-linear-to-br from-gray-100 to-gray-200"
-                            >
-                                <Image
-                                    src={banner.image}
-                                    alt={banner.name || banner.title || "Banner"}
-                                    fill
-                                    sizes="(max-width: 1024px) 100vw, 75vw"
-                                    quality={85}
-                                    priority={bannerIndex === 0}
-                                    className="object-cover"
-                                />
+        <div className="w-full flex flex-col lg:flex-row gap-3 h-auto lg:h-[380px] mb-6" suppressHydrationWarning>
 
-                                {/* Content Overlay */}
-                                <div className="absolute inset-0 bg-linear-to-r from-black/70 via-black/40 to-transparent flex items-center">
-                                    <div className="px-8 md:px-16 max-w-[650px] space-y-5 animate-in slide-in-from-left-6 duration-700">
-                                        <span className="inline-flex items-center gap-2 px-4 py-2 bg-linear-to-r from-babyshopSky to-teal-400 text-white text-xs font-bold uppercase tracking-wider rounded-full shadow-lg">
-                                            <Sparkles className="w-3.5 h-3.5" />
-                                            {banner.bannerType || 'Special Offer'}
-                                        </span>
-                                        <h2 className="text-3xl md:text-5xl font-bold text-white leading-tight drop-shadow-lg">
-                                            {banner.title}
-                                        </h2>
-                                        <p className="text-gray-100 text-lg md:text-xl font-semibold">
-                                            Starting at <span className="text-yellow-300 font-bold text-2xl md:text-3xl">${banner.startFrom}</span>
-                                        </p>
-                                        <div className="pt-2">
-                                            <button className="bg-linear-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white px-8 py-3.5 rounded-full font-bold transition-all transform hover:scale-105 shadow-xl flex items-center gap-2 group/btn">
-                                                Shop Now
-                                                <ChevronRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+            {/* MAIN BANNER SLIDER - Full Cover & Thin Corners */}
+            <div className={`relative w-full ${sideBanners.length > 0 ? 'lg:w-[75%]' : 'lg:w-full'} h-[280px] lg:h-full overflow-hidden rounded-md border border-gray-100`}>
+                <div
+                    className="w-full h-full flex transition-transform duration-700 ease-in-out"
+                    style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                >
+                    {mainBanners.map((banner) => (
+                        <div key={banner._id} className="w-full h-full shrink-0 relative">
+                            <Image
+                                src={banner.image}
+                                alt={banner.title}
+                                fill
+                                priority
+                                className="object-cover"
+                            />
+                            {/* Professional Centered Overlay */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-black/5 px-4">
+                                <span className="text-[10px] uppercase tracking-[0.2em] text-gray-600 font-bold mb-1">
+                                    Best Deals Today
+                                </span>
+                                <h2 className="text-2xl md:text-4xl font-bold text-gray-800 leading-tight mb-6 max-w-lg">
+                                    {banner.title}
+                                </h2>
+                                <button className="bg-white text-gray-900 px-8 py-2.5 rounded-full text-xs font-bold shadow-sm hover:shadow-md transition-all">
+                                    Shop Now
+                                </button>
                             </div>
-                        ))}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* SIDE BANNER - Tight Spacing & Professionally Aligned */}
+            {sideBanners.length > 0 && (
+                <div className="w-full lg:w-[25%] h-[220px] lg:h-full relative rounded-md overflow-hidden border border-gray-100 group cursor-pointer">
+                    <div className="absolute inset-0 w-full h-full">
+                        <Image
+                            src={sideBanners[0].image}
+                            alt="Promo"
+                            fill
+                            className="object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
                     </div>
 
-                    {/* Controls */}
-                    {mainBanners.length > 1 && (
-                        <>
-                            <button
-                                onClick={prevSlide}
-                                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-babyshopSky text-white backdrop-blur-md p-3 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-x-4 group-hover:translate-x-0 border border-white/30 hover:scale-110"
-                                aria-label="Previous slide"
-                            >
-                                <ChevronLeft className="w-6 h-6" />
-                            </button>
-                            <button
-                                onClick={nextSlide}
-                                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-babyshopSky text-white backdrop-blur-md p-3 rounded-full shadow-xl opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0 border border-white/30 hover:scale-110"
-                                aria-label="Next slide"
-                            >
-                                <ChevronRight className="w-6 h-6" />
-                            </button>
-
-                            {/* Indicators */}
-                            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2.5 z-10">
-                                {mainBanners.map((_, index) => (
-                                    <button
-                                        key={index}
-                                        onClick={() => setCurrentIndex(index)}
-                                        className={`h-2 rounded-full transition-all duration-300 ${index === currentIndex
-                                            ? "bg-babyshopSky w-10 shadow-lg"
-                                            : "bg-white/60 w-2 hover:bg-white hover:w-4"
-                                            }`}
-                                        aria-label={`Go to slide ${index + 1}`}
-                                    />
-                                ))}
-                            </div>
-                        </>
-                    )}
-                </div>
-            ) : null}
-
-            {/* Static/Side Banner Slider - 25% width on desktop */}
-            {sideBanners.length > 0 ? (
-                <div className="w-full lg:w-[25%] h-[220px] lg:h-full relative rounded-2xl overflow-hidden shadow-xl group cursor-pointer border border-gray-200 hover:shadow-2xl transition-shadow duration-300">
-                    <div
-                        className="w-full h-full flex transition-transform duration-700 ease-in-out"
-                        style={{ transform: `translateX(-${sideCurrentIndex * 100}%)` }}
-                    >
-                        {sideBanners.map((banner) => (
-                            <div
-                                key={banner._id}
-                                className="w-full h-full shrink-0 relative"
-                            >
-                                <Image
-                                    src={banner.image}
-                                    alt={banner.name || banner.title || "Banner"}
-                                    fill
-                                    sizes="(max-width: 1024px) 100vw, 25vw"
-                                    quality={80}
-                                    loading="lazy"
-                                    className="object-cover group-hover:scale-110 transition-transform duration-700"
-                                />
-                                <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/30 to-black/80 flex flex-col justify-end p-6">
-                                    <span className="inline-flex items-center gap-1.5 text-yellow-300 font-bold text-xs uppercase tracking-wider mb-2">
-                                        <Sparkles className="w-3 h-3" />
-                                        {banner.bannerType || 'Exclusive'}
-                                    </span>
-                                    <h3 className="text-white text-xl font-bold mb-2 leading-tight">{banner.title}</h3>
-                                    <p className="text-gray-200 text-sm mb-3">
-                                        Starting from <span className="font-bold text-white text-base">${banner.startFrom}</span>
-                                    </p>
-                                    <span className="text-white text-sm font-semibold flex items-center gap-1 group-hover:gap-2 transition-all">
-                                        Explore <ChevronRight className="w-4 h-4" />
-                                    </span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            ) : (
-                // Fallback static banner if no API data found for side slot
-                <div className="w-full lg:w-[25%] h-[220px] lg:h-full relative rounded-2xl overflow-hidden shadow-xl group cursor-pointer bg-linear-to-br from-gray-100 to-gray-200 border border-gray-200">
-                    <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">
-                        <Sparkles className="w-10 h-10 mb-2 text-gray-300" />
-                        <span className="text-sm font-medium">Side Banner</span>
+                    {/* Content Layer floating over the covered image */}
+                    <div className="relative z-10 h-full w-full flex flex-col items-center justify-start pt-8 text-center bg-gradient-to-b from-white/30 via-transparent to-transparent">
+                        <p className="text-[#7C5CFC] text-[10px] font-bold uppercase tracking-widest mb-1">
+                            Hot this week
+                        </p>
+                        <h3 className="text-xl font-extrabold text-gray-800 leading-tight mb-4">
+                            Baby Deals
+                        </h3>
+                        <button className="bg-white text-gray-900 px-6 py-2 rounded-full text-[11px] font-bold shadow-md active:scale-95 transition-all">
+                            Shop Now
+                        </button>
                     </div>
                 </div>
             )}

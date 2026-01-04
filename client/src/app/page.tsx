@@ -18,7 +18,16 @@ export default function Home() {
 
         <div className="flex-1">
           {/* ১. ব্যানার সেকশন */}
-          <Suspense fallback={<div className="w-full h-[300px] md:h-[400px] bg-gradient-to-br from-gray-100 to-gray-200 animate-pulse rounded-2xl" />}>
+          <Suspense
+            fallback={
+              <div className="w-full flex flex-col lg:flex-row gap-3 h-auto lg:h-[400px] mb-6">
+                {/* Main Banner Fallback */}
+                <div className="w-full lg:w-[75%] h-[300px] lg:h-full bg-gray-100 animate-pulse rounded-md" />
+                {/* Side Banner Fallback */}
+                <div className="hidden lg:block lg:w-[25%] h-full bg-gray-50 animate-pulse rounded-md border border-gray-100" />
+              </div>
+            }
+          >
             <Banner />
           </Suspense>
 
