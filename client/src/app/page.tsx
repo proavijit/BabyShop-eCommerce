@@ -1,11 +1,12 @@
 import { Suspense } from "react";
 import Container from "@/components/common/Container";
-import CategorySection from "@/components/home/CategorySection";
 import ProductList from "@/components/home/ProductList";
 import HomeBrand from "@/components/home/HomeBrand"; // PPR এর জন্য ডিরেক্ট ইম্পোর্ট
 import BabyTravelSection from "@/components/home/BabyTravelSection"; // PPR এর জন্য ডিরেক্ট ইম্পোর্ট
 import BannerComponent from "@/components/home/banner";
 import BannerSkeleton from "@/components/home/banner/banner-skeleton";
+import CategorySection from "@/components/home/category";
+import CategorySkeleton from "@/components/home/category/category-skeleton";
 
 
 // নোট: export const experimental_ppr = true; এখানে দেওয়ার দরকার নেই, 
@@ -16,7 +17,9 @@ export default function Home() {
     <div className="bg-babyShopLightWhite min-h-screen">
       <Container className="flex py-7 gap-3">
         {/* লেফট সাইডবার ক্যাটাগরি */}
-        <CategorySection />
+        <Suspense fallback={<CategorySkeleton />}>
+          <CategorySection />
+        </Suspense>
 
         <div className="flex-1">
           {/* ১. ব্যানার সেকশন */}

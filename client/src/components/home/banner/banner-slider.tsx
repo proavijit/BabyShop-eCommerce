@@ -55,7 +55,7 @@ export default function BannerSlider({ mainBanners, sideBanners }: BannerSliderP
                                 <span className="text-[10px] uppercase tracking-[0.2em] text-gray-600 font-bold mb-1">
                                     Best Deals Today
                                 </span>
-                                <h2 className="text-2xl md:text-4xl font-bold text-gray-800 leading-tight mb-6 max-w-lg">
+                                <h2 className="text-2xl md:text-4xl font-bold text-white leading-tight mb-6 max-w-lg">
                                     {banner.title}
                                 </h2>
                                 <button className="bg-white text-gray-900 px-8 py-2.5 rounded-full text-xs font-bold shadow-sm hover:shadow-md transition-all">
@@ -82,10 +82,10 @@ export default function BannerSlider({ mainBanners, sideBanners }: BannerSliderP
 
                     {/* Content Layer floating over the covered image */}
                     <div className="relative z-10 h-full w-full flex flex-col items-center justify-start pt-8 text-center bg-gradient-to-b from-white/30 via-transparent to-transparent">
-                        <p className="text-[#7C5CFC] text-[10px] font-bold uppercase tracking-widest mb-1">
+                        <p className="text-white text-[10px] font-bold uppercase tracking-widest mb-1">
                             Hot this week
                         </p>
-                        <h3 className="text-xl font-extrabold text-gray-800 leading-tight mb-4">
+                        <h3 className="text-xl font-extrabold text-white leading-tight mb-4">
                             Baby Deals
                         </h3>
                         <button className="bg-white text-gray-900 px-6 py-2 rounded-full text-[11px] font-bold shadow-md active:scale-95 transition-all">
