@@ -77,7 +77,10 @@ export const useUserStore = create<UserState>()(
                 useOrderStore.getState().clearLocalOrders();
             },
         }),
-        { name: "user-storage" }
+        {
+            name: "user-storage",
+            partialize: (state) => ({ authUser: state.authUser }),
+        }
     )
 );
 

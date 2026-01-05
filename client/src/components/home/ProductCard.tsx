@@ -2,17 +2,7 @@ import { Product } from "@/types/type";
 import Image from "next/image";
 import Link from "next/link";
 import AddToCartButton from "../common/AddToCartButton";
-import WishListButton from "../common/product/WishListButton";
-
-/**
- * ARCHITECTURE: Server Component
- * 
- * RENDERING STRATEGY: SSR/SSG
- * 
- * JUSTIFICATION:
- * - Optimized for SEO and performance
- * - Interactive children are Client Components
- */
+import { ShoppingCart, Heart } from "lucide-react";
 
 interface ProductCardProps {
     product: Product & { images?: string[]; discountPrice?: number };
@@ -22,90 +12,107 @@ export default function ProductCard({ product }: ProductCardProps) {
     const imageUrl = product.images?.[0] || product.image || "/placeholder.png";
     const price = product.price;
     const discountPrice = product.discountPrice;
+    const hasDiscount = !!(discountPrice && discountPrice < price);
 
-    const hasDiscount = discountPrice && discountPrice < price;
     const discountPercentage = hasDiscount
         ? Math.round(((price - discountPrice) / price) * 100)
         : null;
 
-    const brandName = product.brand
-        ? (typeof product.brand === 'object' ? (product.brand as any).name : product.brand)
-        : "Baby Care";
+    const brandName =
+        typeof product.brand === "object"
+            ? product.brand?.name
+            : product.brand || "BABY DEALS";
 
     return (
-        <div className="group relative bg-card rounded-2xl border border-border overflow-hidden hover:shadow-lg transition-all duration-300 flex flex-col h-full" suppressHydrationWarning={true}>
-            {/* Image Section */}
-            <div className="relative aspect-square w-full overflow-hidden bg-muted" suppressHydrationWarning={true}>
+        <div className="
+      group
+      relative flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white
+      transition-all duration-300 ease-in-out
+      hover:border-gray-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)]
+    ">
+            {/* Image Container */}
+            <div className="relative h-48 w-full overflow-hidden bg-white">
+                {/* Discount Badge */}
                 {hasDiscount && (
-                    <div className="absolute left-2 top-2 z-10 bg-destructive text-destructive-foreground text-[10px] font-bold px-2 py-1 rounded-md uppercase" suppressHydrationWarning={true}>
-                        {discountPercentage}% OFF
-                    </div>
+                    <span className="absolute left-2 top-2 z-10 rounded-full bg-[#FF3B30] px-2.5 py-0.5 text-[11px] font-bold text-white shadow-sm">
+                        -{discountPercentage}%
+                    </span>
                 )}
 
-                <div className="absolute right-2 top-2 z-10" suppressHydrationWarning={true}>
-                    <WishListButton productId={product._id} product={product} />
-                </div>
+                {/* Wishlist Button (Professional Hover) */}
+                <button className="
+          absolute right-2 top-2 z-10 
+          flex h-8 w-8 items-center justify-center 
+          rounded-full bg-white/80 text-gray-600 backdrop-blur-sm
+          transition-all duration-300
+          opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0
+          hover:bg-white hover:text-red-500 hover:shadow-md
+        ">
+                    <Heart className="h-4 w-4" />
+                </button>
 
-                <Link
-                    href={`/product/${product.slug}`}
-                    className="block h-full w-full relative"
-                    suppressHydrationWarning={true}
-                >
+                <Link href={`/product/${product.slug}`} className="block h-full w-full">
                     <Image
                         src={imageUrl}
                         alt={product.name}
                         fill
-                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
-                        quality={85}
-                        loading="lazy"
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        suppressHydrationWarning={true}
+                        sizes="(max-width: 768px) 50vw, 20vw"
+                        className="
+              object-cover
+              transition-transform duration-500 ease-out
+              group-hover:scale-105
+            "
                     />
                 </Link>
             </div>
 
-            {/* Details Section */}
-            <div className="p-4 flex flex-col flex-grow" suppressHydrationWarning={true}>
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-1" suppressHydrationWarning={true}>
+            {/* Content */}
+            <div className="flex flex-1 flex-col p-3 pt-4">
+                <span className="mb-1 text-[10px] font-bold uppercase tracking-tight text-gray-400">
                     {brandName}
                 </span>
 
-                <Link href={`/product/${product.slug}`} className="flex-grow" suppressHydrationWarning={true}>
-                    <h3 className="text-sm font-semibold text-foreground line-clamp-2 mb-2 min-h-[40px]" suppressHydrationWarning={true}>
+                <Link href={`/product/${product.slug}`}>
+                    <h3 className="mb-2 line-clamp-2 min-h-[36px] text-[13px] font-medium leading-tight text-gray-800 transition-colors group-hover:text-[#00B5A5]">
                         {product.name}
                     </h3>
                 </Link>
 
-                <div className="flex flex-col gap-3 mt-auto" suppressHydrationWarning={true}>
-                    {/* Price Area */}
-                    <div className="flex items-baseline gap-2" suppressHydrationWarning={true}>
-                        <span className="text-lg font-bold text-foreground" suppressHydrationWarning={true}>
-                            ${(hasDiscount ? discountPrice : price).toFixed(2)}
-                        </span>
-                        {hasDiscount && (
-                            <span className="text-xs text-muted-foreground line-through" suppressHydrationWarning={true}>
+                {/* Pricing */}
+                <div className="mb-4 flex items-center gap-2">
+                    {hasDiscount ? (
+                        <>
+                            <span className="text-[12px] text-gray-400 line-through">
                                 ${price.toFixed(2)}
                             </span>
-                        )}
-                    </div>
-
-                    {/* Footer: Stock & Add to Cart */}
-                    <div className="flex items-center justify-between" suppressHydrationWarning={true}>
-                        <div className="flex items-center gap-1.5" suppressHydrationWarning={true}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${product.stock > 0 ? 'bg-green-500' : 'bg-destructive'}`} />
-                            <span className="text-[11px] text-muted-foreground font-medium" suppressHydrationWarning={true}>
-                                {product.stock} left
+                            <span className="text-[14px] font-bold text-[#FF3B30]">
+                                ${discountPrice?.toFixed(2)}
                             </span>
-                        </div>
-
-                        <div className="max-w-[120px]" suppressHydrationWarning={true}>
-                            <AddToCartButton
-                                product={product}
-                                className="!py-2 !px-3 text-xs"
-                            />
-                        </div>
-                    </div>
+                        </>
+                    ) : (
+                        <span className="text-[14px] font-bold text-gray-900">
+                            ${price.toFixed(2)}
+                        </span>
+                    )}
                 </div>
+
+                {/* Button – Minimal, Fixed Hover State */}
+                <AddToCartButton
+                    product={product}
+                    className="
+            flex w-full items-center justify-center gap-2
+            rounded-full border border-[#00B5A5]
+            bg-white py-1.5
+            text-[12px] font-bold text-gray-700
+            transition-all duration-200
+            hover:bg-[#00B5A5] hover:text-white
+            active:scale-95
+            shadow-none
+          "
+                >
+                    <ShoppingCart className="h-3.5 w-3.5" />
+                    Add to cart
+                </AddToCartButton>
             </div>
         </div>
     );

@@ -2,15 +2,13 @@ import { API_ENDPOINTS, fetchData, buildQueryString } from "@/lib/api";
 import { Product } from "@/types/type";
 import ProductCard from "./ProductCard";
 import Link from "next/link";
-import { Sparkles, TrendingUp, Tag, ArrowRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 interface ProductSectionProps {
     title: string;
     description?: string;
     query: Record<string, string | number | boolean>;
     viewAllLink?: string;
-    icon?: React.ReactNode;
-    gradient?: string;
     accentColor?: string;
 }
 
@@ -19,9 +17,7 @@ async function ProductSection({
     description,
     query,
     viewAllLink,
-    icon,
-    gradient = "from-slate-50 to-white",
-    accentColor = "text-babyshopSky"
+    accentColor = "bg-[#00B5A5]",
 }: ProductSectionProps) {
     let products: Product[] = [];
 
@@ -30,62 +26,56 @@ async function ProductSection({
         const data = await fetchData<{ products: Product[] }>(
             `${API_ENDPOINTS.PRODUCTS}${queryString}`,
             {
-                next: { revalidate: 3600 }, // Cache for 1 hour
-                cache: 'force-cache'
+                next: { revalidate: 3600 },
+                cache: "force-cache",
             }
         );
         products = data.products || [];
     } catch (error) {
-        console.error(`Failed to fetch products:`, error);
+        console.error("Failed to fetch products:", error);
         return null;
     }
 
-    if (products.length === 0) return null;
+    if (!products.length) return null;
 
     return (
-        // ১. সেকশন কার্ডকে আরও প্রিমিয়াম লুক দিতে shadow-sm এবং subtle border ব্যবহার করা হয়েছে
-        <section
-            className={`py-10 px-4 md:px-8 rounded-[2rem] bg-gradient-to-br ${gradient} border border-gray-100/50 shadow-sm transition-all duration-500 hover:shadow-md`}
-            suppressHydrationWarning={true}
-        >
-
+        <section className="group">
             {/* Header Section */}
-            <div className="flex flex-col sm:flex-row justify-between items-end sm:items-center mb-8 gap-4">
-                <div className="flex items-center gap-5">
-                    {icon && (
-                        // ২. আইকন বক্সকে আরও ক্লিন এবং মডার্ন করা হয়েছে
-                        <div className={`hidden sm:flex w-12 h-12 rounded-2xl bg-white shadow-sm border border-gray-50 items-center justify-center ${accentColor}`}>
-                            {icon}
-                        </div>
-                    )}
-                    <div className="space-y-1">
-                        <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-gray-800">
+            <div className="flex items-end justify-between mb-6 px-1">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-3">
+                        <span className={`h-6 w-[3px] rounded-full ${accentColor}`} />
+                        <h2 className="text-2xl font-semibold tracking-tight text-slate-900">
                             {title}
                         </h2>
-                        {description && (
-                            <p className="text-gray-500 text-sm md:text-base font-medium opacity-80">
-                                {description}
-                            </p>
-                        )}
                     </div>
+                    {description && (
+                        <p className="text-sm text-slate-500 ml-[15px]">
+                            {description}
+                        </p>
+                    )}
                 </div>
 
                 {viewAllLink && (
                     <Link
                         href={viewAllLink}
-                        className={`group flex items-center gap-1.5 px-4 py-2 rounded-full bg-white/80 backdrop-blur-sm border border-gray-100 ${accentColor} text-sm font-bold shadow-sm hover:bg-white hover:shadow transition-all duration-300`}
+                        className="group/link flex items-center gap-1 text-sm font-medium text-slate-600 transition-all hover:text-slate-900"
                     >
-                        Explore More
-                        <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                        View all
+                        <ChevronRight className="h-4 w-4 transition-transform group-hover/link:translate-x-0.5" />
                     </Link>
                 )}
             </div>
 
-            {/* ৩. গ্রিড লেআউট এবং কার্ড স্পেসিং ফিক্সড */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
-                {products.map((product) => (
-                    <ProductCard key={product._id} product={product} />
-                ))}
+            {/* Grid Container */}
+            <div className="relative rounded-3xl border border-slate-100 bg-white p-6 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.04)]">
+                <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+                    {products.map((product) => (
+                        <div key={product._id} className="transition-transform duration-300 hover:-translate-y-1">
+                            <ProductCard product={product} />
+                        </div>
+                    ))}
+                </div>
             </div>
         </section>
     );
@@ -93,38 +83,28 @@ async function ProductSection({
 
 export default function ProductList() {
     return (
-        <div className="max-w-7xl mx-auto space-y-12 py-10 px-4">
-            {/* Featured Products - Sophisticated Purple */}
+        <div className="mx-auto max-w-[1400px] space-y-20 px-6 py-16 bg-[#fafafa]">
             <ProductSection
                 title="Featured Picks"
-                description="Handpicked excellence for your little ones"
+                description="Curated quality for your little ones"
                 query={{ isFeatured: true }}
                 viewAllLink="/products?isFeatured=true"
-                icon={<Sparkles className="w-6 h-6" />}
-                gradient="from-cyan-50/50 via-white to-white"
-                accentColor="text-cyan-600"
             />
 
-            {/* Trending Products - Modern Cyan/Teal */}
             <ProductSection
-                title="Trending Style"
-                description="What's making waves this season"
+                title="Trending Now"
+                description="The most loved pieces this week"
                 query={{ trending: true }}
                 viewAllLink="/products?trending=true"
-                icon={<TrendingUp className="w-6 h-6" />}
-                gradient="from-cyan-50/50 via-white to-white"
-                accentColor="text-cyan-600"
+                accentColor="bg-amber-400"
             />
 
-            {/* Best Deals - Warm Orange/Red */}
             <ProductSection
                 title="Exclusive Deals"
-                description="Premium quality at unbeatable prices"
+                description="Premium quality, better prices"
                 query={{ isBestDeal: true }}
                 viewAllLink="/products?isBestDeal=true"
-                icon={<Tag className="w-6 h-6" />}
-                gradient="from-cyan-50/50 via-white to-white"
-                accentColor="text-cyan-600"
+                accentColor="bg-rose-400"
             />
         </div>
     );

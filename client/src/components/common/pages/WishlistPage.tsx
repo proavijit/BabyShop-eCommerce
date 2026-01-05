@@ -61,6 +61,8 @@ export default function WishlistPage() {
     const handleAddToCart = async (product: Product) => {
         try {
             await addToCart(product, 1);
+            // Optionally remove from wishlist after adding to cart
+            await toggleWishlist(product);
             toast.success(`${product.name} added to cart!`);
         } catch {
             toast.error("Failed to add to cart");

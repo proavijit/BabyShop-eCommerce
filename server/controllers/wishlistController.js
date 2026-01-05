@@ -45,7 +45,7 @@ export const addToWishlist = asyncHandler(async (req, res) => {
   }
 
   // Check if product is already in wishlist
-  if (user.wishlist.includes(productId)) {
+  if (user.wishlist.some((id) => id.toString() === productId.toString())) {
     res.status(400);
     throw new Error("Product already in wishlist");
   }

@@ -4,7 +4,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { Category, Brand, Product, ProductResponse } from "@/types/type";
 import { fetchWithConfig, buildQueryString } from "@/lib/config";
-import ProductCard from "@/components/home/ProductCard";
+import ProductCard from "@/components/home/product/ProductCard";
 import {
     X, Search, Loader2,
     SlidersHorizontal, Trash2, ListFilter

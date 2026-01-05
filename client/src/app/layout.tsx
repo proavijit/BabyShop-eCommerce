@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import WebVitalsReporter from "@/components/WebVitalsReporter";
 import FooterSkeleton from "@/components/footer/FooterSkeleton";
+import StoreInitializer from "@/components/common/StoreInitializer";
 
 const Footer = dynamic(() => import("@/components/footer/Footer"), {
   ssr: true,
@@ -34,6 +35,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${plusJakartaSans.className} antialiased`} suppressHydrationWarning>
+        <StoreInitializer />
         <Header />
 
         <LazyMotion features={domMax} strict>

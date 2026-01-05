@@ -218,4 +218,3 @@ export default async function SingleProductPage({ params }: ProductPageProps) {
     );
 }
 
-export const revalidate = 60;
