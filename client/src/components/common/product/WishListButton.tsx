@@ -63,6 +63,7 @@ export default function WishListButton({ productId, product, className = "" }: W
             onClick={handleToggle}
             className={`w-12 h-12 rounded-full bg-white flex items-center justify-center hover:bg-white transition-all duration-300 group relative ${className}`}
             aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+            suppressHydrationWarning={true}
         >
             <AnimatePresence mode="wait">
                 {isWishlisted ? (
@@ -71,6 +72,7 @@ export default function WishListButton({ productId, product, className = "" }: W
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
+                        suppressHydrationWarning={true}
                     >
                         <Heart className="w-5 h-5 fill-babyshopRed text-babyshopRed" />
                     </m.div>
@@ -80,6 +82,7 @@ export default function WishListButton({ productId, product, className = "" }: W
                         initial={{ scale: 0, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0, opacity: 0 }}
+                        suppressHydrationWarning={true}
                     >
                         <Heart className="w-5 h-5 text-gray-400 group-hover:text-babyshopRed transition-colors" />
                     </m.div>

@@ -38,7 +38,7 @@ export default function ProductCard({
                     />
                 </div>
 
-                <Link href={`/product/${product.slug}`} className="relative block h-full w-full">
+                <Link href={`/product/${product.slug}`} className="relative block h-full w-full" suppressHydrationWarning={true}>
                     <Image
                         src={imageUrl}
                         alt={product.name}
@@ -48,22 +48,23 @@ export default function ProductCard({
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         // Add quality for better mobile performance
                         quality={75}
+                        suppressHydrationWarning={true}
                     />
                 </Link>
             </div>
 
             <div className="flex flex-1 flex-col p-3" suppressHydrationWarning={true}>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400" suppressHydrationWarning={true}>
                     {typeof product.brand === "object" ? product.brand?.name : product.brand || "Baby Deals"}
                 </span>
 
-                <Link href={`/product/${product.slug}`} className="mt-1 flex-1">
+                <Link href={`/product/${product.slug}`} className="mt-1 flex-1" suppressHydrationWarning={true}>
                     <h3 className="line-clamp-2 text-sm font-medium text-slate-800 hover:text-[#00B5A5] min-h-[40px]">
                         {product.name}
                     </h3>
                 </Link>
 
-                <div className="mt-2 flex items-center gap-2">
+                <div className="mt-2 flex items-center gap-2" suppressHydrationWarning={true}>
                     <span className={`text-base font-bold ${hasDiscount ? 'text-[#FF3B00]' : 'text-slate-900'}`}>
                         ${hasDiscount ? product.discountPrice : product.price}
                     </span>
@@ -72,7 +73,7 @@ export default function ProductCard({
                     )}
                 </div>
 
-                <div className="mt-3">
+                <div className="mt-3" suppressHydrationWarning={true}>
                     <AddToCartButton
                         product={product}
                         className="w-full rounded-full border border-[#00B5A5] bg-transparent py-1.5 text-xs font-semibold text-[#003B65] transition-all hover:bg-[#00B5A5] hover:text-white"

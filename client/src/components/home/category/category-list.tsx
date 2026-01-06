@@ -44,8 +44,8 @@ export default function CategoryList({ categories }: CategoryListProps) {
                     </div>
                     <div className="flex flex-col gap-1" suppressHydrationWarning={true}>
                         {categories?.slice(0, 8).map((cat) => (
-                            <Link key={cat._id} href={`/shop?category=${cat._id}`} className="flex items-center gap-3 px-2 py-1.5 rounded-sm transition-all duration-200 hover:bg-pink-100/50 group">
-                                <div className="relative w-9 h-9 shrink-0 overflow-hidden rounded-sm border border-gray-100 bg-gray-50">
+                            <Link key={cat._id} href={`/shop?category=${cat._id}`} className="flex items-center gap-3 px-2 py-1.5 rounded-sm transition-all duration-200 hover:bg-pink-100/50 group" suppressHydrationWarning={true}>
+                                <div className="relative w-9 h-9 shrink-0 overflow-hidden rounded-sm border border-gray-100 bg-gray-50" suppressHydrationWarning={true}>
                                     <Image src={cat.image || "/icons/placeholder.png"} alt={cat.name} fill sizes="36px" className="object-cover group-hover:scale-110 transition-transform duration-500" />
                                 </div>
                                 <span className="text-[13px] font-medium text-gray-600 group-hover:text-black">{cat.name}</span>
@@ -56,8 +56,8 @@ export default function CategoryList({ categories }: CategoryListProps) {
                 </section>
 
                 {/* 3. Footer Links */}
-                <section className="pt-4 border-t border-gray-50">
-                    <div className="flex flex-col gap-1">
+                <section className="pt-4 border-t border-gray-50" suppressHydrationWarning={true}>
+                    <div className="flex flex-col gap-1" suppressHydrationWarning={true}>
                         <FeatureLink href="/wishlist" icon={<Heart className="w-3.5 h-3.5" />} label="Wishlist" hoverColor="hover:bg-rose-500/[0.05]" iconColor="text-rose-500" />
                         <FeatureLink href="/support" icon={<HeadphonesIcon className="w-3.5 h-3.5" />} label="Support" hoverColor="hover:bg-indigo-500/[0.05]" iconColor="text-indigo-500" />
                     </div>
@@ -69,8 +69,8 @@ export default function CategoryList({ categories }: CategoryListProps) {
 
 function FeatureLink({ href, icon, label, hoverColor, iconColor }: any) {
     return (
-        <Link href={href} className={`flex items-center gap-3 px-3 py-2 rounded-sm transition-all duration-200 ${hoverColor} group`}>
-            <div className={`${iconColor} transition-transform group-hover:scale-110`}>{icon}</div>
+        <Link href={href} className={`flex items-center gap-3 px-3 py-2 rounded-sm transition-all duration-200 ${hoverColor} group`} suppressHydrationWarning={true}>
+            <div className={`${iconColor} transition-transform group-hover:scale-110`} suppressHydrationWarning={true}>{icon}</div>
             <span className="text-[13px] font-medium text-gray-600 group-hover:text-black">{label}</span>
         </Link>
     );

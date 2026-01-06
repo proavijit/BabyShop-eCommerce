@@ -7,7 +7,7 @@ interface BrandGridProps {
 
 export default function BrandGrid({ brands }: BrandGridProps) {
     return (
-        <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+        <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6" suppressHydrationWarning={true}>
             {brands.map((brand) => (
                 <BrandCard key={brand._id} brand={brand} />
             ))}

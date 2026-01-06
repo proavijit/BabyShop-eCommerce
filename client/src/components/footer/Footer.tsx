@@ -77,7 +77,7 @@ export default function Footer() {
             {/* Main Footer Content */}
             <div className="container mx-auto px-4 py-12" suppressHydrationWarning={true}>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8 mb-12" suppressHydrationWarning={true}>
-                    <div className="lg:col-span-2">
+                    <div className="lg:col-span-2" suppressHydrationWarning={true}>
                         <Link href="/" className="flex items-center gap-2 mb-4 group" suppressHydrationWarning={true}>
                             <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-babyshopSky to-teal-400 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300" suppressHydrationWarning={true}>
                                 <Baby className="w-7 h-7 text-white" />

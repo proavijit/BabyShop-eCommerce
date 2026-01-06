@@ -33,14 +33,45 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${plusJakartaSans.className} antialiased`} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning={true}>
+      <head suppressHydrationWarning={true}>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const targetAttributes = ['bis_skin_checked', 'bis_size'];
+                const cleanNode = (node) => {
+                  if (node.nodeType === 1) {
+                    targetAttributes.forEach(attr => node.removeAttribute(attr));
+                    for (let i = 0; i < node.childNodes.length; i++) {
+                      cleanNode(node.childNodes[i]);
+                    }
+                  }
+                };
+                // Initial clean
+                cleanNode(document.documentElement);
+                // Observe for further injections before hydration
+                const observer = new MutationObserver((mutations) => {
+                  mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes' && targetAttributes.includes(mutation.attributeName)) {
+                      mutation.target.removeAttribute(mutation.attributeName);
+                    }
+                  });
+                });
+                observer.observe(document.documentElement, { attributes: true, subtree: true });
+                window.__hydration_cleaner = observer;
+              })();
+            `,
+          }}
+        />
+      </head>
+      <body className={`${plusJakartaSans.className} antialiased`} suppressHydrationWarning={true}>
         <StoreInitializer />
         <Header />
 
         <LazyMotion features={domMax} strict>
-          <Suspense fallback={<main className="min-h-screen" suppressHydrationWarning />}>
-            <main suppressHydrationWarning>{children}</main>
+          <Suspense fallback={<main className="min-h-screen" suppressHydrationWarning={true} />}>
+            <main suppressHydrationWarning={true}>{children}</main>
           </Suspense>
         </LazyMotion>
 
