@@ -40,7 +40,7 @@ const sampleBrands = [
     },
     {
         name: "Bambino",
-        image: "https://images.unsplash.com/photo-1558877385-8c7f5e5d6e8e?w=400"
+        image: "https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=400"
     },
     {
         name: "Precious Moments",
@@ -62,7 +62,7 @@ const sampleCategories = [
     },
     {
         name: "Toys & Entertainment",
-        image: "https://images.unsplash.com/photo-1558877385-8c7f5e5d6e8e?w=600",
+        image: "https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=600",
         categoryType: "Featured"
     },
     {
@@ -148,7 +148,7 @@ const sampleProducts = [
         categoryName: "Toys & Entertainment",
         brandName: "Little Angels",
         images: [
-            "https://images.unsplash.com/photo-1558877385-8c7f5e5d6e8e?w=800"
+            "https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=800"
         ]
     },
     {
@@ -162,7 +162,7 @@ const sampleProducts = [
         categoryName: "Travel & Gear",
         brandName: "TinyTots",
         images: [
-            "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=800"
+            "https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?w=800"
         ]
     },
     {
@@ -299,7 +299,7 @@ const sampleProducts = [
         categoryName: "Toys & Entertainment",
         brandName: "Bambino",
         images: [
-            "https://images.unsplash.com/photo-1558877385-8c7f5e5d6e8e?w=800"
+            "https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=800"
         ]
     },
     {
@@ -341,7 +341,7 @@ const sampleProducts = [
         categoryName: "Toys & Entertainment",
         brandName: "Little Angels",
         images: [
-            "https://images.unsplash.com/photo-1558877385-8c7f5e5d6e8e?w=800"
+            "https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=800"
         ]
     },
     {
@@ -374,6 +374,16 @@ const sampleProducts = [
     }
 ];
 
+const slugify = (text) => {
+    return text
+        .toString()
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/[^\w-]+/g, '')
+        .replace(/--+/g, '-');
+};
+
 const seedDatabase = async () => {
     try {
         await connectDB();
@@ -391,11 +401,15 @@ const seedDatabase = async () => {
 
         // Step 2: Create Categories
         console.log("\n📁 Creating categories...");
-        const createdCategories = await Category.insertMany(sampleCategories);
+        const categoriesWithSlugs = sampleCategories.map(cat => ({
+            ...cat,
+            slug: slugify(cat.name)
+        }));
+        const createdCategories = await Category.insertMany(categoriesWithSlugs);
         console.log(`✅ Created ${createdCategories.length} categories`);
 
         // Step 3: Create Products with proper relationships
-        console.log("\n�️  Creating products...");
+        console.log("\n️  Creating products...");
 
         // Create a map for quick lookups
         const brandMap = {};
@@ -414,6 +428,7 @@ const seedDatabase = async () => {
 
             return {
                 ...productData,
+                slug: slugify(productData.name),
                 category: categoryMap[categoryName],
                 brand: brandMap[brandName]
             };

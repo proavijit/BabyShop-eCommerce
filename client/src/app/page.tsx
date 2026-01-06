@@ -3,11 +3,11 @@ import Container from "@/components/common/Container";
 import ProductList from "@/components/home/product/ProductList";
 import ProductRowSkeleton from "@/components/home/product/ProductRowSkeleton";
 import { BrandSection } from "@/components/home/brand";
-import BabyTravelSection from "@/components/home/BabyTravelSection";
 import BannerComponent from "@/components/home/banner";
 import BannerSkeleton from "@/components/home/banner/banner-skeleton";
 import CategorySection from "@/components/home/category";
 import CategorySkeleton from "@/components/home/category/category-skeleton";
+import BabyTravelSection from "@/components/home/travel";
 
 
 export default function Home() {

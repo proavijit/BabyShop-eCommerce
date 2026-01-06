@@ -1,8 +1,10 @@
 
+import { LucideIcon } from "lucide-react";
 export interface Category {
     _id: string;
     name: string;
     slug: string;
+    image?: string;
     categoryType: string;
 }
 export interface CategoryResponse {
@@ -136,4 +138,15 @@ export interface Brand {
     image?: string | null;
     slug?: string;
     isActive?: boolean;
+}
+
+
+export interface TravelCategory {
+    id: number;
+    name: string;
+    icon: LucideIcon;
+    description: string;
+    accentColor: string;
+    iconColor: string;
+    link: string;
 }
