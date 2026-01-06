@@ -1,69 +1,82 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
 import { Product } from "@/types/type";
+// Keep buttons as small, isolated client components to minimize hydration impact
 import AddToCartButton from "../../common/AddToCartButton";
 import WishListButton from "../../common/product/WishListButton";
 
-export default function ProductCard({ product }: { product: Product }) {
-    const imageUrl = product.images?.[0] || product.image || "/placeholder.png";
+// Move constant styles or logic outside the component to prevent re-creation
+const PLACEHOLDER_IMAGE = "/placeholder.png";
+
+export default function ProductCard({
+    product,
+    priority = false // New prop to handle LCP (First few products in the grid)
+}: {
+    product: Product;
+    priority?: boolean
+}) {
+    const imageUrl = product.images?.[0] || product.image || PLACEHOLDER_IMAGE;
     const hasDiscount = !!(product.discountPrice && product.discountPrice < product.price);
+    const discountPercentage = hasDiscount
+        ? Math.round(((product.price - (product.discountPrice ?? 0)) / product.price) * 100)
+        : 0;
 
     return (
-        <div className="group relative flex flex-col bg-white transition-all duration-500">
-            {/* Media Container */}
-            <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-[#F3F4F6]">
+        <div className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white transition-shadow hover:shadow-md h-full">
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#f7f7f7]">
                 {hasDiscount && (
-                    <div className="absolute left-3 top-3 z-10 rounded-full bg-rose-500 px-2.5 py-1 text-[10px] font-bold text-white shadow-sm">
-                        SALE
-                    </div>
+                    <span className="absolute left-2 top-2 z-10 rounded-full bg-[#FF3B00] px-2 py-1 text-[10px] font-bold text-white">
+                        -{discountPercentage}%
+                    </span>
                 )}
 
-                {/* Wishlist Toggle - Functionally Integrated */}
-                <WishListButton
-                    productId={product._id}
-                    product={product}
-                    className="absolute right-3 top-3 z-10 flex h-9 w-9 items-center justify-center rounded-full bg-white/80 text-slate-400 opacity-0 translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 hover:text-rose-500 hover:bg-white shadow-sm backdrop-blur-sm"
-                />
+                <div className="absolute right-2 top-2 z-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                    <WishListButton
+                        productId={product._id}
+                        product={product}
+                        className="flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm hover:text-rose-500"
+                    />
+                </div>
 
-                <Link href={`/product/${product.slug}`} className="block h-full w-full">
+                <Link href={`/product/${product.slug}`} className="relative block h-full w-full">
                     <Image
                         src={imageUrl}
                         alt={product.name}
                         fill
-                        sizes="(max-width: 768px) 50vw, 20vw"
-                        className="object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                        priority={priority} // Optimization: Prioritize first few images
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        // Add quality for better mobile performance
+                        quality={75}
                     />
                 </Link>
-
-                {/* Quick Cart Slide-up */}
-                <div className="absolute inset-x-0 bottom-0 p-3 translate-y-full transition-transform duration-300 ease-in-out group-hover:translate-y-0">
-                    <AddToCartButton
-                        product={product}
-                        className="flex w-full items-center justify-center gap-2 rounded-xl bg-white/95 py-2.5 text-[12px] font-bold text-slate-900 shadow-xl backdrop-blur-md transition-all hover:bg-white active:scale-95"
-                    />
-                </div>
             </div>
 
-            {/* Info Container */}
-            <div className="mt-4 flex flex-col space-y-1 px-1">
-                <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400">
-                    {typeof product.brand === "object" ? product.brand?.name : product.brand || "Premium"}
+            <div className="flex flex-1 flex-col p-3">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    {typeof product.brand === "object" ? product.brand?.name : product.brand || "Baby Deals"}
                 </span>
-                <Link href={`/product/${product.slug}`}>
-                    <h3 className="line-clamp-1 text-sm font-medium text-slate-800 transition-colors group-hover:text-[#00B5A5]">
+
+                <Link href={`/product/${product.slug}`} className="mt-1 flex-1">
+                    <h3 className="line-clamp-2 text-sm font-medium text-slate-800 hover:text-[#00B5A5] min-h-[40px]">
                         {product.name}
                     </h3>
                 </Link>
-                <div className="flex items-center gap-2 pt-0.5">
-                    {hasDiscount ? (
-                        <>
-                            <span className="text-base font-bold text-slate-900">${product.discountPrice}</span>
-                            <span className="text-xs text-slate-400 line-through">${product.price}</span>
-                        </>
-                    ) : (
-                        <span className="text-base font-bold text-slate-900">${product.price}</span>
+
+                <div className="mt-2 flex items-center gap-2">
+                    <span className={`text-base font-bold ${hasDiscount ? 'text-[#FF3B00]' : 'text-slate-900'}`}>
+                        ${hasDiscount ? product.discountPrice : product.price}
+                    </span>
+                    {hasDiscount && (
+                        <span className="text-xs text-slate-400 line-through">${product.price}</span>
                     )}
+                </div>
+
+                <div className="mt-3">
+                    <AddToCartButton
+                        product={product}
+                        className="w-full rounded-full border border-[#00B5A5] bg-transparent py-1.5 text-xs font-semibold text-[#003B65] transition-all hover:bg-[#00B5A5] hover:text-white"
+                    />
                 </div>
             </div>
         </div>
