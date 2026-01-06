@@ -3,10 +3,10 @@ import { Product, BreadcrumbItem, StructuredProductData } from "@/types/type";
 import Container from "@/components/common/Container";
 import ProductAction from "@/components/common/product/ProductAction";
 import ImageGallery from "@/components/common/product/ImageGallery";
-import ProductDescription from "@/components/common/product/ProductDescription";
 import ProductInfo from "@/components/common/product/ProductInfo";
 import PricingSection from "@/components/common/product/PricingSection";
 import Breadcrumb from "@/components/common/product/Breadcrumb";
+import ProductTabs from "@/components/common/product/ProductTabs";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
@@ -123,7 +123,7 @@ export default async function SingleProductPage({ params }: ProductPageProps) {
     const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
     const currentUrl = `${baseUrl}/product/${slug}`;
 
-    // Generate JSON-LD Structured Data for Product
+    // Generate JSON-LD Structured Data
     const structuredData: StructuredProductData = {
         '@context': 'https://schema.org',
         '@type': 'Product',
@@ -173,48 +173,52 @@ export default async function SingleProductPage({ params }: ProductPageProps) {
     });
 
     return (
-        <>
+        <div className="bg-[#fbfbfb] min-h-screen pb-20">
             {/* Product JSON-LD Structured Data */}
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
             />
 
-            <div className="bg-white min-h-screen">
-                <div className="py-6 border-b border-gray-50">
-                    <Container>
-                        <Breadcrumb items={breadcrumbItems} baseUrl={baseUrl} />
-                    </Container>
-                </div>
+            {/* Breadcrumb Section */}
+            <div className="bg-white border-b border-gray-100">
+                <Container className="py-4">
+                    <Breadcrumb items={breadcrumbItems} baseUrl={baseUrl} />
+                </Container>
+            </div>
 
-                <Container className="py-12 md:py-20">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 xl:gap-24">
-                        {/* Gallery */}
-                        <div className="lg:col-span-7">
-                            <div className="lg:sticky lg:top-24">
-                                <ImageGallery
-                                    name={product.name}
-                                    images={productImages}
-                                />
-                            </div>
+            <Container className="mt-8">
+                {/* Main Product Card */}
+                <div className="bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-sm">
+                    <div className="grid grid-cols-1 lg:grid-cols-2">
+                        {/* Left: Gallery */}
+                        <div className="p-6 md:p-10 border-b lg:border-b-0 lg:border-r border-gray-100">
+                            <ImageGallery
+                                name={product.name}
+                                images={productImages}
+                            />
                         </div>
 
-                        {/* Info */}
-                        <div className="lg:col-span-5 flex flex-col gap-10">
-                            <ProductInfo product={product} />
-                            <PricingSection
-                                price={product.price}
-                                discountPrice={product.discountPrice}
-                            />
-                            <ProductAction product={product} />
-                            <div className="pt-8 border-t border-gray-100">
-                                <ProductDescription product={product} />
+                        {/* Right: Info & Actions */}
+                        <div className="p-6 md:p-10 flex flex-col justify-start">
+                            <div className="max-w-xl">
+                                <ProductInfo product={product} />
+                                <PricingSection
+                                    price={product.price}
+                                    discountPrice={product.discountPrice}
+                                />
+                                <div className="mt-8">
+                                    <ProductAction product={product} />
+                                </div>
                             </div>
                         </div>
                     </div>
-                </Container>
-            </div>
-        </>
+                </div>
+
+                {/* Bottom: Tabs (Description, Reviews, etc.) */}
+                <ProductTabs product={product} />
+            </Container>
+        </div>
     );
 }
 

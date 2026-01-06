@@ -9,29 +9,21 @@ export default function PricingSection({ price, discountPrice }: PricingSectionP
     const savings = hasDiscount ? price - discountPrice! : 0;
 
     return (
-        <div className="space-y-2 py-6">
-            <div className="flex items-baseline gap-4" aria-label="Price information">
-                <span className="text-4xl md:text-5xl font-extrabold text-gray-900 tracking-tighter">
-                    ${finalPrice.toFixed(2)}
-                </span>
-
+        <div className="py-4">
+            <div className="flex items-center gap-3 flex-wrap" aria-label="Price information">
                 {hasDiscount && (
                     <span
-                        className="text-xl md:text-2xl text-gray-400 line-through font-medium"
+                        className="text-xl text-gray-400 line-through font-medium"
                         aria-label={`Original price was $${price.toFixed(2)}`}
                     >
                         ${price.toFixed(2)}
                     </span>
                 )}
-            </div>
 
-            {hasDiscount && (
-                <div className="flex items-center gap-2">
-                    <span className="inline-block px-3 py-1 bg-red-50 text-babyshopRed text-xs font-bold rounded-full animate-pulse uppercase tracking-wider">
-                        Save ${savings.toFixed(2)} Today
-                    </span>
-                </div>
-            )}
+                <span className={`text-3xl md:text-4xl font-extrabold tracking-tight ${hasDiscount ? 'text-babyshopRed' : 'text-gray-900'}`}>
+                    ${finalPrice.toFixed(2)}
+                </span>
+            </div>
         </div>
     );
 }

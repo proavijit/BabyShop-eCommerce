@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Product } from "@/types/type";
 import { m } from "framer-motion";
-import { Plus, Minus, ShoppingCart, Loader2 } from "lucide-react";
+import { Plus, Minus, ShoppingCart, Loader2, Eye, HelpCircle, Share2, Truck, RotateCcw } from "lucide-react";
 import WishListButton from "./WishListButton";
 import { useCart } from "@/hooks/useCart";
 import { toast } from "sonner";
@@ -16,10 +16,9 @@ interface ProductActionProps {
 
 export default function ProductAction({ product }: ProductActionProps) {
     const [quantity, setQuantity] = useState(1);
-    const { addToCart, isLoading, isInCart } = useCart();
+    const { addToCart, isLoading } = useCart();
     const { isAuthenticated } = useUserStore();
     const router = useRouter();
-
 
     const handleQuantityChange = (delta: number) => {
         const newQuantity = quantity + delta;
@@ -30,20 +29,10 @@ export default function ProductAction({ product }: ProductActionProps) {
 
     const handleAddToCart = async () => {
         if (!isAuthenticated) {
-            toast.error("Please login to add items to cart", {
-                description: "Redirecting you to the login page...",
-            });
+            toast.error("Please login to add items to cart");
             router.push("/auth/signin");
             return;
         }
-
-        if (isInCart(product._id)) {
-            toast.info(`${product.name} is already in your cart`, {
-                description: "You can update the quantity from this page or the cart summary.",
-            });
-            return;
-        }
-
         try {
             await addToCart(product, quantity);
             toast.success(`${product.name} added to cart!`);
@@ -53,80 +42,94 @@ export default function ProductAction({ product }: ProductActionProps) {
     };
 
     return (
-        <div className="space-y-6" role="form" aria-label="Product purchase options">
-            {/* Actions */}
-            <div className="space-y-6 pt-2">
-                <div className="flex flex-col sm:flex-row gap-4">
-                    {/* Quantity - Playful & Round */}
-                    <div
-                        className="flex items-center justify-between px-2 w-full sm:w-40 h-14 bg-gray-50 rounded-2xl border border-gray-100"
-                        role="group"
-                        aria-label="Quantity selector"
+        <div className="space-y-6">
+            {/* Quantity & Add to Cart Row */}
+            <div className="flex flex-wrap items-center gap-4">
+                <div className="flex items-center h-12 bg-white border border-gray-200 rounded-lg overflow-hidden">
+                    <button
+                        onClick={() => handleQuantityChange(-1)}
+                        className="w-10 h-full flex items-center justify-center hover:bg-gray-50 transition-colors border-r border-gray-200"
                     >
-                        <button
-                            onClick={() => handleQuantityChange(-1)}
-                            disabled={quantity <= 1 || isLoading}
-                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-600 hover:text-babyshopSky hover:border-babyshopSky disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
-                            aria-label="Decrease quantity"
-                            aria-disabled={quantity <= 1 || isLoading}
-                        >
-                            <Minus className="w-4 h-4" aria-hidden="true" />
-                        </button>
-                        <span
-                            className="text-lg font-bold text-gray-900"
-                            role="status"
-                            aria-live="polite"
-                            aria-label={`Quantity: ${quantity}`}
-                        >
-                            {quantity}
-                        </span>
-                        <button
-                            onClick={() => handleQuantityChange(1)}
-                            disabled={quantity >= product.stock || isLoading}
-                            className="w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-100 text-gray-600 hover:text-babyshopSky hover:border-babyshopSky disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-sm"
-                            aria-label="Increase quantity"
-                            aria-disabled={quantity >= product.stock || isLoading}
-                        >
-                            <Plus className="w-4 h-4" aria-hidden="true" />
-                        </button>
-                    </div>
-
-                    {/* Add to Cart - Bold & Vibrant */}
-                    <m.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        disabled={product.stock === 0 || isLoading}
-                        onClick={handleAddToCart}
-                        className="flex-1 h-14 bg-gradient-to-r from-babyshopSky to-teal-400 hover:from-teal-400 hover:to-babyshopSky text-white font-bold rounded-2xl transition-all duration-300 shadow-lg shadow-babyshopSky/25 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none"
-                        aria-label={`Add ${quantity} ${quantity === 1 ? 'item' : 'items'} to cart`}
-                        aria-disabled={product.stock === 0 || isLoading}
+                        <Minus className="w-4 h-4 text-gray-600" />
+                    </button>
+                    <span className="w-12 text-center font-bold text-gray-900">{quantity}</span>
+                    <button
+                        onClick={() => handleQuantityChange(1)}
+                        className="w-10 h-full flex items-center justify-center hover:bg-gray-50 transition-colors border-l border-gray-200"
                     >
-                        {isLoading ? (
-                            <Loader2 className="w-5 h-5 animate-spin" aria-hidden="true" />
-                        ) : (
-                            <ShoppingCart className="w-5 h-5" aria-hidden="true" />
-                        )}
-                        {product.stock > 0 ? (isLoading ? "Adding..." : "Add to Cart") : "Out of Stock"}
-                    </m.button>
-
-                    {/* Quick Wishlist */}
-                    <div
-                        className="w-14 h-14 flex items-center justify-center rounded-2xl border-2 border-gray-100 hover:border-babyshopSky/30 hover:bg-red-50 group transition-all duration-300"
-                        role="group"
-                        aria-label="Add to wishlist"
-                    >
-                        <WishListButton
-                            productId={product._id}
-                            product={product}
-                            className="w-full h-full rounded-2xl group-hover:text-red-500"
-                        />
-                    </div>
+                        <Plus className="w-4 h-4 text-gray-600" />
+                    </button>
                 </div>
 
-                <div className="flex items-center justify-center gap-2 text-sm text-gray-500 bg-teal-50/50 py-3 rounded-xl">
-                    <span className="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
-                    Free shipping on orders over <span className="font-bold text-teal-600">$50</span>
+                <button
+                    onClick={handleAddToCart}
+                    disabled={isLoading}
+                    className="flex-1 min-w-[150px] h-12 bg-white border border-gray-900 text-gray-900 font-bold rounded-lg hover:bg-gray-900 hover:text-white transition-all duration-300 flex items-center justify-center gap-2"
+                >
+                    {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ShoppingCart className="w-4 h-4" />}
+                    Add to cart
+                </button>
+
+                <div className="w-12 h-12">
+                    <WishListButton
+                        productId={product._id}
+                        product={product}
+                        className="w-full h-full border border-gray-200 rounded-lg flex items-center justify-center hover:bg-red-50 group transition-colors"
+                    />
                 </div>
+            </div>
+
+            {/* Social Proof & Buy Now */}
+            <div className="space-y-4">
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Eye className="w-4 h-4 text-gray-400" />
+                    <span><span className="font-bold text-gray-900">29 people</span> are viewing this right now</span>
+                </div>
+
+                <button
+                    className="w-full h-14 bg-[#26B3A8] hover:bg-[#1f968c] text-white font-bold text-lg rounded-lg transition-colors shadow-lg shadow-teal-500/10"
+                >
+                    Buy now
+                </button>
+            </div>
+
+            {/* Questions & Share */}
+            <div className="flex items-center justify-between py-2 border-b border-gray-100">
+                <button className="flex items-center gap-2 text-sm font-bold text-gray-700 hover:text-babyshopSky transition-colors">
+                    <HelpCircle className="w-4 h-4" />
+                    Ask a Question
+                </button>
+                <div className="flex items-center gap-2 text-sm font-bold text-gray-700 hover:text-babyshopSky transition-colors">
+                    <Share2 className="w-4 h-4" />
+                    Share Product
+                </div>
+            </div>
+
+            {/* Shipping & Returns Layer */}
+            <div className="space-y-4 pt-2">
+                <div className="flex items-start gap-3">
+                    <Truck className="w-5 h-5 text-gray-900 mt-0.5" />
+                    <div>
+                        <div className="text-sm font-bold text-gray-900">Estimated Delivery: <span className="text-gray-500 font-medium">08 - 15 Jun, 2025</span></div>
+                    </div>
+                </div>
+                <div className="flex items-start gap-3">
+                    <RotateCcw className="w-5 h-5 text-gray-900 mt-0.5" />
+                    <div>
+                        <div className="text-sm font-bold text-gray-900">Free Shipping & Returns: <span className="text-gray-500 font-medium">On all orders over $200.00</span></div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Payment Icons Placeholder */}
+            <div className="bg-[#f8f8f8] p-4 rounded-lg flex flex-col items-center gap-3">
+                <div className="flex flex-wrap justify-center gap-3 opacity-70">
+                    <div className="w-10 h-6 bg-gray-300 rounded"></div>
+                    <div className="w-10 h-6 bg-gray-300 rounded"></div>
+                    <div className="w-10 h-6 bg-gray-300 rounded"></div>
+                    <div className="w-10 h-6 bg-gray-300 rounded"></div>
+                </div>
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Guaranteed safe & secure checkout</span>
             </div>
         </div>
     );

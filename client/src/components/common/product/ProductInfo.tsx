@@ -8,50 +8,39 @@ interface ProductInfoProps {
 
 export default function ProductInfo({ product }: ProductInfoProps) {
     const brandName = typeof product.brand === 'object' ? product.brand.name : product.brand;
+    const hasDiscount = product.discountPrice && product.discountPrice < product.price;
+    const discountPercentage = hasDiscount
+        ? Math.round(((product.price - product.discountPrice!) / product.price) * 100)
+        : 0;
 
     return (
         <div className="space-y-4">
-            {/* Brand Link */}
-            {brandName && (
-                <Link
-                    href={`/brand/${brandName.toLowerCase()}`}
-                    className="text-babyshopSky font-bold text-sm tracking-widest uppercase hover:underline inline-block"
-                >
-                    {brandName}
-                </Link>
+            {/* Discount Badge - Top (from image) */}
+            {hasDiscount && (
+                <div className="flex items-center gap-2">
+                    <span className="inline-block px-3 py-1 bg-red-500 text-white text-[10px] font-black rounded-full uppercase tracking-tighter shadow-sm shadow-red-500/20">
+                        -{discountPercentage}%
+                    </span>
+                </div>
             )}
 
             {/* Product Title */}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-900 tracking-tight leading-tight">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900 tracking-tight leading-tight">
                 {product.name}
             </h1>
 
-            {/* Rating Summary */}
-            <div className="flex items-center gap-3">
-                <div
-                    className="flex bg-yellow-50 px-2 py-1 rounded-lg"
-                    role="img"
-                    aria-label={`Rated ${product.averageRating} out of 5 stars`}
-                >
-                    {[1, 2, 3, 4, 5].map((star) => (
-                        <Star
-                            key={star}
-                            className={`w-4 h-4 ${star <= Math.round(product.averageRating)
-                                    ? "fill-yellow-400 text-yellow-400"
-                                    : "text-gray-200"
-                                }`}
-                        />
-                    ))}
+            {/* Brand Link (Subtle) */}
+            {brandName && (
+                <div className="flex items-center gap-1.5">
+                    <span className="text-gray-400 text-xs font-bold uppercase tracking-wider">Brand:</span>
+                    <Link
+                        href={`/brand/${brandName.toLowerCase()}`}
+                        className="text-babyshopSky font-bold text-xs hover:underline"
+                    >
+                        {brandName}
+                    </Link>
                 </div>
-                {product.averageRating > 0 && (
-                    <span className="text-sm font-bold text-gray-900">
-                        {product.averageRating.toFixed(1)}
-                    </span>
-                )}
-                <span className="text-sm text-gray-500 font-medium">
-                    (0 reviews)
-                </span>
-            </div>
+            )}
         </div>
     );
 }
