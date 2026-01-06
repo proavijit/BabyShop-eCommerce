@@ -17,15 +17,15 @@ const featuredItems = [
 
 export default function CategoryList({ categories }: CategoryListProps) {
     return (
-        <aside className="hidden lg:flex flex-col w-[260px] h-fit bg-white border border-gray-100 rounded-sm sticky top-24 overflow-hidden">
-            <div className="flex flex-col h-full p-4 space-y-7">
+        <aside className="hidden lg:flex flex-col w-[260px] h-fit bg-white border border-gray-100 rounded-sm sticky top-24 overflow-hidden" suppressHydrationWarning={true}>
+            <div className="flex flex-col h-full p-4 space-y-7" suppressHydrationWarning={true}>
                 {/* 1. Featured Nav */}
-                <section>
+                <section suppressHydrationWarning={true}>
                     <h3 className="px-2 text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-4">Discovery</h3>
-                    <nav className="flex flex-col gap-1">
+                    <nav className="flex flex-col gap-1" suppressHydrationWarning={true}>
                         {featuredItems.map((item) => (
-                            <Link key={item.label} href={item.href} className={`flex items-center gap-3 px-2 py-1.5 rounded-sm transition-all duration-200 ${item.hover} group`}>
-                                <div className={`w-7 h-7 rounded-sm ${item.bg} ${item.color} flex items-center justify-center text-sm transition-transform group-hover:scale-110`}>
+                            <Link key={item.label} href={item.href} className={`flex items-center gap-3 px-2 py-1.5 rounded-sm transition-all duration-200 ${item.hover} group`} suppressHydrationWarning={true}>
+                                <div className={`w-7 h-7 rounded-sm ${item.bg} ${item.color} flex items-center justify-center text-sm transition-transform group-hover:scale-110`} suppressHydrationWarning={true}>
                                     {item.icon}
                                 </div>
                                 <span className="text-[13px] font-semibold text-gray-600 group-hover:text-gray-900">{item.label}</span>
@@ -35,14 +35,14 @@ export default function CategoryList({ categories }: CategoryListProps) {
                 </section>
 
                 {/* 2. Categories List */}
-                <section>
-                    <div className="flex items-center justify-between px-2 mb-4">
+                <section suppressHydrationWarning={true}>
+                    <div className="flex items-center justify-between px-2 mb-4" suppressHydrationWarning={true}>
                         <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Categories</h3>
                         <Link href="/shop" className="text-[10px] font-bold text-pink-600 hover:underline flex items-center gap-0.5">
                             VIEW ALL <ArrowRight className="w-2.5 h-2.5" />
                         </Link>
                     </div>
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1" suppressHydrationWarning={true}>
                         {categories?.slice(0, 8).map((cat) => (
                             <Link key={cat._id} href={`/shop?category=${cat._id}`} className="flex items-center gap-3 px-2 py-1.5 rounded-sm transition-all duration-200 hover:bg-pink-100/50 group">
                                 <div className="relative w-9 h-9 shrink-0 overflow-hidden rounded-sm border border-gray-100 bg-gray-50">

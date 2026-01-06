@@ -37,10 +37,10 @@ export default async function ProductSection({
     if (!products.length) return null;
 
     return (
-        <section className="w-full">
-            <div className="mb-8 flex items-end justify-between px-1">
-                <div className="space-y-1.5">
-                    <div className="flex items-center gap-3">
+        <section className="w-full" suppressHydrationWarning={true}>
+            <div className="mb-8 flex items-end justify-between px-1" suppressHydrationWarning={true}>
+                <div className="space-y-1.5" suppressHydrationWarning={true}>
+                    <div className="flex items-center gap-3" suppressHydrationWarning={true}>
                         <span className={`h-6 w-[3px] rounded-full ${accentColor}`} />
                         <h2 className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
                             {title}
@@ -63,7 +63,7 @@ export default async function ProductSection({
             </div>
 
             {/* Grid Layout */}
-            <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+            <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" suppressHydrationWarning={true}>
                 {products.map((product, index) => (
                     <ProductCard
                         key={product._id}

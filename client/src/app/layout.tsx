@@ -39,8 +39,8 @@ export default function RootLayout({
         <Header />
 
         <LazyMotion features={domMax} strict>
-          <Suspense fallback={<main className="min-h-screen" />}>
-            <main>{children}</main>
+          <Suspense fallback={<main className="min-h-screen" suppressHydrationWarning />}>
+            <main suppressHydrationWarning>{children}</main>
           </Suspense>
         </LazyMotion>
 

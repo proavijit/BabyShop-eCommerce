@@ -11,9 +11,10 @@ export default function BrandCard({ brand }: BrandCardProps) {
         <Link
             href={`/shop?brands=${brand._id}`}
             className="group flex flex-col items-center"
+            suppressHydrationWarning={true}
         >
-            <div className="relative w-full aspect-square max-w-[160px] rounded-2xl border border-slate-100 bg-white p-4 shadow-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-md">
-                <div className="relative h-full w-full overflow-hidden rounded-full bg-slate-50 ring-1 ring-slate-100">
+            <div className="relative w-full aspect-square max-w-[160px] rounded-2xl border border-slate-100 bg-white p-4 shadow-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-md" suppressHydrationWarning={true}>
+                <div className="relative h-full w-full overflow-hidden rounded-full bg-slate-50 ring-1 ring-slate-100" suppressHydrationWarning={true}>
                     {brand.image ? (
                         <Image
                             src={brand.image}

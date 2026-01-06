@@ -80,29 +80,29 @@ function HeaderComponent() {
     return (
         <>
             <TopHeader />
-            <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200">
+            <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200" suppressHydrationWarning={true}>
                 <Container>
-                    <div className="flex items-center justify-between gap-4 h-16 md:h-20">
+                    <div className="flex items-center justify-between gap-4 h-16 md:h-20" suppressHydrationWarning={true}>
                         {/* 1. Static Logo */}
-                        <div className="flex-shrink-0">
+                        <div className="flex-shrink-0" suppressHydrationWarning={true}>
                             <Logo />
                         </div>
 
                         {/* 2. Search Bar - Desktop */}
-                        <div className="hidden md:flex flex-1 max-w-[650px] mx-6">
-                            <div className="w-full border border-gray-300 rounded-lg bg-white min-h-[42px]">
+                        <div className="hidden md:flex flex-1 max-w-[650px] mx-6" suppressHydrationWarning={true}>
+                            <div className="w-full border border-gray-300 rounded-lg bg-white min-h-[42px]" suppressHydrationWarning={true}>
                                 <SearchInput />
                             </div>
                         </div>
 
                         {/* 3. Icons & Actions */}
-                        <div className="flex items-center gap-4 lg:gap-6">
-                            <div className="hidden lg:flex items-center gap-5 border-r border-gray-200 pr-5">
+                        <div className="flex items-center gap-4 lg:gap-6" suppressHydrationWarning={true}>
+                            <div className="hidden lg:flex items-center gap-5 border-r border-gray-200 pr-5" suppressHydrationWarning={true}>
                                 <OrdersIcon />
                                 <WishlistIcon />
                             </div>
 
-                            <div className="flex items-center gap-3 sm:gap-4">
+                            <div className="flex items-center gap-3 sm:gap-4" suppressHydrationWarning={true}>
                                 <UserButton />
                                 <CartIcon />
                             </div>
@@ -110,8 +110,8 @@ function HeaderComponent() {
                     </div>
 
                     {/* Mobile Search */}
-                    <div className="md:hidden pb-4 px-1">
-                        <div className="border border-gray-300 rounded-lg bg-white min-h-[40px]">
+                    <div className="md:hidden pb-4 px-1" suppressHydrationWarning={true}>
+                        <div className="border border-gray-300 rounded-lg bg-white min-h-[40px]" suppressHydrationWarning={true}>
                             <SearchInput />
                         </div>
                     </div>

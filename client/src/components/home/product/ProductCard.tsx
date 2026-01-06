@@ -22,15 +22,15 @@ export default function ProductCard({
         : 0;
 
     return (
-        <div className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white transition-shadow hover:shadow-md h-full">
-            <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#f7f7f7]">
+        <div className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white transition-shadow hover:shadow-md h-full" suppressHydrationWarning={true}>
+            <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#f7f7f7]" suppressHydrationWarning={true}>
                 {hasDiscount && (
                     <span className="absolute left-2 top-2 z-10 rounded-full bg-[#FF3B00] px-2 py-1 text-[10px] font-bold text-white">
                         -{discountPercentage}%
                     </span>
                 )}
 
-                <div className="absolute right-2 top-2 z-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                <div className="absolute right-2 top-2 z-10 opacity-0 transition-opacity duration-200 group-hover:opacity-100" suppressHydrationWarning={true}>
                     <WishListButton
                         productId={product._id}
                         product={product}
@@ -52,7 +52,7 @@ export default function ProductCard({
                 </Link>
             </div>
 
-            <div className="flex flex-1 flex-col p-3">
+            <div className="flex flex-1 flex-col p-3" suppressHydrationWarning={true}>
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
                     {typeof product.brand === "object" ? product.brand?.name : product.brand || "Baby Deals"}
                 </span>

@@ -22,32 +22,32 @@ const socialLinks = [
 
 const TopHeader = () => {
     return (
-        <div className="relative z-50 w-full bg-purple-400 text-white text-[12px] sm:text-sm">
+        <div className="relative z-50 w-full bg-purple-400 text-white text-[12px] sm:text-sm" suppressHydrationWarning={true}>
             <Container className="flex flex-col md:flex-row items-center justify-between py-2 gap-3 md:gap-0">
 
                 {/* Left Section: Links */}
-                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-6">
+                <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 sm:gap-6" suppressHydrationWarning={true}>
                     <a href="#" className="hover:underline whitespace-nowrap">Help Center</a>
                     <a href="#" className="hover:underline whitespace-nowrap">Wishlist</a>
                     <a href="#" className="hover:underline whitespace-nowrap">Order Tracking</a>
                 </div>
 
                 {/* Center Section */}
-                <div className="hidden lg:flex items-center justify-center bg-purple-500/50 px-4 py-1 rounded-full text-[11px] sm:text-xs">
+                <div className="hidden lg:flex items-center justify-center bg-purple-500/50 px-4 py-1 rounded-full text-[11px] sm:text-xs" suppressHydrationWarning={true}>
                     100% Secure delivery without contacting the courier
                 </div>
 
                 {/* Right Section: Currency, Language & Socials */}
-                <div className="flex flex-wrap items-center justify-center gap-4">
+                <div className="flex flex-wrap items-center justify-center gap-4" suppressHydrationWarning={true}>
 
                     {/* Currency & Language Select */}
-                    <div className="flex items-center gap-2 border-r border-white/20 pr-3 md:border-0 md:pr-0">
+                    <div className="flex items-center gap-2 border-r border-white/20 pr-3 md:border-0 md:pr-0" suppressHydrationWarning={true}>
                         <SelectCurrency />
                         <SelectLanguage />
                     </div>
 
                     {/* Social Links */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2" suppressHydrationWarning={true}>
                         {socialLinks.map((social, idx) => (
                             <a
                                 key={idx}

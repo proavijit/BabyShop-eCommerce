@@ -49,10 +49,10 @@ const TRAVEL_CATEGORIES: TravelCategory[] = [
  */
 export default function BabyTravelSection() {
     return (
-        <section className="w-full py-12 px-4 max-w-7xl mx-auto" aria-labelledby="travel-essentials-heading">
-            <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-                <div className="space-y-1.5">
-                    <div className="flex items-center gap-3">
+        <section className="w-full py-12 px-4 max-w-7xl mx-auto" aria-labelledby="travel-essentials-heading" suppressHydrationWarning={true}>
+            <div className="mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4" suppressHydrationWarning={true}>
+                <div className="space-y-1.5" suppressHydrationWarning={true}>
+                    <div className="flex items-center gap-3" suppressHydrationWarning={true}>
                         <span className="h-6 w-[3px] rounded-full bg-blue-400" aria-hidden="true" />
                         <h2 id="travel-essentials-heading" className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
                             Travel Essentials
@@ -72,7 +72,7 @@ export default function BabyTravelSection() {
                 </Link>
             </div>
 
-            <div className="grid grid-cols-1 gap-x-5 gap-y-8 xs:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-x-5 gap-y-8 xs:grid-cols-2 lg:grid-cols-4" suppressHydrationWarning={true}>
                 {TRAVEL_CATEGORIES.map((category) => (
                     <CategoryCard key={category.id} category={category} />
                 ))}

@@ -33,15 +33,16 @@ export default function BannerSlider({ mainBanners, sideBanners }: BannerSliderP
     }
 
     return (
-        <div className="w-full flex flex-col lg:flex-row gap-3 h-auto lg:h-[380px] mb-6">
+        <div className="w-full flex flex-col lg:flex-row gap-3 h-auto lg:h-[380px] mb-6" suppressHydrationWarning={true}>
             {/* MAIN BANNER SLIDER */}
-            <div className={`relative w-full ${sideBanners.length > 0 ? 'lg:w-[75%]' : 'lg:w-full'} h-[300px] lg:h-full overflow-hidden rounded-md border border-gray-100`}>
+            <div className={`relative w-full ${sideBanners.length > 0 ? 'lg:w-[75%]' : 'lg:w-full'} h-[300px] lg:h-full overflow-hidden rounded-md border border-gray-100`} suppressHydrationWarning={true}>
                 <div
                     className="w-full h-full flex transition-transform duration-700 ease-in-out"
                     style={{ transform: `translateX(-${currentIndex * 100}%)` }}
+                    suppressHydrationWarning={true}
                 >
                     {mainBanners.map((banner, index) => (
-                        <div key={banner._id} className="w-full h-full shrink-0 relative">
+                        <div key={banner._id} className="w-full h-full shrink-0 relative" suppressHydrationWarning={true}>
                             <Image
                                 src={banner.image}
                                 alt={banner.title}
@@ -51,7 +52,7 @@ export default function BannerSlider({ mainBanners, sideBanners }: BannerSliderP
                                 className="object-cover"
                             />
                             {/* Professional Centered Overlay */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-black/5 px-4">
+                            <div className="absolute inset-0 flex flex-col items-center justify-center text-center bg-black/5 px-4" suppressHydrationWarning={true}>
                                 <span className="text-[10px] uppercase tracking-[0.2em] text-gray-600 font-bold mb-1">
                                     Best Deals Today
                                 </span>
@@ -69,8 +70,8 @@ export default function BannerSlider({ mainBanners, sideBanners }: BannerSliderP
 
             {/* SIDE BANNER */}
             {sideBanners.length > 0 && (
-                <div className="w-full lg:w-[25%] min-h-[220px] lg:h-full relative rounded-md overflow-hidden border border-gray-100 group cursor-pointer">
-                    <div className="absolute inset-0 w-full h-full">
+                <div className="w-full lg:w-[25%] min-h-[220px] lg:h-full relative rounded-md overflow-hidden border border-gray-100 group cursor-pointer" suppressHydrationWarning={true}>
+                    <div className="absolute inset-0 w-full h-full" suppressHydrationWarning={true}>
                         <Image
                             src={sideBanners[0].image}
                             alt="Promo"
@@ -81,7 +82,7 @@ export default function BannerSlider({ mainBanners, sideBanners }: BannerSliderP
                     </div>
 
                     {/* Content Layer floating over the covered image */}
-                    <div className="relative z-10 h-full w-full flex flex-col items-center justify-start pt-8 text-center bg-gradient-to-b from-white/30 via-transparent to-transparent">
+                    <div className="relative z-10 h-full w-full flex flex-col items-center justify-start pt-8 text-center bg-gradient-to-b from-white/30 via-transparent to-transparent" suppressHydrationWarning={true}>
                         <p className="text-white text-[10px] font-bold uppercase tracking-widest mb-1">
                             Hot this week
                         </p>

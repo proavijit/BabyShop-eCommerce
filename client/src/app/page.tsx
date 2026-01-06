@@ -12,16 +12,16 @@ import BabyTravelSection from "@/components/home/travel";
 
 export default function Home() {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="bg-white min-h-screen" suppressHydrationWarning={true}>
       <Container className="flex py-7 gap-6">
         {/* Left Sidebar Category */}
-        <aside className="hidden lg:block w-64 shrink-0">
+        <aside className="hidden lg:block w-64 shrink-0" suppressHydrationWarning={true}>
           <Suspense fallback={<CategorySkeleton />}>
             <CategorySection />
           </Suspense>
         </aside>
 
-        <div className="flex-1 overflow-hidden">
+        <div className="flex-1 overflow-hidden" suppressHydrationWarning={true}>
           {/* 1. Banner Section */}
           <Suspense fallback={<BannerSkeleton />}>
             <BannerComponent />
@@ -33,7 +33,7 @@ export default function Home() {
           </Suspense>
 
           {/* 3. Brands & Travel */}
-          <div className="mt-20 space-y-20">
+          <div className="mt-20 space-y-20" suppressHydrationWarning={true}>
             <Suspense fallback={null}>
               <BrandSection />
             </Suspense>

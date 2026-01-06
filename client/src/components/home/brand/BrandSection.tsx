@@ -29,10 +29,11 @@ export default async function BrandSection({
         <section
             aria-labelledby="brand-section-title"
             className="w-full py-10"
+            suppressHydrationWarning={true}
         >
-            <header className="mb-8 flex items-end justify-between px-1">
-                <div className="space-y-1.5">
-                    <div className="flex items-center gap-3">
+            <header className="mb-8 flex items-end justify-between px-1" suppressHydrationWarning={true}>
+                <div className="space-y-1.5" suppressHydrationWarning={true}>
+                    <div className="flex items-center gap-3" suppressHydrationWarning={true}>
                         <span className={`h-6 w-[3px] rounded-full ${accentColor}`} />
                         <h2
                             id="brand-section-title"
@@ -59,7 +60,9 @@ export default async function BrandSection({
                 )}
             </header>
 
-            <BrandGrid brands={brands} />
+            <div suppressHydrationWarning={true}>
+                <BrandGrid brands={brands} />
+            </div>
         </section>
     );
 }

@@ -7,7 +7,7 @@ interface Props {
     suppressHydrationWarning?: boolean;
 }
 
-const Container = ({ children, className, suppressHydrationWarning }: Props) => {
+const Container = ({ children, className, suppressHydrationWarning = true }: Props) => {
     return (
         <div
             className={cn("max-w-screen-2xl mx-auto px-4", className)}
