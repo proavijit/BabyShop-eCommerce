@@ -1,31 +1,46 @@
-import ShopPageClient from "@/components/page/shop/ShopPageClient";
-import { fetchData } from "@/lib/api";
-import { CategoryResponse, BrandResponse, Category, Brand } from "@/types/type";
+import { Metadata } from "next";
+import { getCategories } from "@/lib/categoriesApi";
+import { getBrands } from "@/lib/brandsApi";
+import ShopPageClient from "@/components/shop/ShopPageClient";
+
+/**
+ * SEO Metadata for shop page
+ * Improves search engine indexing and social sharing
+ */
+export const metadata: Metadata = {
+    title: "Shop Baby Products | Premium Baby Essentials | BabyShop",
+    description:
+        "Browse our curated collection of premium baby products. Find the perfect items for your little ones with our wide selection of safe, stylish, and high-quality baby essentials.",
+    keywords: [
+        "baby products",
+        "baby essentials",
+        "baby shop",
+        "baby gear",
+        "baby clothes",
+        "baby toys",
+        "baby care",
+    ],
+    openGraph: {
+        title: "Shop Baby Products | BabyShop",
+        description:
+            "Premium baby essentials curated for safety and style. Shop now!",
+        type: "website",
+        url: "/shop",
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Shop Baby Products | BabyShop",
+        description: "Premium baby essentials curated for safety and style.",
+    },
+};
 
 const ShopPage = async () => {
-    let categories: Category[] = [];
-    let brands: Brand[] = [];
+    const [categories, brands] = await Promise.all([
+        getCategories(),
+        getBrands(),
+    ]);
 
-    try {
-        const categoryData = await fetchData<CategoryResponse>("/categories");
-        categories = categoryData.categories || [];
-    } catch (error) {
-        console.error("Error fetching categories:", error);
-    }
+    return <ShopPageClient categories={categories} brands={brands} />;
+};
 
-    try {
-        const brandData = await fetchData<BrandResponse>("/brands");
-        brands = brandData.brands || [];
-    } catch (error) {
-        console.error("Error fetching brands:", error);
-    }
-
-    return (
-        <>
-            <ShopPageClient categories={categories} brands={brands} />
-        </>
-    )
-}
-
-export default ShopPage
-
+export default ShopPage;
