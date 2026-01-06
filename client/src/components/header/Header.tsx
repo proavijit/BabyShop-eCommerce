@@ -1,13 +1,21 @@
 "use client";
 
+import { memo } from "react";
 import dynamic from "next/dynamic";
 import Container from "../common/Container";
 import Logo from "./Logo";
 import TopHeader from "./TopHeader";
 
-// Skeleton Components 
-const IconSkeleton = () => <div className="w-8 h-8 bg-gray-100 rounded-full animate-pulse" />;
-const UserSkeleton = () => (
+/**
+ * Skeleton Components for Loading States
+ * Memoized to prevent re-creation
+ */
+const IconSkeleton = memo(() => (
+    <div className="w-8 h-8 bg-gray-100 rounded-full animate-pulse" />
+));
+IconSkeleton.displayName = "IconSkeleton";
+
+const UserSkeleton = memo(() => (
     <div className="flex items-center gap-2">
         <div className="w-8 h-8 bg-gray-100 rounded-full animate-pulse" />
         <div className="hidden sm:flex flex-col gap-1">
@@ -15,47 +23,66 @@ const UserSkeleton = () => (
             <div className="w-14 h-3 bg-gray-100 rounded animate-pulse" />
         </div>
     </div>
-);
+));
+UserSkeleton.displayName = "UserSkeleton";
 
-// Dynamic Imports with Loading Skeletons
+const SearchSkeleton = memo(() => (
+    <div className="relative w-full h-10 bg-white border border-gray-100 rounded-md flex items-center px-4">
+        <div className="h-4 w-32 bg-gray-100 animate-pulse rounded" />
+        <div className="ml-auto h-5 w-5 bg-gray-100 animate-pulse rounded-full" />
+    </div>
+));
+SearchSkeleton.displayName = "SearchSkeleton";
+
+/**
+ * Dynamic Imports with Loading Skeletons
+ * Reduces initial bundle size and improves performance
+ */
 const UserButton = dynamic(() => import("./UserButton"), {
     ssr: false,
-    loading: () => <UserSkeleton />
+    loading: () => <UserSkeleton />,
 });
 
 const CartIcon = dynamic(() => import("./CartIcon"), {
     ssr: false,
-    loading: () => <IconSkeleton />
+    loading: () => <IconSkeleton />,
 });
 
 const SearchInput = dynamic(() => import("./SearchInput"), {
     ssr: false,
-    loading: () => (
-        <div className="relative w-full h-10 bg-white border border-gray-100 rounded-md flex items-center px-4">
-            <div className="h-4 w-32 bg-gray-100 animate-pulse rounded" />
-            <div className="ml-auto h-5 w-5 bg-gray-100 animate-pulse rounded-full" />
-        </div>
-    )
+    loading: () => <SearchSkeleton />,
 });
 
 const OrdersIcon = dynamic(() => import("./OrdersIcon"), {
     ssr: false,
-    loading: () => <IconSkeleton />
+    loading: () => <IconSkeleton />,
 });
 
 const WishlistIcon = dynamic(() => import("./WishlistIcon"), {
     ssr: false,
-    loading: () => <IconSkeleton />
+    loading: () => <IconSkeleton />,
 });
 
-export default function Header() {
+/**
+ * Header Component
+ * 
+ * OPTIMIZATIONS:
+ * - Dynamic imports for all client components (reduces initial bundle)
+ * - Memoized skeleton components
+ * - Sticky positioning for better UX
+ * - Responsive design (mobile + desktop search)
+ * 
+ * 'use client' REQUIRED because:
+ * - Uses dynamic imports with client-side components
+ * - Contains interactive elements (search, cart, user actions)
+ */
+function HeaderComponent() {
     return (
         <>
             <TopHeader />
             <header className="sticky top-0 z-50 w-full bg-white border-b border-gray-200">
                 <Container>
                     <div className="flex items-center justify-between gap-4 h-16 md:h-20">
-
                         {/* 1. Static Logo */}
                         <div className="flex-shrink-0">
                             <Logo />
@@ -63,7 +90,7 @@ export default function Header() {
 
                         {/* 2. Search Bar - Desktop */}
                         <div className="hidden md:flex flex-1 max-w-[650px] mx-6">
-                            <div className="w-full border border-gray-300 rounded-lg bg-white overflow-hidden min-h-[42px]">
+                            <div className="w-full border border-gray-300 rounded-lg bg-white min-h-[42px]">
                                 <SearchInput />
                             </div>
                         </div>
@@ -93,3 +120,9 @@ export default function Header() {
         </>
     );
 }
+
+/**
+ * Export memoized Header component
+ * Prevents re-renders when parent components update
+ */
+export default memo(HeaderComponent);

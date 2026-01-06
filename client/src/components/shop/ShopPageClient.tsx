@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Category, Brand } from "@/types/type";
 import { useShopFilters } from "@/hooks/useShopFilters";
@@ -58,6 +58,7 @@ export default function ShopPageClient({
 
   // Mobile filter sheet state
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   // Sync filters to URL
   useEffect(() => {
@@ -70,7 +71,9 @@ export default function ShopPageClient({
     if (filters.minPrice) params.set("minPrice", filters.minPrice);
     if (filters.maxPrice) params.set("maxPrice", filters.maxPrice);
 
-    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    startTransition(() => {
+      router.push(`${pathname}?${params.toString()}`, { scroll: false });
+    });
   }, [
     filters.category,
     filters.selectedBrands,
@@ -99,7 +102,9 @@ export default function ShopPageClient({
 
   const handleSearchChange = useCallback(
     (query: string) => {
-      setSearchQuery(query);
+      startTransition(() => {
+        setSearchQuery(query);
+      });
     },
     [setSearchQuery]
   );

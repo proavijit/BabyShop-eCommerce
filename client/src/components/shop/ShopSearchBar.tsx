@@ -44,19 +44,19 @@ function ShopSearchBarComponent({
 
     // Debounce the search query
     useEffect(() => {
-        // Only trigger if local value differs from parent value
+        // Don't trigger search on mount if initial local value matches prop
         if (localSearchQuery === searchQuery) {
             return;
         }
 
         const timer = setTimeout(() => {
             onSearchChange(localSearchQuery);
-        }, 300);
+        }, 500);
 
         return () => {
             clearTimeout(timer);
         };
-    }, [localSearchQuery, searchQuery, onSearchChange]);
+    }, [localSearchQuery, onSearchChange]); // Remove searchQuery from deps to avoid re-triggering on sync
 
     return (
         <div className="sticky top-4 z-40 mb-10">
