@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Container from "@/components/common/Container";
 import ProductList from "@/components/home/product/ProductList";
 import ProductRowSkeleton from "@/components/home/product/ProductRowSkeleton";
-import HomeBrand from "@/components/home/HomeBrand";
+import { BrandSection } from "@/components/home/brand";
 import BabyTravelSection from "@/components/home/BabyTravelSection";
 import BannerComponent from "@/components/home/banner";
 import BannerSkeleton from "@/components/home/banner/banner-skeleton";
@@ -35,7 +35,7 @@ export default function Home() {
           {/* 3. Brands & Travel */}
           <div className="mt-20 space-y-20">
             <Suspense fallback={null}>
-              <HomeBrand />
+              <BrandSection />
             </Suspense>
 
             <Suspense fallback={null}>

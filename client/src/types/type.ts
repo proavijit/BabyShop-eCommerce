@@ -13,11 +13,7 @@ export interface CategoryResponse {
     totalPages: number;
 }
 
-export interface Brand {
-    _id: string;
-    name: string;
-    image?: string;
-}
+
 
 export interface BrandResponse {
     brands: Brand[];
@@ -132,4 +128,12 @@ export interface Banner {
 
 export interface BannerResponse {
     banners: Banner[];
+}
+
+export interface Brand {
+    _id: string;
+    name: string;
+    image?: string | null;
+    slug?: string;
+    isActive?: boolean;
 }
