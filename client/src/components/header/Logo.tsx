@@ -8,8 +8,8 @@ export default function Logo() {
             <Image
                 src="/logo.png"
                 alt="BabyShop"
-                width={150}
-                height={40}
+                width={130}
+                height={30}
                 priority={true}
                 suppressHydrationWarning={true}
                 className="object-contain h-10 w-auto"
