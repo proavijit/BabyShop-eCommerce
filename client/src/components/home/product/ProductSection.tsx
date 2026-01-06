@@ -10,6 +10,7 @@ interface ProductSectionProps {
     query: Record<string, string | number | boolean>;
     viewAllLink?: string;
     accentColor?: string;
+    isFirstSection?: boolean;
 }
 
 export default async function ProductSection({
@@ -18,6 +19,7 @@ export default async function ProductSection({
     query,
     viewAllLink,
     accentColor = "bg-[#00B5A5]",
+    isFirstSection = false,
 }: ProductSectionProps) {
     // Fetch with Tag-based revalidation (Best Practice)
     const queryString = buildQueryString({ ...query, perPage: 5 });
@@ -62,8 +64,12 @@ export default async function ProductSection({
 
             {/* Grid Layout */}
             <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                {products.map((product) => (
-                    <ProductCard key={product._id} product={product} />
+                {products.map((product, index) => (
+                    <ProductCard
+                        key={product._id}
+                        product={product}
+                        priority={isFirstSection && index < 4}
+                    />
                 ))}
             </div>
         </section>

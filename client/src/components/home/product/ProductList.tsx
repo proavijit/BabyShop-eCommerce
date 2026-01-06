@@ -4,7 +4,7 @@ import ProductRowSkeleton from "./ProductRowSkeleton";
 
 export default function ProductList() {
     return (
-        <div className="mt-10 space-y-16">
+        <div className="mt-10 space-y-16" suppressHydrationWarning={true}>
             <Suspense fallback={<ProductRowSkeleton />}>
                 <ProductSection
                     title="Featured Picks"
