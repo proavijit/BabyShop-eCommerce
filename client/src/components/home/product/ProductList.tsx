@@ -36,6 +36,7 @@ export default async function ProductList() {
                 />
             </Suspense>
 
+            {/* hello  */}
             {/* 2. Dynamic Category Sections */}
             {homeCategories.map((category, index) => (
                 <Suspense key={category._id} fallback={<ProductRowSkeleton />}>
